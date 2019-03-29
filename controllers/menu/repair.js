@@ -41,7 +41,7 @@ _.assign(exports, {
 				return _.get(filtObj, 'spawnCat') === 'samRadar' || _.get(filtObj, 'spawnCat') === 'unarmedAmmo';
 			}) , 'type');
 			// console.log('sa: ', samTypeArray);
-			masterDBController.unitActions('read', serverName, {type: {$in:samTypeArray }, dead: false})
+			masterDBController.unitActions('read', serverName, {type: {$in:samTypeArray }, playerOwnerId: null, dead: false})
 				.then(function(units){
 					groups = _.groupBy(units, 'groupName');
 					_.forEach(groups, function (group) {
