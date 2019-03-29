@@ -66,6 +66,7 @@ _.assign(exports, {
 									masterDBController.unitActions('read', serverName, {_id: base.name + ' Logistics', dead: false})
 										.then(function (cmdCenters) {
 											if (cmdCenters.length > 0) {
+												console.log('cmdCenter already exists: ' + base.name + ' ' + cmdCenters);
 												DCSLuaCommands.sendMesgToGroup(
 													curPlayerUnit.groupId,
 													serverName,
@@ -74,11 +75,18 @@ _.assign(exports, {
 												);
 												console.log('player own CC??: ' + _.first(cmdCenters).coalition === curPlayerUnit.coalition);
 												if(_.first(cmdCenters).coalition === curPlayerUnit.coalition) {
+													console.log('Farp Units Replenished: ' + base.name);
+													DCSLuaCommands.sendMesgToGroup(
+														curPlayerUnit.groupId,
+														serverName,
+														'G: ' + base.name + ' Farp Units Replenished.',
+														5
+													);
 													groupController.spawnSupportBaseGrp( serverName, base.name, curPlayerUnit.coalition );
 												}
 												resolve(false);
 											} else {
-												// console.log('player: ', curPlayerUnit);
+												console.log('cmdCenter doesnt exist ' + base.name);
 												groupController.spawnLogisticCmdCenter(serverName, {}, false, base, curPlayerUnit.coalition);
 												masterDBController.baseActions('updateSide', serverName, {name: base.name, side: curPlayerUnit.coalition})
 													.then(function () {
