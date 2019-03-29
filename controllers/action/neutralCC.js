@@ -66,23 +66,24 @@ _.assign(exports, {
 									masterDBController.unitActions('read', serverName, {_id: base.name + ' Logistics', dead: false})
 										.then(function (cmdCenters) {
 											if (cmdCenters.length > 0) {
-												console.log('cmdCenter already exists: ' + base.name + ' ' + cmdCenters);
-												DCSLuaCommands.sendMesgToGroup(
-													curPlayerUnit.groupId,
-													serverName,
-													'G: ' + base.name + ' Command Center Already Exists.',
-													5
-												);
 												console.log('player own CC??: ' + _.first(cmdCenters).coalition === curPlayerUnit.coalition);
 												if(_.first(cmdCenters).coalition === curPlayerUnit.coalition) {
-													console.log('Farp Units Replenished: ' + base.name);
+													console.log('cmdCenter already exists, replace units: ' + base.name + ' ' + cmdCenters);
 													DCSLuaCommands.sendMesgToGroup(
 														curPlayerUnit.groupId,
 														serverName,
-														'G: ' + base.name + ' Farp Units Replenished.',
+														'G: ' + base.name + ' Command Center Already Exists, Support Units Replaced.',
 														5
 													);
 													groupController.spawnSupportBaseGrp( serverName, base.name, curPlayerUnit.coalition );
+												} else {
+													console.log(' enemy cmdCenter already exists: ' + base.name + ' ' + cmdCenters);
+													DCSLuaCommands.sendMesgToGroup(
+														curPlayerUnit.groupId,
+														serverName,
+														'G: Enemy ' + base.name + ' Command Center Already Exists.',
+														5
+													);
 												}
 												resolve(false);
 											} else {
@@ -98,11 +99,10 @@ _.assign(exports, {
 														console.log('erroring line162: ', err);
 													})
 												;
-												var mesg = 'C: ' + base.name + ' Command Center Is Now Built!';
 												DCSLuaCommands.sendMesgToCoalition(
 													curPlayerUnit.coalition,
 													serverName,
-													mesg,
+													'C: ' + base.name + ' Command Center Is Now Built!',
 													20
 												);
 											}
