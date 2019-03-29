@@ -115,7 +115,7 @@ _.set(exports, 'spendResourcePoints', function (serverName, player, rsCost, rsIt
 			}
 		})
 		.catch(function (err) {
-			console.log('line26', err);
+			console.log('line118', err);
 		})
 	;
 });
@@ -142,7 +142,7 @@ _.set(exports, 'checkResourcePoints', function (serverName, player) {
 				}
 			})
 			.catch(function (err) {
-				console.log('line26', err);
+				console.log('line145', err);
 			})
 		;
 	}

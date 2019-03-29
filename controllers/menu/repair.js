@@ -25,7 +25,7 @@ _.assign(exports, {
 				}
 			})
 			.catch(function (err) {
-				console.log('erroring line26: ', err);
+				console.log('erroring line28: ', err);
 			})
 		;
 		return true;
