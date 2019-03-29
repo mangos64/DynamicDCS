@@ -3,121 +3,126 @@ const masterDBController = require('../db/masterDB');
 const DCSLuaCommands = require('../player/DCSLuaCommands');
 
 _.set(exports, 'spendResourcePoints', function (serverName, player, rsCost, rsItem, itemObj) {
-	return masterDBController.unitActions('read', serverName, {unitId: _.toNumber(player.slot)})
-		.then(function(cUnit) {
-			var mesg;
-			var currentObjUpdate;
-			var curUnit = _.get(cUnit, [0]);
-			var curName = 'AI|' + _.get(itemObj, 'name', '') + '|';
-			if (curUnit.inAir) {
-			//if (true) {
-				return masterDBController.unitActions('read', serverName, {_id: curName})
-					.then(function(unitExist) {
-						if(unitExist.length > 0 && rsItem === 'Tanker') {
-							mesg = 'G: Tanker your trying to spawn already exists';
-							DCSLuaCommands.sendMesgToGroup(
-								curUnit.groupId,
-								serverName,
-								mesg,
-								5
-							);
-							return false;
-						/*
-						} else if(unitExist.length > 0 && rsItem === 'AWACS') {
-							mesg = 'G: AWACS your trying to spawn already exists';
-							DCSLuaCommands.sendMesgToGroup(
-								curUnit.groupId,
-								serverName,
-								mesg,
-								5
-							);
-							return false;
-							*/
-						} else {
-							if (player.side === 1) {
-								if(player.redRSPoints >= rsCost){
-									currentObjUpdate = {
-										_id: player._id,
-										redRSPoints: player.redRSPoints - rsCost
-									};
-									return masterDBController.srvPlayerActions('update', serverName, currentObjUpdate)
-										.then(function () {
-											mesg = 'G: You have spent red ' + rsCost + ' points on a ' + rsItem + '(' + currentObjUpdate.redRSPoints + 'pts left)';
-											DCSLuaCommands.sendMesgToGroup(
-												curUnit.groupId,
-												serverName,
-												mesg,
-												5
-											);
-											return true;
-										})
-										.catch(function (err) {
-											console.log('line53', err);
-										})
-										;
-								} else {
-									mesg = 'G: You do not have red ' + rsCost + ' points to buy a ' + rsItem + ' (' + player.redRSPoints + 'pts)';
-									DCSLuaCommands.sendMesgToGroup(
-										curUnit.groupId,
-										serverName,
-										mesg,
-										5
-									);
-									return false;
-								}
+	if(isNaN(player.slot)) {
+		console.log('player doesnt have slotID: ' + player);
+		return Promise.success(false);
+	} else {
+		return masterDBController.unitActions('read', serverName, {unitId: _.toNumber(player.slot)})
+			.then(function(cUnit) {
+				var mesg;
+				var currentObjUpdate;
+				var curUnit = _.get(cUnit, [0]);
+				var curName = 'AI|' + _.get(itemObj, 'name', '') + '|';
+				if (curUnit.inAir) {
+					//if (true) {
+					return masterDBController.unitActions('read', serverName, {_id: curName})
+						.then(function(unitExist) {
+							if(unitExist.length > 0 && rsItem === 'Tanker') {
+								mesg = 'G: Tanker your trying to spawn already exists';
+								DCSLuaCommands.sendMesgToGroup(
+									curUnit.groupId,
+									serverName,
+									mesg,
+									5
+								);
+								return false;
+								/*
+                                } else if(unitExist.length > 0 && rsItem === 'AWACS') {
+                                    mesg = 'G: AWACS your trying to spawn already exists';
+                                    DCSLuaCommands.sendMesgToGroup(
+                                        curUnit.groupId,
+                                        serverName,
+                                        mesg,
+                                        5
+                                    );
+                                    return false;
+                                    */
 							} else {
-								if(player.blueRSPoints >= rsCost){
-									currentObjUpdate = {
-										_id: player._id,
-										blueRSPoints: player.blueRSPoints - rsCost
-									};
-									return masterDBController.srvPlayerActions('update', serverName, currentObjUpdate)
-										.then(function () {
-											mesg = 'G: You have spent ' + rsCost + ' blue points on a ' + rsItem + '(' + currentObjUpdate.blueRSPoints + 'pts left)';
-											DCSLuaCommands.sendMesgToGroup(
-												curUnit.groupId,
-												serverName,
-												mesg,
-												5
-											);
-											return true;
-										})
-										.catch(function (err) {
-											console.log('line84', err);
-										})
-										;
+								if (player.side === 1) {
+									if(player.redRSPoints >= rsCost){
+										currentObjUpdate = {
+											_id: player._id,
+											redRSPoints: player.redRSPoints - rsCost
+										};
+										return masterDBController.srvPlayerActions('update', serverName, currentObjUpdate)
+											.then(function () {
+												mesg = 'G: You have spent red ' + rsCost + ' points on a ' + rsItem + '(' + currentObjUpdate.redRSPoints + 'pts left)';
+												DCSLuaCommands.sendMesgToGroup(
+													curUnit.groupId,
+													serverName,
+													mesg,
+													5
+												);
+												return true;
+											})
+											.catch(function (err) {
+												console.log('line53', err);
+											})
+											;
+									} else {
+										mesg = 'G: You do not have red ' + rsCost + ' points to buy a ' + rsItem + ' (' + player.redRSPoints + 'pts)';
+										DCSLuaCommands.sendMesgToGroup(
+											curUnit.groupId,
+											serverName,
+											mesg,
+											5
+										);
+										return false;
+									}
 								} else {
-									mesg = 'G: You do not have ' + rsCost + ' blue points to buy a ' + rsItem + ' (' + player.blueRSPoints + 'pts)';
-									DCSLuaCommands.sendMesgToGroup(
-										curUnit.groupId,
-										serverName,
-										mesg,
-										5
-									);
-									return false;
+									if(player.blueRSPoints >= rsCost){
+										currentObjUpdate = {
+											_id: player._id,
+											blueRSPoints: player.blueRSPoints - rsCost
+										};
+										return masterDBController.srvPlayerActions('update', serverName, currentObjUpdate)
+											.then(function () {
+												mesg = 'G: You have spent ' + rsCost + ' blue points on a ' + rsItem + '(' + currentObjUpdate.blueRSPoints + 'pts left)';
+												DCSLuaCommands.sendMesgToGroup(
+													curUnit.groupId,
+													serverName,
+													mesg,
+													5
+												);
+												return true;
+											})
+											.catch(function (err) {
+												console.log('line84', err);
+											})
+											;
+									} else {
+										mesg = 'G: You do not have ' + rsCost + ' blue points to buy a ' + rsItem + ' (' + player.blueRSPoints + 'pts)';
+										DCSLuaCommands.sendMesgToGroup(
+											curUnit.groupId,
+											serverName,
+											mesg,
+											5
+										);
+										return false;
+									}
 								}
 							}
-						}
-					})
-					.catch(function (err) {
-						console.log('line101', err);
-					})
-				;
-			} else {
-				mesg = 'G: You cannot spend RS points on the ground, Please TakeOff First, Then Call RS Point Option!';
-				DCSLuaCommands.sendMesgToGroup(
-					curUnit.groupId,
-					serverName,
-					mesg,
-					5
-				);
-				return false;
-			}
-		})
-		.catch(function (err) {
-			console.log('line118', err);
-		})
-	;
+						})
+						.catch(function (err) {
+							console.log('line101', err);
+						})
+						;
+				} else {
+					mesg = 'G: You cannot spend RS points on the ground, Please TakeOff First, Then Call RS Point Option!';
+					DCSLuaCommands.sendMesgToGroup(
+						curUnit.groupId,
+						serverName,
+						mesg,
+						5
+					);
+					return false;
+				}
+			})
+			.catch(function (err) {
+				console.log('line118', err);
+			})
+		;
+	}
 });
 
 _.set(exports, 'checkResourcePoints', function (serverName, player) {
