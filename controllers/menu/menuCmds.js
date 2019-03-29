@@ -932,6 +932,7 @@ _.assign(exports, {
 		console.log('AWACSType: ', awacsType, rsCost);
 
 		var awacsObj;
+		/*
 		if(awacsType === 'RussianAWACSA50') {
 			awacsObj = {
 				name: 'RussianAWACSA50',
@@ -948,6 +949,7 @@ _.assign(exports, {
 				eplrs: false
 			};
 		}
+		 */
 		if(awacsType === 'RussianAWACSE2C') {
 			awacsObj = {
 				name: 'RussianAWACSE2C',
