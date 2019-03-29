@@ -64,15 +64,18 @@ _.assign(exports, {
 							.then(function (unitsInProx) {
 								if(_.find(unitsInProx, {playername: curPlayerUnit.playername})) {
 									masterDBController.unitActions('read', serverName, {_id: base.name + ' Logistics', dead: false})
-										.then(function (isCCExist) {
-											if (isCCExist.length > 0) {
+										.then(function (cmdCenters) {
+											if (cmdCenters.length > 0) {
 												DCSLuaCommands.sendMesgToGroup(
 													curPlayerUnit.groupId,
 													serverName,
 													'G: ' + base.name + ' Command Center Already Exists.',
 													5
 												);
-												groupController.spawnSupportBaseGrp( serverName, base.name, curPlayerUnit.coalition );
+												console.log('player own CC??: ' + _.first(cmdCenters).coalition === curPlayerUnit.coalition);
+												if(_.first(cmdCenters).coalition === curPlayerUnit.coalition) {
+													groupController.spawnSupportBaseGrp( serverName, base.name, curPlayerUnit.coalition );
+												}
 												resolve(false);
 											} else {
 												// console.log('player: ', curPlayerUnit);
