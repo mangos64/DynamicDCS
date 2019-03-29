@@ -11,7 +11,7 @@ var SRSServers = {
 };
 
 exports.oldestAllowedUser = 300;
-exports.timeToCorrect = 30;
+exports.timeToCorrect = 15;
 exports.Only0ChannelNames = [
 	'Please join side before joining GCI'
 ];
