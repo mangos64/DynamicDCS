@@ -75,7 +75,7 @@ _.assign(exports, {
 								_.get(tNameArry, [2]).charAt(0),
 								launcher,
 								'blah',
-								_.get(tNameArry));
+								tNameArry);
 							groupController.spawnStarSam(
 								serverName,
 								_.get(curSAMTemplate, 'coalition'),
