@@ -90,6 +90,9 @@ this should install all the dependences needed to run DDCS
    npm install
    ```
    this will install all the dependancys for the DDCS project
+####Install Backend Hook Script for backend communication
+1. make sure DCS is closed
+2. Copy the file from app/assets/lua/dynamicDCSTrueGameGUI.lua into the folder C:\Users\[computer account name]\Saved Games\DCS\Scripts\Hooks
 
 ####Configure your DCS server to be able to run lua socket(has to be done after EVERY update)
 1. Make sure DCS is closed
