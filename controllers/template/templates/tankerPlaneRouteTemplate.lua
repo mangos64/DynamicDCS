@@ -1,10 +1,10 @@
 ["route"] = { 
-	["points"] = { 
-		[1] = { 
-			["alt"] = %alt%
+    ["points"] = { 
+        [1] = { 
+            ["alt"] = %alt%, 
             ["action"] = "Turning Point", 
             ["alt_type"] = "BARO", 
-            ["speed"] = %speed%
+            ["speed"] = %speed%, 
             ["task"] = { 
                 ["id"] = "ComboTask", 
                 ["params"] = { 
@@ -12,8 +12,8 @@
                         [1] = { 
                             ["number"] = 1, 
                             ["auto"] = true, 
-                            ["id"] = "AWACS", 
-                            ["enabled"] = true, 
+                            ["id"] = "Tanker", 
+                            ["enabled"]=true, 
                             ["params"]={}, 
                         }, 
                         [2] = { 
@@ -21,14 +21,14 @@
                             ["auto"] = false, 
                             ["id"] = "WrappedAction", 
                             ["name"] = "RadioFreq", 
-                            ["enabled"] = true, 
+                            ["enabled"]=true, 
                             ["params"] = { 
                                 ["action"] = { 
                                     ["id"] = "SetFrequency", 
                                     ["params"] = { 
-                                        ["power"] = 10, 
-                                        ["modulation"] = 0, 
-                                        ["frequency"] = %radioFreq%
+                                        ["power"]=10, 
+                                        ["modulation"]=0, 
+                                        ["frequency"]= %radioFreq%, 
                                     }, 
                                 }, 
                             }, 
@@ -39,51 +39,36 @@
                             ["id"] = "Orbit", 
                             ["enabled"]=true, 
                             ["params"] = { 
-                                ["altitude"] = %alt%
+                                ["altitude"] =  %alt%, 
                                 ["pattern"] = "Race-Track", 
-                                ["speed"] = %speed$
+                                ["speed"] = %speed%, 
                                 ["speedEdited"] = true, 
                             }, 
                         }, 
-                        [4] = { 
-                            ["number"] = 4, 
-                            ["auto"] = false, 
-                            ["id"] = "WrappedAction", 
-                            ["enabled"] = true, 
-                            ["params"] = { 
-                                ["action"] = { 
-                                    ["id"] = "Option", 
-                                    ["params"] = { 
-                                        ["name"] = 1, 
-                                        ["value"] = 2, 
-                                    }, 
-                                }, 
-                            }, 
-                        },
-                        %eplrs%
+                        %tacan%
                     }, 
                 }, 
             }, 
             ["type"] = "Turning Point", 
-            ["x"] = coord.LLtoLO( %routeLoc;0;1%, %routeLoc;0;0% ).x,   
-            ["y"] = coord.LLtoLO( %routeLoc;0;1%, %routeLoc;0;0% ).z,  
+            ["x"] = coord.LLtoLO( %routeLocs;0;1, %routeLocs;0;0% ).x,  
+            ["y"] = coord.LLtoLO( %routeLocs;0;1, %routeLocs;0;0% ).z,  
             ["speed_locked"] = true, 
         }, 
         [2]={ 
-            ["alt"] = %alt%
+            ["alt"] = %alt%, 
             ["action"] = "Turning Point", 
             ["alt_type"] = "BARO", 
-            ["speed"] = %speed%
+            ["speed"] = %speed%, 
             ["task"] = { 
                 ["id"] = "ComboTask", 
                 ["params"] = { 
-                    ["tasks"]= {} 
+                    ["tasks"]={} 
                 }, 
             }, 
             ["type"] = "Turning Point", 
-            ["x"] = coord.LLtoLO( %routeLoc;1;1%, %routeLoc;1;0% ).x,  
-            ["y"] = coord.LLtoLO( %routeLoc;1;1%, %routeLoc;1;0% ).z,  
+            ["x"] = coord.LLtoLO( %routeLocs;1;1, %routeLocs;1;0% ).x,  
+            ["y"] = coord.LLtoLO( %routeLocs;1;1, %routeLocs;1;0% ).z,  
             ["speed_locked"] = true, 
         }, 
     }, 
-}
+},

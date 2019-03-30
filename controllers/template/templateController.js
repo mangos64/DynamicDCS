@@ -2,6 +2,8 @@ const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
 
+const CACHE_TEMPLATES = true;
+
 const templateCache = {};
 const templateFileDirectory = './templates';
 
@@ -12,7 +14,11 @@ const getTemplateFromFile = function (templateName) {
 		// Check to see if the file has already been read,
 		// as we don't want to perform expensive file operations
 		// every time someone tries to spawn something.
-		const possibleCachedTemplate = _.get(templateCache, templateName);
+		let possibleCachedTemplate;
+		if (CACHE_TEMPLATES) {
+			possibleCachedTemplate = _.get(templateCache, templateName);
+		}
+
 		if (possibleCachedTemplate) {
 			console.log('Loading unit template from cache');
 			templateString = possibleCachedTemplate;

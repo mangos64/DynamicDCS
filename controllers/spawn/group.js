@@ -10,12 +10,11 @@ var openSAM = 0;
 
 _.set(exports, 'spawnGrp', function (grpSpawn, country, category) {
 	// console.log('spwnGrp: ', country, _.indexOf(constants.countryId, country), category);
-	return gSpawnCmd = 'coalition.addGroup(' + _.indexOf(constants.countryId, country) + ', Group.Category.' + category + ', ' + grpSpawn + ')';
+	return 'coalition.addGroup(' + _.indexOf(constants.countryId, country) + ', Group.Category.' + category + ', ' + grpSpawn + ')';
 });
 
 _.set(exports, 'spawnStatic', function (serverName, staticSpawn, country, statName, init) {
-
-	return sSpawnCmd = [
+	return [
 		'coalition.addStaticObject(' + _.indexOf(constants.countryId, country) + ', ' + staticSpawn + ')'
 	];
 
@@ -40,7 +39,7 @@ _.set(exports, 'turnOnEWRAuto', function (groupObj) {
 		setCallsign = 254;
 		setFreq = 254000000;
 	} else if (_.get(groupObj, 'type') === '55G6 EWR') {
-		//Mig 15 freq
+		// Mig 15 freq
 		setCallsign = 375;
 		setFreq = 3750000;
 	} else {
@@ -566,35 +565,66 @@ _.set(exports, 'bombersPlaneRouteTemplate', function (routes) {
 		;
 });
 
-_.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
-	let templateString = templateController.getTemplateFromFile('awacsPlaneRouteTemplate');
+_.set(exports, 'getUnitTemplate', function (templateName, routes) {
+	let templateString = templateController.getTemplateFromFile(templateName);
 
-	// TODO: Implement logic for replacing strings
-	templateString = templateString.replace(/\%alt\%/g, _.get(routes, 'alt'));
-	templateString = templateString.replace(/\%speed\%/g, _.get(routes, 'speed'));
-	templateString = templateString.replace(/\%radioFreq\%/g, _.get(routes, 'radioFreq'));
+	const templateRegex = /%.*?%/g;
 
-	const routeLocationRegex = /\%routes;([0-9]);([0-9])\%/g;
-	const matches = templateString.match(routeLocationRegex);
+	// Make the array unique so we only have to iterate through each item once.
+	const matchingTemplates = _.uniq(templateString.match(templateRegex));
 
-	matches.forEach((x) => {
-		const routeMatch = x.match(/\%routes;([0-9]);([0-9])\%/);
-		const posOne = routeMatch[1];
-		const posTwo = routeMatch[2];
+	matchingTemplates.forEach((x) => {
+		const key = x.replace(/%/g, ''); // Remove the leading and trailing % sign from the key
+		console.log('Key: ', key);
 
-		templateString = templateString.replace(x, _.get(routes, ['routeLoc', posOne, posTwo]));
+		// We have a special action for EPLRS as it is an addition and not a straight substitution
+		if (key === 'eplrs') {
+			// Check if EPLRS is activated and add to the template if it is.
+			if (_.get(routes, 'eplrs')) {
+				templateString = templateString.replace(/%eplrs%/g, templateController.getTemplateFromFile('eplrs'));
+			} else {
+				templateString = templateString.replace(/%eplrs%/g, ''); // No eplrs implemented, so let's remove it as it will cause errors
+			}
+		}
+
+		// We have a special action for EPLRS as it is an addition and not a straight substitution
+		if (key === 'tacan') {
+			if (_.get(routes, 'tacan')) {
+				templateString = templateString.replace(/%tacan%/g, exports.getUnitTemplate('tacan', _.get(routes, 'tacan')));
+			} else {
+				templateString = templateString.replace(/%tacan%/g, ''); // No tacan implemented, so let's remove it as it will cause errors
+			}
+		}
+
+		// Split the key using the delimeter symbol of ';' so we can go down multiple paths
+		const path = key.split(';');
+		console.log('Path: ', path);
+		const mappedPath = path.map(y => {
+			if (isNaN(y)) {
+				return y;
+			}
+
+			return parseInt(y, 10);
+		});
+		console.log('Mapped Path: ', mappedPath);
+
+		templateString = templateString.replace(new RegExp(x, 'g'), _.get(routes, mappedPath));
 	});
 
 	// Check if EPLRS is activated and add to the template if it is.
 	if (_.get(routes, 'eplrs')) {
-		templateString = templateString.replace(/\%eplrs\%/g, templateController.getTemplateFromFile('eplrs'));
+		templateString = templateString.replace(/%eplrs%/g, templateController.getTemplateFromFile('eplrs'));
 	} else {
-		templateString = templateString.replace(/\%eplrs\%/g, ''); // No eplrs implemented, so let's remove it as it will cause errors
+		templateString = templateString.replace(/%eplrs%/g, ''); // No eplrs implemented, so let's remove it as it will cause errors
 	}
 
 	// Do one final pass to replace any remaining template strings (there shouldn't)
 
 	return templateString;
+});
+
+_.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
+	return exports.getUnitTemplate('awacsPlaneRouteTemplate', routes);
 });
 
 _.set(exports, 'tankerPlaneRouteTemplate', function (routes) {
@@ -700,9 +730,9 @@ _.set(exports, 'tankerPlaneRouteTemplate', function (routes) {
 		;
 
 	if (_.get(routes, 'tacan.enabled')) {
-		tankerTemplate = _.replace(tankerTemplate, "#TACAN", tacanInfo);
+		tankerTemplate = _.replace(tankerTemplate, '#TACAN', tacanInfo);
 	} else {
-		tankerTemplate = _.replace(tankerTemplate, "#TACAN", "");
+		tankerTemplate = _.replace(tankerTemplate, '#TACAN', '');
 	}
 	return tankerTemplate;
 });
@@ -739,13 +769,13 @@ _.set(exports, 'landPlaneRouteTemplate', function (routes) {
 		'},' +
 		'},' +
 		'["type"] = "Turning Point",' +
-		//'["ETA"] = 0,' +
-		//'["ETA_locked"] = true,' +
+		// '["ETA"] = 0,' +
+		// '["ETA_locked"] = true,' +
 		'["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
 		'["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-		//'["name"] = "waypoint 1",' +
-		//'["formation_template"] = "",' +
-		//'["speed_locked"] = true,' +
+		// '["name"] = "waypoint 1",' +
+		// '["formation_template"] = "",' +
+		// '["speed_locked"] = true,' +
 		'},' +
 		'[2]={' +
 		'["alt"] = 25,' +
@@ -775,14 +805,14 @@ _.set(exports, 'landPlaneRouteTemplate', function (routes) {
 		'},' +
 		'},' +
 		'["type"] = "Land",' +
-		//'["ETA"] = 712.36534243372,' +
-		//'["ETA_locked"] = false,' +
+		// '["ETA"] = 712.36534243372,' +
+		// '["ETA_locked"] = false,' +
 		'["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').x, ' +
 		'["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').z, ' +
-		//'["name"] = "DictKey_WptName_21362",' +
-		//'["formation_template"] = "",' +
+		// '["name"] = "DictKey_WptName_21362",' +
+		// '["formation_template"] = "",' +
 		'["airdromeId"] = ' + _.get(routes, 'baseId') + ',' +
-		//'["speed_locked"] = true,' +
+		// '["speed_locked"] = true,' +
 		'},' +
 		'}' +
 		'},'
@@ -833,13 +863,13 @@ _.set(exports, 'landHeliRouteTemplate', function (routes) {
 		'},' +
 		'},' +
 		'["type"] = "Turning Point",' +
-		//'["ETA"] = 0,' +
-		//'["ETA_locked"] = true,' +
+		// '["ETA"] = 0,' +
+		// '["ETA_locked"] = true,' +
 		'["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
 		'["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-		//'["name"] = "waypoint 1",' +
-		//'["formation_template"] = "",' +
-		//'["speed_locked"] = true,' +
+		// '["name"] = "waypoint 1",' +
+		// '["formation_template"] = "",' +
+		// '["speed_locked"] = true,' +
 		'},' +
 		'},' +
 		'},'
@@ -847,9 +877,8 @@ _.set(exports, 'landHeliRouteTemplate', function (routes) {
 });
 
 _.set(exports, 'grndUnitGroup', function (groupObj, task, routes) {
-
 	var curRoute = '';
-	var curTask = (task) ? task : 'Ground Nothing';
+	var curTask = (task) || 'Ground Nothing';
 	var uncontrollable = _.get(groupObj, 'playerCanDrive', false) === false;
 	// console.log('uncontrol: ', uncontrollable, curTask);
 
@@ -865,7 +894,7 @@ _.set(exports, 'grndUnitGroup', function (groupObj, task, routes) {
 	}
 
 	return '{' +
-		//'["groupId"] = ' + _.get(groupObj, 'groupId') + ',' +
+		// '["groupId"] = ' + _.get(groupObj, 'groupId') + ',' +
 		'["communication"] = true,' +
 		'["start_time"] = 0,' +
 		'["frequency"] = 251,' +
@@ -900,7 +929,7 @@ _.set(exports, 'grndUnitTemplate', function (unitObj) {
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
 		'["playerCanDrive"] = ' + _.get(unitObj, 'playerCanDrive', false) + ',' +
 		// '["playerCanDrive"] = false,' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["country"] = "' + _.get(unitObj, 'country') + '",' +
 		'}'
 		;
@@ -915,7 +944,7 @@ _.set(exports, 'mi24vTemplate', function (unitObj) {
 		'["name"] = "' + _.get(unitObj, 'name') + '",' +
 		// '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["payload"]={' +
 		'["pylons"]={},' +
 		'["fuel"] = "1704",' +
@@ -937,7 +966,7 @@ _.set(exports, 'ah1wTemplate', function (unitObj) {
 		'["name"] = "' + _.get(unitObj, 'name') + '",' +
 		// '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["payload"]={' +
 		'["pylons"]={},' +
 		'["fuel"] = "1250",' +
@@ -958,7 +987,7 @@ _.set(exports, 'mi28nTemplate', function (unitObj) {
 		'["name"] = "' + _.get(unitObj, 'name') + '",' +
 		// '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["hardpoint_racks"] = true,' +
 		'["payload"]={' +
 		'["pylons"]={' +
@@ -984,7 +1013,7 @@ _.set(exports, 'ah64dTemplate', function (unitObj) {
 		'["name"] = "' + _.get(unitObj, 'name') + '",' +
 		// '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["hardpoint_racks"] = true,' +
 		'["payload"]={' +
 		'["pylons"]={' +
@@ -1013,7 +1042,7 @@ _.set(exports, 'b1bTemplate', function (unitObj) {
 		'["name"] = "' + _.get(unitObj, 'name') + '",' +
 		// '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["hardpoint_racks"] = true,' +
 		'["payload"]={' +
 		'["pylons"]={' +
@@ -1045,7 +1074,7 @@ _.set(exports, 'su24mTemplate', function (unitObj) {
 		'["name"] = "' + _.get(unitObj, 'name') + '",' +
 		// '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["hardpoint_racks"] = true,' +
 		'["payload"]={' +
 		'["pylons"]={' +
@@ -1093,7 +1122,7 @@ _.set(exports, 'airUnitTemplate', function (unitObj) {
 		'["name"] = "' + _.get(unitObj, 'name') + '",' +
 		// '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
 		'["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-		'["skill"] = "' + _.get(unitObj, 'skill', "Excellent") + '",' +
+		'["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
 		'["payload"]={' +
 		'["pylons"]={},' +
 		'["fuel"] = "100000",' +
@@ -1115,7 +1144,7 @@ _.set(exports, 'airUnitTemplate', function (unitObj) {
 		curAirTemplate = curAirTemplate + '["callsign"] = "' + _.get(unitObj, 'callsign') + '",' +
 			'["onboard_num"] = "' + _.get(unitObj, 'onboard_num') + '",';
 	}
-	curAirTemplate = curAirTemplate + '}';
+	curAirTemplate += '}';
 
 	return curAirTemplate;
 });
@@ -1177,14 +1206,14 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 		if (curUnits.length > 0) {
 			_.forEach(curUnits, function (cUnit) {
 				if (_.get(cUnit, 'launcher')) {
-					curLaunchSpawn = launchers ? launchers : _.get(cUnit, 'spawnCount');
+					curLaunchSpawn = launchers || _.get(cUnit, 'spawnCount');
 				} else {
 					curLaunchSpawn = _.get(cUnit, 'spawnCount');
 				}
 				for (y = 0; y < curLaunchSpawn; y++) {
 					unitsChosen.push(cUnit);
 				}
-			})
+			});
 		}
 		if (spawnShow) {
 			_.forEach(unitsChosen, function (unit) {
@@ -1192,24 +1221,23 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 			});
 		}
 		return unitsChosen;
-	} else {
-		return false;
 	}
+	return false;
 });
 
 _.set(exports, 'spawnSupportVehiclesOnFarp', function (serverName, baseName, side) {
 	var curBase = _.find(_.get(constants, 'bases'), { name: baseName });
 	var curFarpArray = [];
 	var sptArray = [
-		"unarmedAmmo",
-		"unarmedFuel",
-		"unarmedPower"
+		'unarmedAmmo',
+		'unarmedFuel',
+		'unarmedPower'
 	];
 	var curAng = _.cloneDeep(curBase.hdg);
 	if (curAng > 180) {
-		curAng = curAng - 90
+		curAng -= 90;
 	} else {
-		curAng = curAng + 270
+		curAng += 270;
 	}
 	_.forEach(sptArray, function (val) {
 		var sptUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat(val, side, false, true)));
@@ -1274,19 +1302,19 @@ _.set(exports, 'spawnBaseReinforcementGroup', function (serverName, side, baseNa
 					curSpokeDeg = 359 / curSpokeNum;
 
 					if (_.get(infoSpwn, 'centerRadar')) {
-						//main radar
+						// main radar
 						curCat = _.cloneDeep(infoSpwn);
 						_.set(curCat, 'lonLatLoc', randLatLonInBase);
 						groupedUnits.push(curCat);
 					}
-					//secondary radar
+					// secondary radar
 					for (var j = _.cloneDeep(centerRadar); j < _.get(infoSpwn, 'secRadarNum') + centerRadar; j++) {
 						curCat = _.cloneDeep(curRndSpawn[j]);
 						_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, curAngle, _.get(curCat, 'spokeDistance') / 2));
 						curAngle += curSpokeDeg;
 						groupedUnits.push(curCat);
 					}
-					//launchers
+					// launchers
 					for (var k = _.get(infoSpwn, 'secRadarNum') + centerRadar; k < curSpokeNum + centerRadar; k++) {
 						curCat = _.cloneDeep(curRndSpawn[k]);
 						_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, curAngle, _.get(curCat, 'spokeDistance')));
@@ -1325,7 +1353,7 @@ _.set(exports, 'spawnSAMNet', function (serverName, side, baseName, init) {
 	var realSAMArray = [];
 	var rndRobinArray;
 
-	//{$and: [{name: /Tuapse_FARP/}, {name: /EWR/}], dead: false}
+	// {$and: [{name: /Tuapse_FARP/}, {name: /EWR/}], dead: false}
 	// first get working SAMS for base
 	// console.log('sam for: ', baseName);
 	return masterDBController.unitActions('read', serverName, { $and: [{ name: new RegExp(baseName) }, { name: /SAM/ }], dead: false })
@@ -1365,18 +1393,16 @@ _.set(exports, 'spawnSAMNet', function (serverName, side, baseName, init) {
 					} else {
 						openSAM = _.sample(_.sample(spawnArray));
 					}
-					exports.spawnStarSam(serverName, side, baseName, openSAM[0])
+					exports.spawnStarSam(serverName, side, baseName, openSAM[0]);
 				} else {
 					console.log('3+ missle batterys in place');
 				}
-			} else {
-				if (init) {
-					rndRobinArray = _.sample(spawnArray);
-					_.forEach(rndRobinArray, function (spwnPoint) {
-						//console.log('rr: ', spwnPoint, spwnPoint[0]);
-						exports.spawnStarSam(serverName, side, baseName, spwnPoint[0]);
-					});
-				}
+			} else if (init) {
+				rndRobinArray = _.sample(spawnArray);
+				_.forEach(rndRobinArray, function (spwnPoint) {
+					// console.log('rr: ', spwnPoint, spwnPoint[0]);
+					exports.spawnStarSam(serverName, side, baseName, spwnPoint[0]);
+				});
 			}
 		})
 		.catch(function (err) {
@@ -1406,14 +1432,14 @@ _.set(exports, 'spawnStarSam', function (serverName, side, baseName, openSAM, la
 	curSpokeNum = curRndSpawn.length - centerRadar;
 	curSpokeDeg = 359 / curSpokeNum;
 	if (_.get(infoSpwn, 'centerRadar')) {
-		//main radar
+		// main radar
 		curCat = _.cloneDeep(infoSpwn);
 		_.set(curCat, 'lonLatLoc', randLatLonInBase);
 		_.set(curCat, 'name', '|' + baseName + '|' + openSAM + 'SAM|' + _.random(1000000, 9999999));
 		groupedUnits.push(curCat);
 	}
 	// console.log('centerRadar: ', _.cloneDeep(groupedUnits));
-	//secondary radar
+	// secondary radar
 	for (var j = _.cloneDeep(centerRadar); j < _.get(infoSpwn, 'secRadarNum') + centerRadar; j++) {
 		curCat = _.cloneDeep(curRndSpawn[j]);
 		_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, curAngle, _.get(curCat, 'spokeDistance') / 2));
@@ -1422,7 +1448,7 @@ _.set(exports, 'spawnStarSam', function (serverName, side, baseName, openSAM, la
 		groupedUnits.push(curCat);
 	}
 	// console.log('seccenterRadar: ', _.cloneDeep(groupedUnits));
-	//launchers
+	// launchers
 	for (var k = _.get(infoSpwn, 'secRadarNum') + centerRadar; k < curSpokeNum + centerRadar; k++) {
 		curCat = _.cloneDeep(curRndSpawn[k]);
 		_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, curAngle, _.get(curCat, 'spokeDistance')));
@@ -1431,7 +1457,7 @@ _.set(exports, 'spawnStarSam', function (serverName, side, baseName, openSAM, la
 		groupedUnits.push(curCat);
 	}
 	// console.log('launchers: ', _.cloneDeep(groupedUnits), _.get(infoSpwn, 'secRadarNum'), centerRadar, curSpokeNum, centerRadar);
-	//add ammo truck
+	// add ammo truck
 	curCat = _.cloneDeep(_.first(exports.getRndFromSpawnCat('unarmedAmmo', side, false, true)));
 	_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, 180, _.get(curCat, 'spokeDistance') / 2));
 	_.set(curCat, 'name', '|' + baseName + '|' + openSAM + 'SAM|' + _.random(1000000, 9999999));
@@ -1467,7 +1493,7 @@ _.set(exports, 'spawnLayer2Reinforcements', function (serverName, catType, rndAm
 		randLatLonInBase = _.cloneDeep(zoneController.getRandomLatLonFromBase(serverName, baseName, 'layer2Poly'));
 		_.set(curCat, 'lonLatLoc', randLatLonInBase);
 		groupedL2Units.push(curCat);
-		//launchers
+		// launchers
 		for (var j = 0; j < curSpokeNum; j++) {
 			// console.log('run: ', i, curAngle);
 			curUnit = _.cloneDeep(curRndSpawn[j]);
@@ -1533,9 +1559,9 @@ _.set(exports, 'spawnDefenseChopper', function (serverName, playerUnitObj, unitO
 				}
 			}
 
-			curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+			curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 			var curCMD = exports.spawnGrp(curGroupSpawn, curCountry, curCategory);
-			var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+			var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 			var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 			masterDBController.cmdQueActions('save', serverName, actionObj)
 				.then(function () {
@@ -1577,7 +1603,7 @@ _.set(exports, 'spawnAtkChopper', function (serverName, playerUnitObj, unitObj) 
 		.then(function (enemyBase) {
 			masterDBController.baseActions('getClosestFriendlyBase', serverName, { unitLonLatLoc: playerUnitObj.lonLatLoc, playerSide: playerUnitObj.coalition })
 				.then(function (friendlyBase) {
-					//friendlyLoc = zoneController.getLonLatFromDistanceDirection(enemyBase.centerLoc, enemyBase.spawnAngle, curSpwnUnit.spawnDistance);
+					// friendlyLoc = zoneController.getLonLatFromDistanceDirection(enemyBase.centerLoc, enemyBase.spawnAngle, curSpwnUnit.spawnDistance);
 					friendlyLoc = zoneController.getLonLatFromDistanceDirection(friendlyBase.centerLoc, zoneController.findBearing(friendlyBase.centerLoc[1], friendlyBase.centerLoc[0], enemyBase.centerLoc[1], enemyBase.centerLoc[0]), 10);
 					enemyLoc = enemyBase.centerLoc;
 
@@ -1609,9 +1635,9 @@ _.set(exports, 'spawnAtkChopper', function (serverName, playerUnitObj, unitObj) 
 						}
 					}
 
-					curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+					curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 					var curCMD = exports.spawnGrp(curGroupSpawn, curCountry, curCategory);
-					var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+					var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 					var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 					masterDBController.cmdQueActions('save', serverName, actionObj)
 						.then(function () {
@@ -1687,9 +1713,9 @@ _.set(exports, 'spawnBomberPlane', function (serverName, playerUnitObj, bomberOb
 				curUnitSpawn = exports.b1bTemplate(curSpwnUnit);
 			}
 
-			curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+			curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 			var curCMD = exports.spawnGrp(curGroupSpawn, curCountry, curCategory);
-			var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+			var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 			var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 			masterDBController.cmdQueActions('save', serverName, actionObj)
 				.then(function () {
@@ -1749,9 +1775,9 @@ _.set(exports, 'spawnAWACSPlane', function (serverName, playerUnitObj, awacsObj)
 
 			curUnitSpawn = exports.airUnitTemplate(curSpwnUnit);
 
-			curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+			curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 			var curCMD = exports.spawnGrp(curGroupSpawn, curCountry, curCategory);
-			var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+			var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 			var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 			masterDBController.cmdQueActions('save', serverName, actionObj)
 				.then(function () {
@@ -1811,9 +1837,9 @@ _.set(exports, 'spawnTankerPlane', function (serverName, playerUnitObj, tankerOb
 
 			curUnitSpawn = exports.airUnitTemplate(curSpwnUnit);
 
-			curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+			curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 			var curCMD = exports.spawnGrp(curGroupSpawn, curCountry, curCategory);
-			var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+			var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 			var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 			masterDBController.cmdQueActions('save', serverName, actionObj)
 				.then(function () {
@@ -1897,10 +1923,10 @@ _.set(exports, 'spawnSupportPlane', function (serverName, baseObj, side) {
 
 	curUnitSpawn = exports.airUnitTemplate(curSpwnUnit);
 
-	curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+	curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 	// console.log('spawnSupportPlane: ', curGroupSpawn, curSide, curGrpObj.category);
 	var curCMD = exports.spawnGrp(curGroupSpawn, curSide, curGrpObj.category);
-	var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+	var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 	var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 	masterDBController.cmdQueActions('save', serverName, actionObj)
 		.then(function () {
@@ -1954,7 +1980,7 @@ _.set(exports, 'spawnLogiGroup', function (serverName, spawnArray, side) {
 			}
 			curSpwnUnit = _.cloneDeep(curUnit);
 			if (unitNum !== grpNum) {
-				curUnitSpawn += ','
+				curUnitSpawn += ',';
 			}
 			unitNum += 1;
 			curUnitName = curSpwnUnit.spwnName + ' #' + unitNum;
@@ -1966,10 +1992,10 @@ _.set(exports, 'spawnLogiGroup', function (serverName, spawnArray, side) {
 			_.set(curSpwnUnit, 'playerCanDrive', _.get(curSpwnUnit, 'playerCanDrive', true));
 			curUnitSpawn += exports.grndUnitTemplate(curSpwnUnit);
 		});
-		curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+		curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 		// var curCMD = 'mist.dynAdd(' + curGroupSpawn + ')';
 		var curCMD = exports.spawnGrp(curGroupSpawn, curSide, curGrpObj.category);
-		var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+		var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 		var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 		masterDBController.cmdQueActions('save', serverName, actionObj)
 			.catch(function (err) {
@@ -2010,7 +2036,7 @@ _.set(exports, 'spawnGroup', function (serverName, spawnArray, baseName, side) {
 		_.forEach(sArray, function (curUnit) {
 			curSpwnUnit = _.cloneDeep(curUnit);
 			if (unitNum !== grpNum) {
-				curUnitSpawn += ','
+				curUnitSpawn += ',';
 			}
 			unitNum += 1;
 			curUnitName = baseName + ' #' + unitNum;
@@ -2027,11 +2053,11 @@ _.set(exports, 'spawnGroup', function (serverName, spawnArray, baseName, side) {
 			_.set(curSpwnUnit, 'name', _.get(curSpwnUnit, 'name', curUnitName));
 			curUnitSpawn += exports.grndUnitTemplate(curSpwnUnit);
 		});
-		curGroupSpawn = _.replace(curGroupSpawn, "#UNITS", curUnitSpawn);
+		curGroupSpawn = _.replace(curGroupSpawn, '#UNITS', curUnitSpawn);
 		// var curCMD = 'mist.dynAdd(' + curGroupSpawn + ')';
 		var curCMD = exports.spawnGrp(curGroupSpawn, curSide, curGrpObj.category);
 		// console.log('cmd: ', curCMD);
-		var sendClient = { action: "CMD", cmd: [curCMD], reqID: 0 };
+		var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 		var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 		masterDBController.cmdQueActions('save', serverName, actionObj)
 			.catch(function (err) {
@@ -2056,7 +2082,7 @@ _.set(exports, 'spawnNewMapGrps', function (serverName) {
 			curReplenThreshold = curServer.replenThresholdBase;
 		}
 		totalUnitNum = 0;
-		while (spawnArray.length + totalUnitNum < curReplenThreshold) { //UNCOMMENT THESE
+		while (spawnArray.length + totalUnitNum < curReplenThreshold) { // UNCOMMENT THESE
 			totalUnitNum += exports.spawnBaseReinforcementGroup(serverName, extSide, extName, true, true);
 			// console.log('TN: ', totalUnitNum, spawnArray.length, totalUnitNum, '<', curReplenThreshold, spawnArray.length + totalUnitNum < curReplenThreshold);
 		}
@@ -2077,7 +2103,7 @@ _.set(exports, 'spawnNewMapGrps', function (serverName) {
 		*/
 		totalUnitsSpawned += spawnArray.length + totalUnitNum + 1;
 	});
-	return totalUnitsSpawned
+	return totalUnitsSpawned;
 });
 
 _.set(exports, 'spawnLogisticCmdCenter', function (serverName, staticObj, init, baseObj, side) {
@@ -2094,7 +2120,7 @@ _.set(exports, 'spawnLogisticCmdCenter', function (serverName, staticObj, init, 
 	_.set(curGrpObj, 'shape_name', 'ComCenter');
 
 	var curCMD = exports.spawnStatic(serverName, exports.staticTemplate(curGrpObj), curGrpObj.country, curGrpObj.name, init);
-	var sendClient = { action: "CMD", cmd: curCMD, reqID: 0 };
+	var sendClient = { action: 'CMD', cmd: curCMD, reqID: 0 };
 	var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 	masterDBController.cmdQueActions('save', serverName, actionObj)
 		.catch(function (err) {
@@ -2122,7 +2148,7 @@ _.set(exports, 'spawnRadioTower', function (serverName, staticObj, init, baseObj
 	_.set(curGrpObj, 'shape_name', 'tele_bash_m');
 
 	var curCMD = exports.spawnStatic(serverName, exports.staticTemplate(curGrpObj), curGrpObj.country, curGrpObj.name, init);
-	var sendClient = { action: "CMD", cmd: curCMD, reqID: 0 };
+	var sendClient = { action: 'CMD', cmd: curCMD, reqID: 0 };
 	var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 	masterDBController.cmdQueActions('save', serverName, actionObj)
 		.catch(function (err) {
@@ -2159,12 +2185,12 @@ _.set(exports, 'spawnBaseEWR', function (serverName, type, baseName, side) {
 
 _.set(exports, 'replenishUnits', function (serverName, baseName, side) {
 	exports.spawnBaseReinforcementGroup(serverName, side, baseName);
-	//exports.spawnGroup(serverName, exports.spawnBaseReinforcementGroup(serverName, side, baseName), baseName, side);
+	// exports.spawnGroup(serverName, exports.spawnBaseReinforcementGroup(serverName, side, baseName), baseName, side);
 });
 
 _.set(exports, 'destroyUnit', function (serverName, unitName) {
 	// DONT USE ON CLIENT AIRCRAFT
-	var sendClient = { action: "REMOVEOBJECT", removeObject: unitName, reqID: 0 };
+	var sendClient = { action: 'REMOVEOBJECT', removeObject: unitName, reqID: 0 };
 	var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 	masterDBController.cmdQueActions('save', serverName, actionObj)
 		.catch(function (err) {
@@ -2174,7 +2200,7 @@ _.set(exports, 'destroyUnit', function (serverName, unitName) {
 });
 
 _.set(exports, 'healBase', function (serverName, baseName, curPlayerUnit) {
-	//respawn farp tower to 'heal' it
+	// respawn farp tower to 'heal' it
 	return new Promise(function (resolve, reject) {
 		masterDBController.baseActions('read', serverName, { name: baseName })
 			.then(function (baseUnit) {
@@ -2191,7 +2217,6 @@ _.set(exports, 'healBase', function (serverName, baseName, curPlayerUnit) {
 								reject(err);
 							})
 							;
-
 					} else {
 						masterDBController.unitActions('read', serverName, { name: _.get(curBase, 'name') + ' Logistics', dead: false })
 							.then(function (logiUnit) {
@@ -2265,7 +2290,7 @@ _.set(exports, 'healBase', function (serverName, baseName, curPlayerUnit) {
 							;
 						}
 						*/
-						//rebuild farp support vehicles
+						// rebuild farp support vehicles
 						exports.spawnSupportBaseGrp(serverName, curBase.name, _.get(curPlayerUnit, 'coalition'));
 						resolve(true);
 					}
