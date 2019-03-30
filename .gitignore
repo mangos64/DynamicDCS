@@ -37,3 +37,7 @@ git
 npm
 package-lock.json
 .config.json
+
+# Used by pyenv on macOS to change
+# local python version (2.7 required by node-gyp)
+.python-version
