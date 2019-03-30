@@ -60,23 +60,7 @@
                                 }, 
                             }, 
                         },
-                        -- This section will need to be templated if EPLRS is active
-                        -- START SECTION
-                        [5] = { 
-                            ["number"] = 5, 
-                            ["auto"] = true, 
-                            ["id"] = "WrappedAction", 
-                            ["enabled"] = true, 
-                            ["params"] = { 
-                                ["action"] = { 
-                                    ["id"] = "EPLRS", 
-                                    ["params"] = { 
-                                        ["value"] = true, 
-                                    }, 
-                                }, 
-                            }, 
-                        },
-                        -- END SECTION
+                        %eplrs%
                     }, 
                 }, 
             }, 
