@@ -574,8 +574,21 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 	const matchingTemplates = _.uniq(templateString.match(templateRegex));
 
 	matchingTemplates.forEach((x) => {
-		const key = x.replace(/%/g, ''); // Remove the leading and trailing % sign from the key
-		console.log('Key: ', key);
+		const sanitisedKey = x.replace(/%/g, ''); // Remove the leading and trailing % sign from the key
+		console.log('Sanitised Key: ', sanitisedKey);
+
+		/**
+		 * In order to allow for default values, we need to split on the pipe symbol
+		 * and then check if the array is longer than 1. If it is, we know there is a
+		 * default value supplied.
+		 */
+		const split = sanitisedKey.split(':');
+		let defaultValue;
+		if (split.length > 1) {
+			defaultValue = split[1];
+		}
+
+		const key = split[0]; // This will always be available
 
 		// We have a special action for EPLRS as it is an addition and not a straight substitution
 		if (key === 'eplrs') {
@@ -608,7 +621,11 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 		});
 		console.log('Mapped Path: ', mappedPath);
 
-		templateString = templateString.replace(new RegExp(x, 'g'), _.get(routes, mappedPath));
+		if (defaultValue) {
+			templateString = templateString.replace(new RegExp(x, 'g'), _.get(routes, mappedPath, defaultValue));
+		} else {
+			templateString = templateString.replace(new RegExp(x, 'g'), _.get(routes, mappedPath));
+		}
 	});
 
 	// Check if EPLRS is activated and add to the template if it is.
