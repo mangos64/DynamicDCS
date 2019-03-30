@@ -19,13 +19,6 @@ var DDCS = {};
 //config
 _.assign(DDCS, {
 	port: 80,
-	db: {
-		systemHost: '127.0.0.1',
-		systemDatabase: 'DDCS',
-		dynamicHost: '192.168.44.60',
-		dynamicDatabase: 'DDCSStandard',
-		remoteHost: '127.0.0.1',
-	},
 	perSendMax: 200,
 	serverAdminLvl: 10,
 	socketQue: {}
