@@ -1,4 +1,4 @@
-const	_ = require('lodash');
+const _ = require('lodash');
 const constants = require('../constants');
 const DCSLuaCommands = require('../player/DCSLuaCommands');
 const masterDBController = require('../db/masterDB');
@@ -23,8 +23,8 @@ _.assign(exports, {
 		var crateCount = 0;
 		var curBaseName;
 		var curBaseObj;
-		if(intCargoType === 'loaded') {
-			if(curUnit.intCargoType) {
+		if (intCargoType === 'loaded') {
+			if (curUnit.intCargoType) {
 				DCSLuaCommands.sendMesgToGroup(
 					curUnit.groupId,
 					serverName,
@@ -40,11 +40,11 @@ _.assign(exports, {
 				);
 			}
 		}
-		if(intCargoType === 'unpack') {
+		if (intCargoType === 'unpack') {
 			var intCargo = _.split(curUnit.intCargoType, '|');
 			var curIntCrateType = intCargo[1];
 			var curIntCrateBaseOrigin = intCargo[2];
-			var crateType = (curUnit.coalition === 1)?'UAZ-469':'Hummer';
+			var crateType = (curUnit.coalition === 1) ? 'UAZ-469' : 'Hummer';
 			if (curUnit.inAir) {
 				DCSLuaCommands.sendMesgToGroup(
 					curUnit.groupId,
@@ -75,7 +75,7 @@ _.assign(exports, {
 									// console.log('player prox: ', playerProx, _.some(playerProx)); _.some(playerProx)
 									curBaseName = _.first(_.split(_.get(curBaseObj, 'name'), ' #'));
 									console.log('intCurUnpackBaseAt: ', curBaseName);
-									if(curIntCrateBaseOrigin === curBaseName) {
+									if (curIntCrateBaseOrigin === curBaseName) {
 										DCSLuaCommands.sendMesgToGroup(
 											curUnit.groupId,
 											serverName,
@@ -83,9 +83,9 @@ _.assign(exports, {
 											5
 										);
 									} else {
-										if(curIntCrateType === 'JTAC') {
+										if (curIntCrateType === 'JTAC') {
 											exports.unpackCrate(serverName, curUnit, curUnit.country, crateType, 'jtac', false, true);
-											masterDBController.unitActions('updateByUnitId', serverName, {unitId: curUnit.unitId, intCargoType: ''})
+											masterDBController.unitActions('updateByUnitId', serverName, { unitId: curUnit.unitId, intCargoType: '' })
 												.then(function () {
 													DCSLuaCommands.sendMesgToGroup(
 														curUnit.groupId,
@@ -97,9 +97,9 @@ _.assign(exports, {
 												.catch(function (err) {
 													console.log('erroring line209: ', err);
 												})
-											;
+												;
 										}
-										if(curIntCrateType === 'BaseRepair') {
+										if (curIntCrateType === 'BaseRepair') {
 											if (_.some(playerProx)) {
 												repairController.repairBase(serverName, curBaseObj, curUnit);
 											} else {
@@ -111,11 +111,11 @@ _.assign(exports, {
 												);
 											}
 										}
-										if(curIntCrateType === 'CCBuild') {  // serverName, curUnit, curPlayer, intCargoType
+										if (curIntCrateType === 'CCBuild') {  // serverName, curUnit, curPlayer, intCargoType
 											constants.getServer(serverName)
-												.then(function(serverInfo) {
-													masterDBController.staticCrateActions('read', serverName, {playerOwnerId: curPlayer.ucid})
-														.then(function(delCrates) {
+												.then(function (serverInfo) {
+													masterDBController.staticCrateActions('read', serverName, { playerOwnerId: curPlayer.ucid })
+														.then(function (delCrates) {
 															_.forEach(delCrates, function (crate) {
 																if (crateCount > serverInfo.maxCrates - 2) {
 																	masterDBController.staticCrateActions('delete', serverName, {
@@ -124,7 +124,7 @@ _.assign(exports, {
 																		.catch(function (err) {
 																			console.log('erroring line573: ', err);
 																		})
-																	;
+																		;
 																	groupController.destroyUnit(serverName, crate._id);
 																}
 																crateCount++;
@@ -149,11 +149,11 @@ _.assign(exports, {
 																coalition: curUnit.coalition
 															};
 															crateController.spawnLogiCrate(serverName, crateObj, true);
-															masterDBController.unitActions('updateByUnitId', serverName, {unitId: curUnit.unitId, intCargoType: ''})
+															masterDBController.unitActions('updateByUnitId', serverName, { unitId: curUnit.unitId, intCargoType: '' })
 																.catch(function (err) {
 																	console.log('erroring line209: ', err);
 																})
-															;
+																;
 															DCSLuaCommands.sendMesgToGroup(
 																curUnit.groupId,
 																serverName,
@@ -164,24 +164,24 @@ _.assign(exports, {
 														.catch(function (err) {
 															console.log('line 1359: ', err);
 														})
-													;
+														;
 												})
 												.catch(function (err) {
 													console.log('line 1359: ', err);
 												})
-											;
+												;
 										}
 									}
 								})
 								.catch(function (err) {
 									console.log('line 26: ', err);
 								})
-							;
+								;
 						})
 						.catch(function (err) {
 							console.log('line 26: ', err);
 						})
-					;
+						;
 				} else {
 					DCSLuaCommands.sendMesgToGroup(
 						curUnit.groupId,
@@ -192,9 +192,9 @@ _.assign(exports, {
 				}
 			}
 		}
-		if(intCargoType === 'loadJTAC' || intCargoType === 'loadBaseRepair' || intCargoType === 'loadCCBuild') {
+		if (intCargoType === 'loadJTAC' || intCargoType === 'loadBaseRepair' || intCargoType === 'loadCCBuild') {
 			checkAllBase = [];
-			if(curUnit.inAir) {
+			if (curUnit.inAir) {
 				DCSLuaCommands.sendMesgToGroup(
 					curUnit.groupId,
 					serverName,
@@ -220,14 +220,14 @@ _.assign(exports, {
 						Promise.all(checkAllBase)
 							.then(function (playerProx) {
 								// console.log('playerResp: ', curBaseObj);
-								if(_.some(playerProx)) {
+								if (_.some(playerProx)) {
 									curBaseName = _.first(_.split(_.get(curBaseObj, 'name'), ' #'));
 									console.log('intCurBaseAt: ', curBaseName);
-									masterDBController.unitActions('read', serverName, {name: curBaseName + ' Logistics', dead: false})
+									masterDBController.unitActions('read', serverName, { name: curBaseName + ' Logistics', dead: false })
 										.then(function (aliveLogistics) {
 											if (aliveLogistics.length > 0) {
-												if(intCargoType === 'loadJTAC') {
-													masterDBController.unitActions('updateByUnitId', serverName, {unitId: curUnit.unitId, intCargoType: '|JTAC|' + curBaseName + '|'})
+												if (intCargoType === 'loadJTAC') {
+													masterDBController.unitActions('updateByUnitId', serverName, { unitId: curUnit.unitId, intCargoType: '|JTAC|' + curBaseName + '|' })
 														.then(function () {
 															DCSLuaCommands.sendMesgToGroup(
 																curUnit.groupId,
@@ -239,10 +239,10 @@ _.assign(exports, {
 														.catch(function (err) {
 															console.log('erroring line209: ', err);
 														})
-													;
+														;
 												}
-												if(intCargoType === 'loadBaseRepair') {
-													masterDBController.unitActions('updateByUnitId', serverName, {unitId: curUnit.unitId, intCargoType: '|BaseRepair|' + curBaseName + '|'})
+												if (intCargoType === 'loadBaseRepair') {
+													masterDBController.unitActions('updateByUnitId', serverName, { unitId: curUnit.unitId, intCargoType: '|BaseRepair|' + curBaseName + '|' })
 														.then(function () {
 															DCSLuaCommands.sendMesgToGroup(
 																curUnit.groupId,
@@ -254,10 +254,10 @@ _.assign(exports, {
 														.catch(function (err) {
 															console.log('erroring line1363: ', err);
 														})
-													;
+														;
 												}
-												if(intCargoType === 'loadCCBuild') {
-													masterDBController.unitActions('updateByUnitId', serverName, {unitId: curUnit.unitId, intCargoType: '|CCBuild|' + curBaseName + '|'})
+												if (intCargoType === 'loadCCBuild') {
+													masterDBController.unitActions('updateByUnitId', serverName, { unitId: curUnit.unitId, intCargoType: '|CCBuild|' + curBaseName + '|' })
 														.then(function () {
 															DCSLuaCommands.sendMesgToGroup(
 																curUnit.groupId,
@@ -269,7 +269,7 @@ _.assign(exports, {
 														.catch(function (err) {
 															console.log('erroring line1378: ', err);
 														})
-													;
+														;
 												}
 											} else {
 												DCSLuaCommands.sendMesgToGroup(
@@ -283,7 +283,7 @@ _.assign(exports, {
 										.catch(function (err) {
 											console.log('erroring line1363: ', err);
 										})
-									;
+										;
 								} else {
 									DCSLuaCommands.sendMesgToGroup(
 										curUnit.groupId,
@@ -296,18 +296,18 @@ _.assign(exports, {
 							.catch(function (err) {
 								console.log('line 26: ', err);
 							})
-						;
+							;
 					})
 					.catch(function (err) {
 						console.log('line 26: ', err);
 					})
-				;
+					;
 			}
 		}
 	},
 	isCrateOnboard: function (unit, serverName, verbose) {
 		if (unit.virtCrateType) {
-			if(verbose) {
+			if (verbose) {
 				DCSLuaCommands.sendMesgToGroup(
 					unit.groupId,
 					serverName,
@@ -317,7 +317,7 @@ _.assign(exports, {
 			}
 			return true;
 		}
-		if(verbose) {
+		if (verbose) {
 			DCSLuaCommands.sendMesgToGroup(
 				unit.groupId,
 				serverName,
@@ -329,7 +329,7 @@ _.assign(exports, {
 	},
 	isTroopOnboard: function (unit, serverName, verbose) {
 		if (!_.isEmpty(unit.troopType)) {
-			if(verbose) {
+			if (verbose) {
 				DCSLuaCommands.sendMesgToGroup(
 					unit.groupId,
 					serverName,
@@ -339,7 +339,7 @@ _.assign(exports, {
 			}
 			return true;
 		}
-		if(verbose) {
+		if (verbose) {
 			DCSLuaCommands.sendMesgToGroup(
 				unit.groupId,
 				serverName,
@@ -349,11 +349,11 @@ _.assign(exports, {
 		}
 		return false
 	},
-	loadTroops: function(serverName, unitId, troopType) {
-		masterDBController.unitActions('read', serverName, {unitId: unitId})
-			.then(function(units) {
+	loadTroops: function (serverName, unitId, troopType) {
+		masterDBController.unitActions('read', serverName, { unitId: unitId })
+			.then(function (units) {
 				var curUnit = _.get(units, 0);
-				if(curUnit.inAir) {
+				if (curUnit.inAir) {
 					DCSLuaCommands.sendMesgToGroup(
 						curUnit.groupId,
 						serverName,
@@ -361,7 +361,7 @@ _.assign(exports, {
 						5
 					);
 				} else {
-					masterDBController.baseActions('read', serverName, {mainBase: true, side: curUnit.coalition})
+					masterDBController.baseActions('read', serverName, { mainBase: true, side: curUnit.coalition })
 						.then(function (bases) {
 							checkAllBase = [];
 							_.forEach(bases, function (base) {
@@ -375,8 +375,8 @@ _.assign(exports, {
 							Promise.all(checkAllBase)
 								.then(function (playerProx) {
 									if (_.some(playerProx)) {
-										masterDBController.unitActions('updateByUnitId', serverName, {unitId: unitId, troopType: troopType})
-											.then(function(unit) {
+										masterDBController.unitActions('updateByUnitId', serverName, { unitId: unitId, troopType: troopType })
+											.then(function (unit) {
 												DCSLuaCommands.sendMesgToGroup(
 													unit.groupId,
 													serverName,
@@ -387,17 +387,17 @@ _.assign(exports, {
 											.catch(function (err) {
 												console.log('line 13: ', err);
 											})
-										;
+											;
 									} else {
 										//secondary check for second base distance
 										masterDBController.baseActions('read', serverName)
 											.then(function (bases) {
 												checkAllBase = [];
 												var curLogistic;
-												masterDBController.unitActions('read', serverName, {_id:  /Logistics/, dead: false, coalition: curUnit.coalition})
-													.then(function(aliveBases) {
+												masterDBController.unitActions('read', serverName, { _id: /Logistics/, dead: false, coalition: curUnit.coalition })
+													.then(function (aliveBases) {
 														_.forEach(bases, function (base) {
-															curLogistic = _.find(aliveBases, {name: base.name + ' Logistics'});
+															curLogistic = _.find(aliveBases, { name: base.name + ' Logistics' });
 															if (!!curLogistic) {
 																checkAllBase.push(proximityController.isPlayerInProximity(serverName, _.get(curLogistic, 'lonLatLoc'), 0.2, curUnit.playername)
 																	.catch(function (err) {
@@ -409,8 +409,8 @@ _.assign(exports, {
 														Promise.all(checkAllBase)
 															.then(function (playerProx) {
 																if (_.some(playerProx)) {
-																	masterDBController.unitActions('updateByUnitId', serverName, {unitId: unitId, troopType: troopType})
-																		.then(function(unit) {
+																	masterDBController.unitActions('updateByUnitId', serverName, { unitId: unitId, troopType: troopType })
+																		.then(function (unit) {
 																			DCSLuaCommands.sendMesgToGroup(
 																				curUnit.groupId,
 																				serverName,
@@ -421,7 +421,7 @@ _.assign(exports, {
 																		.catch(function (err) {
 																			console.log('line 13: ', err);
 																		})
-																	;
+																		;
 																} else {
 																	DCSLuaCommands.sendMesgToGroup(
 																		curUnit.groupId,
@@ -434,45 +434,45 @@ _.assign(exports, {
 															.catch(function (err) {
 																console.log('line 26: ', err);
 															})
-														;
+															;
 													})
 													.catch(function (err) {
 														console.log('line 13: ', err);
 													})
-												;
+													;
 											})
 											.catch(function (err) {
 												console.log('line 26: ', err);
 											})
-										;
+											;
 									}
 								})
 								.catch(function (err) {
 									console.log('line 13: ', err);
 								})
-							;
+								;
 						})
 						.catch(function (err) {
 							console.log('line 13: ', err);
 						})
-					;
+						;
 				}
 			})
 			.catch(function (err) {
 				console.log('line 13: ', err);
 			})
-		;
+			;
 	},
 	menuCmdProcess: function (serverName, sessionName, pObj) {
 		var defCrate = 'iso_container_small';
 		//var defCrate = (_.toNumber(pObj.mass) > 1000)?'iso_container':'iso_container_small';
 		// console.log('process menu cmd: ', pObj);
-		masterDBController.unitActions('read', serverName, {unitId: pObj.unitId})
-			.then(function(units) {
+		masterDBController.unitActions('read', serverName, { unitId: pObj.unitId })
+			.then(function (units) {
 				var curUnit = _.get(units, 0);
 				if (curUnit) {
-					masterDBController.srvPlayerActions('read', serverName, {name: curUnit.playername})
-						.then(function(player) {
+					masterDBController.srvPlayerActions('read', serverName, { name: curUnit.playername })
+						.then(function (player) {
 							var curPlayer = _.get(player, [0]);
 							if (curPlayer) {
 								var spawnArray;
@@ -492,7 +492,7 @@ _.assign(exports, {
 									resourcePointsController.checkResourcePoints(serverName, curPlayer);
 								}
 								if (pObj.cmd === 'unloadExtractTroops') {
-									if(curUnit.inAir) {
+									if (curUnit.inAir) {
 										DCSLuaCommands.sendMesgToGroup(
 											curUnit.groupId,
 											serverName,
@@ -500,9 +500,9 @@ _.assign(exports, {
 											5
 										);
 									} else {
-										if(exports.isTroopOnboard(curUnit, serverName)) {
+										if (exports.isTroopOnboard(curUnit, serverName)) {
 											checkAllBase = [];
-											masterDBController.baseActions('read', serverName, {mainBase: true, side: curUnit.coalition})
+											masterDBController.baseActions('read', serverName, { mainBase: true, side: curUnit.coalition })
 												.then(function (bases) {
 													_.forEach(bases, function (base) {
 														checkAllBase.push(proximityController.isPlayerInProximity(serverName, base.centerLoc, 3.4, curUnit.playername)
@@ -516,9 +516,9 @@ _.assign(exports, {
 														.then(function (playerProx) {
 															// console.log('player prox: ', playerProx, _.some(playerProx)); _.some(playerProx)
 
-															if(_.some(playerProx)) {
-																masterDBController.unitActions('updateByUnitId', serverName, {unitId: pObj.unitId, troopType: null})
-																	.then(function(){
+															if (_.some(playerProx)) {
+																masterDBController.unitActions('updateByUnitId', serverName, { unitId: pObj.unitId, troopType: null })
+																	.then(function () {
 																		DCSLuaCommands.sendMesgToGroup(
 																			curUnit.groupId,
 																			serverName,
@@ -529,20 +529,20 @@ _.assign(exports, {
 																	.catch(function (err) {
 																		console.log('line 26: ', err);
 																	})
-																;
+																	;
 															} else {
 																var curTroops = [];
 																if (_.get(constants, 'config.timePeriod') === '1978ColdWar') {
-																	masterDBController.unitActions('read', serverName, {playerOwnerId: curPlayer.ucid, isTroop: true, dead: false})
-																		.then(function(delUnits){
+																	masterDBController.unitActions('read', serverName, { playerOwnerId: curPlayer.ucid, isTroop: true, dead: false })
+																		.then(function (delUnits) {
 																			_.forEach(delUnits, function (unit) {
-																				masterDBController.unitActions('updateByUnitId', serverName, {unitId: unit.unitId, dead: true});
+																				masterDBController.unitActions('updateByUnitId', serverName, { unitId: unit.unitId, dead: true });
 																				groupController.destroyUnit(serverName, unit.name);
 																			});
 																			// spawn troop type
 																			curSpawnUnit = _.cloneDeep(_.first(groupController.getRndFromSpawnCat(curUnit.troopType, curUnit.coalition, false, true)));
 																			spawnArray = {
-																				spwnName: 'TU|' + curPlayer.ucid + '|' + curUnit.troopType + '|' + curUnit.playername + '|' + _.random(1000000, 9999999) ,
+																				spwnName: 'TU|' + curPlayer.ucid + '|' + curUnit.troopType + '|' + curUnit.playername + '|' + _.random(1000000, 9999999),
 																				type: curSpawnUnit.type,
 																				lonLatLoc: curUnit.lonLatLoc,
 																				heading: curUnit.hdg,
@@ -550,14 +550,14 @@ _.assign(exports, {
 																				category: curSpawnUnit.category,
 																				playerCanDrive: true
 																			};
-																			for(var x = 0; x < 6; x++) {
+																			for (var x = 0; x < 6; x++) {
 																				curTroops.push(spawnArray);
 																			}
-																			masterDBController.unitActions('updateByUnitId', serverName, {unitId: pObj.unitId, troopType: null})
+																			masterDBController.unitActions('updateByUnitId', serverName, { unitId: pObj.unitId, troopType: null })
 																				.catch(function (err) {
 																					console.log('erroring line73: ', err);
 																				})
-																			;
+																				;
 																			groupController.spawnLogiGroup(serverName, curTroops, curUnit.coalition);
 																			DCSLuaCommands.sendMesgToGroup(
 																				curUnit.groupId,
@@ -569,18 +569,18 @@ _.assign(exports, {
 																		.catch(function (err) {
 																			console.log('line 26: ', err);
 																		})
-																	;
+																		;
 																} else {
-																	masterDBController.unitActions('read', serverName, {playerOwnerId: curPlayer.ucid, isTroop: true, dead: false})
-																		.then(function(delUnits){
+																	masterDBController.unitActions('read', serverName, { playerOwnerId: curPlayer.ucid, isTroop: true, dead: false })
+																		.then(function (delUnits) {
 																			_.forEach(delUnits, function (unit) {
-																				masterDBController.unitActions('updateByUnitId', serverName, {unitId: unit.unitId, dead: true});
+																				masterDBController.unitActions('updateByUnitId', serverName, { unitId: unit.unitId, dead: true });
 																				groupController.destroyUnit(serverName, unit.name);
 																			});
 																			// spawn troop type
 																			curSpawnUnit = _.cloneDeep(_.first(groupController.getRndFromSpawnCat(curUnit.troopType, curUnit.coalition, false, true)));
 																			spawnArray = {
-																				spwnName: 'TU|' + curPlayer.ucid + '|' + curUnit.troopType + '|' + curUnit.playername + '|' ,
+																				spwnName: 'TU|' + curPlayer.ucid + '|' + curUnit.troopType + '|' + curUnit.playername + '|',
 																				type: curSpawnUnit.type,
 																				lonLatLoc: curUnit.lonLatLoc,
 																				heading: curUnit.hdg,
@@ -589,11 +589,11 @@ _.assign(exports, {
 																				playerCanDrive: false
 																			};
 																			groupController.spawnLogiGroup(serverName, [spawnArray], curUnit.coalition);
-																			masterDBController.unitActions('updateByUnitId', serverName, {unitId: pObj.unitId, troopType: null})
+																			masterDBController.unitActions('updateByUnitId', serverName, { unitId: pObj.unitId, troopType: null })
 																				.catch(function (err) {
 																					console.log('erroring line73: ', err);
 																				})
-																			;
+																				;
 																			DCSLuaCommands.sendMesgToGroup(
 																				curUnit.groupId,
 																				serverName,
@@ -604,36 +604,36 @@ _.assign(exports, {
 																		.catch(function (err) {
 																			console.log('line 26: ', err);
 																		})
-																	;
+																		;
 																}
 															}
 														})
 														.catch(function (err) {
 															console.log('line 26: ', err);
 														})
-													;
+														;
 												})
 												.catch(function (err) {
 													console.log('line 26: ', err);
 												})
-											;
+												;
 										} else {
 											//try to extract a troop
 											proximityController.getTroopsInProximity(serverName, curUnit.lonLatLoc, 0.2, curUnit.coalition)
-												.then(function(units){
+												.then(function (units) {
 													var curTroop = _.first(units);
-													if(curTroop) {
+													if (curTroop) {
 														// pickup troop
-														masterDBController.unitActions('read', serverName, {groupName: curTroop.groupName, isCrate: false, dead: false})
-															.then(function(grpUnits) {
+														masterDBController.unitActions('read', serverName, { groupName: curTroop.groupName, isCrate: false, dead: false })
+															.then(function (grpUnits) {
 																_.forEach(grpUnits, function (curUnit) {
 																	groupController.destroyUnit(serverName, curUnit.name);
 																});
-																masterDBController.unitActions('updateByUnitId', serverName, {unitId: pObj.unitId, troopType: curTroop.spawnCat})
+																masterDBController.unitActions('updateByUnitId', serverName, { unitId: pObj.unitId, troopType: curTroop.spawnCat })
 																	.catch(function (err) {
 																		console.log('erroring line57: ', err);
 																	})
-																;
+																	;
 																DCSLuaCommands.sendMesgToGroup(
 																	curUnit.groupId,
 																	serverName,
@@ -645,7 +645,7 @@ _.assign(exports, {
 															.catch(function (err) {
 																console.log('erroring line57: ', err);
 															})
-														;
+															;
 													} else {
 														// no troops
 														DCSLuaCommands.sendMesgToGroup(
@@ -659,7 +659,7 @@ _.assign(exports, {
 												.catch(function (err) {
 													console.log('line150: ', err);
 												})
-											;
+												;
 										}
 									}
 								}
@@ -681,7 +681,7 @@ _.assign(exports, {
 												5
 											);
 										} else {
-											if(curUnit.inAir) {
+											if (curUnit.inAir) {
 												DCSLuaCommands.sendMesgToGroup(
 													curUnit.groupId,
 													serverName,
@@ -690,7 +690,7 @@ _.assign(exports, {
 												);
 											} else {
 												// real sling loading
-												if(curUnit.inAir) {
+												if (curUnit.inAir) {
 													DCSLuaCommands.sendMesgToGroup(
 														curUnit.groupId,
 														serverName,
@@ -698,36 +698,36 @@ _.assign(exports, {
 														5
 													);
 												} else {
-													masterDBController.srvPlayerActions('read', serverName, {name: curUnit.playername})
-														.then(function(player) {
+													masterDBController.srvPlayerActions('read', serverName, { name: curUnit.playername })
+														.then(function (player) {
 															var curPlayer = _.get(player, [0]);
 															if (curPlayer) {
 																// masterDBController.staticCrateActions('read', serverName, {playerOwnerId: curPlayer.ucid})
 																masterDBController.staticCrateActions('read', serverName, {})
-																	.then(function(crateUpdate) {
+																	.then(function (crateUpdate) {
 																		var sendClient = {
-																			"action" : "CRATEUPDATE",
+																			"action": "CRATEUPDATE",
 																			"crateNames": _.map(crateUpdate, '_id'),
 																			"callback": 'unpackCrate',
 																			"unitId": pObj.unitId
 																		};
-																		var actionObj = {actionObj: sendClient, queName: 'clientArray'};
+																		var actionObj = { actionObj: sendClient, queName: 'clientArray' };
 																		masterDBController.cmdQueActions('save', serverName, actionObj)
 																			.catch(function (err) {
 																				console.log('erroring line23: ', err);
 																			})
-																		;
+																			;
 																	})
 																	.catch(function (err) {
 																		console.log('line 244: ', err);
 																	})
-																;
+																	;
 															}
 														})
 														.catch(function (err) {
 															console.log('line 244: ', err);
 														})
-													;
+														;
 												}
 											}
 										}
@@ -735,7 +735,7 @@ _.assign(exports, {
 									.catch(function (err) {
 										console.log('line 125: ', err);
 									})
-								;
+									;
 							}
 
 							// Troop Menu
@@ -761,10 +761,10 @@ _.assign(exports, {
 
 							// Crate Menu ["action"] = "f10Menu", ["cmd"] = "EWR", ["type"] = "55G6 EWR", ["unitId"] = ' + unit.unitId + ', ["crates"] = 1})
 							if (pObj.cmd === 'acquisitionCnt') {
-								masterDBController.unitActions('read', serverName, {playerOwnerId: curPlayer.ucid, isCrate:false, isTroop: false, dead: false})
-									.then(function(unitsOwned){
+								masterDBController.unitActions('read', serverName, { playerOwnerId: curPlayer.ucid, isCrate: false, isTroop: false, dead: false })
+									.then(function (unitsOwned) {
 										constants.getServer(serverName)
-											.then(function(serverInfo) {
+											.then(function (serverInfo) {
 												var grpGroups = _.transform(unitsOwned, function (result, value) {
 													(result[value.groupName] || (result[value.groupName] = [])).push(value);
 												}, {});
@@ -779,12 +779,12 @@ _.assign(exports, {
 											.catch(function (err) {
 												console.log('erroring line427: ', err);
 											})
-										;
+											;
 									})
 									.catch(function (err) {
 										console.log('erroring line427: ', err);
 									})
-								;
+									;
 							}
 
 							if (pObj.cmd === 'EWR') {
@@ -884,19 +884,19 @@ _.assign(exports, {
 						.catch(function (err) {
 							console.log('line537: ', err);
 						})
-					;
+						;
 				}
 			})
 			.catch(function (err) {
 				console.log('line 543: ', err);
 			})
-		;
+			;
 	},
 	spawnAtkHeli: function (serverName, curUnit, curPlayer, heliType, rsCost) {
 		console.log('HeliType: ', heliType, rsCost);
 
 		var heliObj;
-		if(heliType === 'RussianAtkHeli') {
+		if (heliType === 'RussianAtkHeli') {
 			heliObj = {
 				name: 'RussianAtkHeli',
 				type: 'Mi-28N',
@@ -906,7 +906,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(heliType === 'USAAtkHeli') {
+		if (heliType === 'USAAtkHeli') {
 			heliObj = {
 				name: 'USAAtkHeli',
 				type: 'AH-64D',
@@ -918,15 +918,15 @@ _.assign(exports, {
 		}
 
 		resourcePointsController.spendResourcePoints(serverName, curPlayer, rsCost, 'AtkHeli', heliObj)
-			.then(function(spentPoints) {
+			.then(function (spentPoints) {
 				if (spentPoints) {
 					groupController.spawnAtkChopper(serverName, curUnit, heliObj);
 				}
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log('err line938: ', err);
 			})
-		;
+			;
 	},
 	spawnAWACS: function (serverName, curUnit, curPlayer, awacsType, rsCost) {
 		console.log('AWACSType: ', awacsType, rsCost);
@@ -950,7 +950,7 @@ _.assign(exports, {
 			};
 		}
 		 */
-		if(awacsType === 'RussianAWACSE2C') {
+		if (awacsType === 'RussianAWACSE2C') {
 			awacsObj = {
 				name: 'RussianAWACSE2C',
 				type: 'E-2C',
@@ -966,7 +966,7 @@ _.assign(exports, {
 				eplrs: true
 			};
 		}
-		if(awacsType === 'USAAWACS') {
+		if (awacsType === 'USAAWACS') {
 			awacsObj = {
 				name: 'USAAWACS',
 				type: 'E-3A',
@@ -989,21 +989,21 @@ _.assign(exports, {
 		}
 
 		resourcePointsController.spendResourcePoints(serverName, curPlayer, rsCost, 'AWACS', awacsObj)
-			.then(function(spentPoints) {
+			.then(function (spentPoints) {
 				if (spentPoints) {
 					groupController.spawnAWACSPlane(serverName, curUnit, awacsObj);
 				}
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log('err line938: ', err);
 			})
-		;
+			;
 	},
 	spawnBomber: function (serverName, curUnit, curPlayer, bomberType, rsCost) {
 		console.log('BomberType: ', bomberType, rsCost);
 
 		var bomberObj;
-		if(bomberType === 'RussianBomber') {
+		if (bomberType === 'RussianBomber') {
 			bomberObj = {
 				name: 'RussianBomber',
 				type: 'Su-25M',
@@ -1015,7 +1015,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(bomberType === 'USABomber') {
+		if (bomberType === 'USABomber') {
 			bomberObj = {
 				name: 'USABomber',
 				type: 'B-1B',
@@ -1029,15 +1029,15 @@ _.assign(exports, {
 		}
 
 		resourcePointsController.spendResourcePoints(serverName, curPlayer, rsCost, 'Bomber', bomberObj)
-			.then(function(spentPoints) {
+			.then(function (spentPoints) {
 				if (spentPoints) {
 					groupController.spawnBomberPlane(serverName, curUnit, bomberObj);
 				}
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log('err line938: ', err);
 			})
-		;
+			;
 	},
 	spawnCrateFromLogi: function (serverName, unit, type, crates, combo, special, mobile, mass, crateType) {
 		var spc;
@@ -1049,7 +1049,7 @@ _.assign(exports, {
 			spc = '';
 		}
 
-		if(unit.inAir) {
+		if (unit.inAir) {
 			DCSLuaCommands.sendMesgToGroup(
 				unit.groupId,
 				serverName,
@@ -1058,14 +1058,14 @@ _.assign(exports, {
 			);
 		} else {
 			constants.getServer(serverName)
-				.then(function(serverInfo) {
+				.then(function (serverInfo) {
 					// console.log('SERVERI: ', serverName, serverInfo);
-					masterDBController.srvPlayerActions('read', serverName, {name: unit.playername})
-						.then(function(player) {
+					masterDBController.srvPlayerActions('read', serverName, { name: unit.playername })
+						.then(function (player) {
 							var curPlayer = _.get(player, [0]);
-							if(menuUpdateController.virtualCrates) {
-								masterDBController.unitActions('read', serverName, {playerOwnerId: curPlayer.ucid, isCrate: true, dead: false})
-									.then(function(delCrates) {
+							if (menuUpdateController.virtualCrates) {
+								masterDBController.unitActions('read', serverName, { playerOwnerId: curPlayer.ucid, isCrate: true, dead: false })
+									.then(function (delCrates) {
 										_.forEach(delCrates, function (crate) {
 											// console.log('cr: ', crateCount, ' > ', serverInfo.maxCrates-1);
 											if (crateCount > serverInfo.maxCrates - 2) {
@@ -1076,7 +1076,7 @@ _.assign(exports, {
 													.catch(function (err) {
 														console.log('erroring line387: ', err);
 													})
-												;
+													;
 												groupController.destroyUnit(serverName, crate.name);
 											}
 											crateCount++;
@@ -1096,16 +1096,16 @@ _.assign(exports, {
 									.catch(function (err) {
 										console.log('line 358: ', err);
 									})
-								;
+									;
 							} else {
 								masterDBController.baseActions('read', serverName)
 									.then(function (bases) {
 										checkAllBase = [];
 										var curLogistic;
-										masterDBController.unitActions('read', serverName, {_id:  /Logistics/, dead: false, coalition: unit.coalition})
-											.then(function(aliveBases) {
+										masterDBController.unitActions('read', serverName, { _id: /Logistics/, dead: false, coalition: unit.coalition })
+											.then(function (aliveBases) {
 												_.forEach(bases, function (base) {
-													curLogistic = _.find(aliveBases, {name: base.name + ' Logistics'});
+													curLogistic = _.find(aliveBases, { name: base.name + ' Logistics' });
 													if (!!curLogistic) {
 														checkAllBase.push(proximityController.isPlayerInProximity(serverName, _.get(curLogistic, 'lonLatLoc'), 0.2, unit.playername)
 															.catch(function (err) {
@@ -1118,8 +1118,8 @@ _.assign(exports, {
 													.then(function (playerProx) {
 														// console.log('SC: ', _.some(playerProx), playerProx);
 														if (_.some(playerProx)) {
-															masterDBController.staticCrateActions('read', serverName, {playerOwnerId: curPlayer.ucid})
-																.then(function(delCrates) {
+															masterDBController.staticCrateActions('read', serverName, { playerOwnerId: curPlayer.ucid })
+																.then(function (delCrates) {
 																	_.forEach(delCrates, function (crate) {
 																		if (crateCount > serverInfo.maxCrates - 2) {
 																			masterDBController.staticCrateActions('delete', serverName, {
@@ -1128,7 +1128,7 @@ _.assign(exports, {
 																				.catch(function (err) {
 																					console.log('erroring line573: ', err);
 																				})
-																			;
+																				;
 																			groupController.destroyUnit(serverName, crate._id);
 																		}
 																		crateCount++;
@@ -1136,7 +1136,7 @@ _.assign(exports, {
 																	crateObj = {
 																		name: (spc) ? spc + '|#' + _.random(1000000, 9999999) : type + '|#' + _.random(1000000, 9999999),
 																		unitLonLatLoc: unit.lonLatLoc,
-																		shape_name: _.get(_.find(constants.staticDictionary, {_id: crateType}), 'shape_name', 'iso_container_small_cargo'),
+																		shape_name: _.get(_.find(constants.staticDictionary, { _id: crateType }), 'shape_name', 'iso_container_small_cargo'),
 																		category: 'Cargo',
 																		type: crateType,
 																		heading: unit.hdg,
@@ -1164,7 +1164,7 @@ _.assign(exports, {
 																.catch(function (err) {
 																	console.log('line 358: ', err);
 																})
-															;
+																;
 														} else {
 															DCSLuaCommands.sendMesgToGroup(
 																unit.groupId,
@@ -1177,35 +1177,35 @@ _.assign(exports, {
 													.catch(function (err) {
 														console.log('line 26: ', err);
 													})
-												;
+													;
 											})
 											.catch(function (err) {
 												console.log('line 13: ', err);
 											})
-										;
+											;
 									})
 									.catch(function (err) {
 										console.log('line 26: ', err);
 									})
-								;
+									;
 							}
 						})
 						.catch(function (err) {
 							console.log('line 13: ', err);
 						})
-					;
+						;
 				})
 				.catch(function (err) {
 					console.log('line 358: ', err);
 				})
-			;
+				;
 		}
 	},
 	spawnDefHeli: function (serverName, curUnit, curPlayer, heliType, rsCost) {
 		console.log('HeliType: ', heliType, rsCost);
 
 		var heliObj;
-		if(heliType === 'RussianDefHeli') {
+		if (heliType === 'RussianDefHeli') {
 			heliObj = {
 				name: 'RussianDefHeli',
 				type: 'Mi-24V',
@@ -1215,7 +1215,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(heliType === 'USADefHeli') {
+		if (heliType === 'USADefHeli') {
 			heliObj = {
 				name: 'USADefHeli',
 				type: 'AH-1W',
@@ -1227,21 +1227,21 @@ _.assign(exports, {
 		}
 
 		resourcePointsController.spendResourcePoints(serverName, curPlayer, rsCost, 'DefHeli', heliObj)
-			.then(function(spentPoints) {
+			.then(function (spentPoints) {
 				if (spentPoints) {
 					groupController.spawnDefenseChopper(serverName, curUnit, heliObj);
 				}
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log('err line938: ', err);
 			})
-		;
+			;
 	},
 	spawnTanker: function (serverName, curUnit, curPlayer, tankerType, rsCost) {
 		console.log('tankerType: ', tankerType, rsCost);
 
 		var tankerObj;
-		if(tankerType === 'BHABTKR') {
+		if (tankerType === 'BHABTKR') {
 			tankerObj = {
 				name: 'BHABTKR',
 				type: 'KC-135',
@@ -1267,7 +1267,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(tankerType === 'BHADTKR') {
+		if (tankerType === 'BHADTKR') {
 			tankerObj = {
 				name: 'BHADTKR',
 				type: 'IL-78M',
@@ -1285,7 +1285,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(tankerType === 'BLABTKR') {
+		if (tankerType === 'BLABTKR') {
 			tankerObj = {
 				name: 'BLABTKR',
 				type: 'KC-135',
@@ -1311,7 +1311,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(tankerType === 'BLADTKR') {
+		if (tankerType === 'BLADTKR') {
 			tankerObj = {
 				name: 'BLADTKR',
 				type: 'KC130',
@@ -1337,7 +1337,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(tankerType === 'RHADTKR') {
+		if (tankerType === 'RHADTKR') {
 			tankerObj = {
 				name: 'RHADTKR',
 				type: 'IL-78M',
@@ -1355,7 +1355,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(tankerType === 'RLABTKR') {
+		if (tankerType === 'RLABTKR') {
 			tankerObj = {
 				name: 'RLABTKR',
 				type: 'KC-135',
@@ -1381,7 +1381,7 @@ _.assign(exports, {
 				hidden: false
 			};
 		}
-		if(tankerType === 'RLADTKR') {
+		if (tankerType === 'RLADTKR') {
 			tankerObj = {
 				name: 'RLADTKR',
 				type: 'KC130',
@@ -1404,19 +1404,19 @@ _.assign(exports, {
 		}
 
 		resourcePointsController.spendResourcePoints(serverName, curPlayer, rsCost, 'Tanker', tankerObj)
-			.then(function(spentPoints) {
+			.then(function (spentPoints) {
 				if (spentPoints) {
 					groupController.spawnTankerPlane(serverName, curUnit, tankerObj);
 				}
 			})
-			.catch(function(err) {
+			.catch(function (err) {
 				console.log('err line938: ', err);
 			})
-		;
+			;
 	},
 	unpackCrate: function (serverName, playerUnit, country, type, special, combo, mobile) {
-		return new Promise(function(resolve, reject) {
-			if(playerUnit.inAir) {
+		return new Promise(function (resolve, reject) {
+			if (playerUnit.inAir) {
 				DCSLuaCommands.sendMesgToGroup(
 					playerUnit.groupId,
 					serverName,
@@ -1425,13 +1425,13 @@ _.assign(exports, {
 				);
 				resolve(false);
 			} else {
-				masterDBController.srvPlayerActions('read', serverName, {name: playerUnit.playername})
-					.then(function(player) {
+				masterDBController.srvPlayerActions('read', serverName, { name: playerUnit.playername })
+					.then(function (player) {
 						var curPlayer = _.get(player, [0]);
-						masterDBController.unitActions('readStd', serverName, {playerOwnerId: curPlayer.ucid, playerCanDrive: mobile, isCrate: false, dead: false})
-							.then(function(delUnits){
+						masterDBController.unitActions('readStd', serverName, { playerOwnerId: curPlayer.ucid, playerCanDrive: mobile, isCrate: false, dead: false })
+							.then(function (delUnits) {
 								constants.getServer(serverName)
-									.then(function(serverInfo) {
+									.then(function (serverInfo) {
 										var tRem;
 										var curUnit = 0;
 										var grpGroups = _.transform(delUnits, function (result, value) {
@@ -1441,12 +1441,12 @@ _.assign(exports, {
 
 										_.forEach(grpGroups, function (gUnit) {
 											if (curUnit <= tRem) {
-												_.forEach(gUnit, function(unit) {
-													masterDBController.unitActions('updateByUnitId', serverName, {unitId: unit.unitId, dead: true})
+												_.forEach(gUnit, function (unit) {
+													masterDBController.unitActions('updateByUnitId', serverName, { unitId: unit.unitId, dead: true })
 														.catch(function (err) {
 															console.log('erroring line462: ', err);
 														})
-													;
+														;
 													groupController.destroyUnit(serverName, unit.name);
 												});
 												curUnit++;
@@ -1456,12 +1456,12 @@ _.assign(exports, {
 									.catch(function (err) {
 										console.log('line 390: ', err);
 									})
-								;
+									;
 							})
 							.catch(function (err) {
 								console.log('line 390: ', err);
 							})
-						;
+							;
 						var newSpawnArray = [];
 						if (combo) {
 							constants.getUnitDictionary(_.get(constants, 'config.timePeriod', 'modern'))
@@ -1473,7 +1473,7 @@ _.assign(exports, {
 										return _.includes(_.get(curUnitDict, 'comboName'), type);
 									});
 									_.forEach(findUnits, function (cbUnit) {
-										for (x=0; x < cbUnit.spawnCount; x++) {
+										for (x = 0; x < cbUnit.spawnCount; x++) {
 											unitStart = _.cloneDeep(cbUnit);
 											if (curUnitHdg > 359) {
 												curUnitHdg = 30;
@@ -1503,12 +1503,12 @@ _.assign(exports, {
 									var curUnitHdg = playerUnit.hdg;
 									var unitStart;
 									var pCountry = country;
-									var findUnit = _.find(unitDic, {_id: type});
+									var findUnit = _.find(unitDic, { _id: type });
 									if ((type === '1L13 EWR' || type === '55G6 EWR' || type === 'Dog Ear radar') && _.get(playerUnit, 'coalition') === 2) {
 										console.log('EWR: UKRAINE');
 										pCountry = 'UKRAINE';
 									}
-									for (x=0; x < findUnit.spawnCount; x++) {
+									for (x = 0; x < findUnit.spawnCount; x++) {
 										unitStart = _.cloneDeep(findUnit);
 										if (curUnitHdg > 359) {
 											curUnitHdg = 30;
