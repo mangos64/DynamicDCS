@@ -65,7 +65,6 @@
                 }, 
             }, 
             ["type"] = "Turning Point", 
-            -- ["x"] = coord.LLtoLO(  _.get(routes, [routeLocs, 0, 1])  ,   _.get(routes, [routeLocs, 0, 0])  ).x,
             ["x"] = coord.LLtoLO( %routes;0;1%, %routes;0;0% ).x,   
             ["y"] = coord.LLtoLO( %routes;0;1%, %routes;0;0% ).z,  
             ["speed_locked"] = true, 
