@@ -1,5 +1,5 @@
 # DynamicDCS
-####Dynamic DCS System for Controlling DCS Servers
+#### Dynamic DCS System for Controlling DCS Servers
 
 The Dynamic DCS engine is built on externally written software from the ground up to offload all the process's from the DCS server to allow for unique game play using nodeJS and mongoDB for asynchronous processing and decision making.
 The server then, syncs to it through lua sockets and it compiles commands to send back, essentially freeing up massive amounts of overhead for the server to do what it needs to do.<br>
