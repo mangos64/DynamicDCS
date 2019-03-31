@@ -28,12 +28,12 @@ readWriteAnyDatabase@admin
 userAdminAnyDatabase@admin
 ```
 5. Login to your mongodb and create 2 databases (Add Collection)<br>
-  a. Create 1 named "DDCSExample" and import devEnvironment/DBs/DDCSExample db into it
-  b. Create another named "ServerExample" and import devEnvironment/DBs/ServerExample db into it
+  a. Create 1 named "DDCS" and import devEnvironment/DBs/DDCS db into it
+  b. Create another named "DDCSExampleServer" and import devEnvironment/DBs/DDCSExampleServer db into it
 #### Install Git and checkout main DDCS project
 1. Follow the instructions on getting command line git working for windows, should be able to open a windows cmd line and type git, and it works. Please ONLY use command line git for checking in things, the GUI systems do weird things in source control for some reason<br>
 https://git-scm.com/download/win<br>
-2. In a director where you want the project to live, clone the project:<br>
+2. In a directory where you want the project to live, clone the project:<br>
 ```bash
 git clone https://github.com/afinegan/DynamicDCS.git
 ``` 
