@@ -28,8 +28,8 @@ readWriteAnyDatabase@admin
 userAdminAnyDatabase@admin
 ```
 5. Login to your mongodb and create 2 databases (Add Collection)<br>
-  a. Create 1 named "DDCSExample" and import devEnvironment/DB/DDCSExample db into it
-  b. Create another named "ServerExample" and import devEnvironment/DB/ServerExample db into it
+  a. Create 1 named "DDCSExample" and import devEnvironment/DBs/DDCSExample db into it
+  b. Create another named "ServerExample" and import devEnvironment/DBs/ServerExample db into it
 #### Install Git and checkout main DDCS project
 1. Follow the instructions on getting command line git working for windows, should be able to open a windows cmd line and type git, and it works. Please ONLY use command line git for checking in things, the GUI systems do weird things in source control for some reason<br>
 https://git-scm.com/download/win<br>
