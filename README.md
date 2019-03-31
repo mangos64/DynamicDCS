@@ -47,7 +47,7 @@ andrew.finegan@gmail.com
 https://github.com/coreybutler/nvm-windows/releases
 2. go into the directory you checked DDCS project out and install node 8<br>
 ```bash
-nvm install 8
+nvm install v8
 ```
 3. once done, run node -v to make sure it is installed and working (might have to open another command prompt for it to work)
 ```bash
