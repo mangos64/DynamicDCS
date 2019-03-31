@@ -2,7 +2,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
 
-const CACHE_TEMPLATES = true;
+const CACHE_TEMPLATES = false;
 
 const templateCache = {};
 const templateFileDirectory = './templates';

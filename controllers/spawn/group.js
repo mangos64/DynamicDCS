@@ -628,6 +628,10 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 		templateString = templateString.replace(new RegExp(x, 'g'), isNaN(value) ? `"${value}"` : value);
 	});
 
+	templateString = templateString.replace(/\r?\n|\r/g, ''); // Remove any new lines
+
+	console.log(templateString);
+
 	return templateString;
 });
 

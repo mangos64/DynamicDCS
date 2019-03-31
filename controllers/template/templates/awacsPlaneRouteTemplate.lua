@@ -41,7 +41,7 @@
                             ["params"] = { 
                                 ["altitude"] = %alt%
                                 ["pattern"] = "Race-Track", 
-                                ["speed"] = %speed$
+                                ["speed"] = %speed%
                                 ["speedEdited"] = true, 
                             }, 
                         }, 
@@ -65,8 +65,8 @@
                 }, 
             }, 
             ["type"] = "Turning Point", 
-            ["x"] = coord.LLtoLO( %routeLoc;0;1%, %routeLoc;0;0% ).x,   
-            ["y"] = coord.LLtoLO( %routeLoc;0;1%, %routeLoc;0;0% ).z,  
+            ["x"] = coord.LLtoLO( %routeLocs;0;1%, %routeLocs;0;0% ).x,   
+            ["y"] = coord.LLtoLO( %routeLocs;0;1%, %routeLocs;0;0% ).z,  
             ["speed_locked"] = true, 
         }, 
         [2]={ 
@@ -81,8 +81,8 @@
                 }, 
             }, 
             ["type"] = "Turning Point", 
-            ["x"] = coord.LLtoLO( %routeLoc;1;1%, %routeLoc;1;0% ).x,  
-            ["y"] = coord.LLtoLO( %routeLoc;1;1%, %routeLoc;1;0% ).z,  
+            ["x"] = coord.LLtoLO( %routeLocs;1;1%, %routeLocs;1;0% ).x,  
+            ["y"] = coord.LLtoLO( %routeLocs;1;1%, %routeLocs;1;0% ).z,  
             ["speed_locked"] = true, 
         }, 
     }, 

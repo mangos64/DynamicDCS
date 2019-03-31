@@ -122,7 +122,7 @@ _.set(exports, 'syncType', function (serverName, serverUnitCount) {
 								DCSLuaCommands.sendMesgChatWindow(serverName, mesg);
 								exports.isServerSynced = false;
 							} else {
-								if (!exports.isServerSynced && units.length > 200) {
+								if (!exports.isServerSynced && units.length > 100) {
 									mesg = 'Server units are Synced, Slots Now Open!';
 									console.log(mesg);
 									DCSLuaCommands.sendMesgChatWindow(serverName, mesg);
