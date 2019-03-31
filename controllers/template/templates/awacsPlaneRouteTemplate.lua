@@ -1,10 +1,10 @@
 ["route"] = { 
 	["points"] = { 
 		[1] = { 
-			["alt"] = %alt%
+			["alt"] = %alt%,
             ["action"] = "Turning Point", 
             ["alt_type"] = "BARO", 
-            ["speed"] = %speed%
+            ["speed"] = %speed%,
             ["task"] = { 
                 ["id"] = "ComboTask", 
                 ["params"] = { 
@@ -39,9 +39,9 @@
                             ["id"] = "Orbit", 
                             ["enabled"]=true, 
                             ["params"] = { 
-                                ["altitude"] = %alt%
+                                ["altitude"] = %alt%,
                                 ["pattern"] = "Race-Track", 
-                                ["speed"] = %speed%
+                                ["speed"] = %speed%,
                                 ["speedEdited"] = true, 
                             }, 
                         }, 
@@ -70,10 +70,10 @@
             ["speed_locked"] = true, 
         }, 
         [2]={ 
-            ["alt"] = %alt%
+            ["alt"] = %alt%,
             ["action"] = "Turning Point", 
             ["alt_type"] = "BARO", 
-            ["speed"] = %speed%
+            ["speed"] = %speed%,
             ["task"] = { 
                 ["id"] = "ComboTask", 
                 ["params"] = { 
@@ -86,4 +86,4 @@
             ["speed_locked"] = true, 
         }, 
     }, 
-}
+},

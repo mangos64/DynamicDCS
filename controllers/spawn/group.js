@@ -628,8 +628,7 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 		templateString = templateString.replace(new RegExp(x, 'g'), isNaN(value) ? `"${value}"` : value);
 	});
 
-	templateString = templateString.replace(/\r?\n|\r/g, ''); // Remove any new lines
-	templateString = templateString.replace(/\s+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/g, '');
+	templateString = templateString.replace(/\r?\n|\r|\s+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/g, ''); // Remove any new lines and any spaces that aren't between quotes
 
 	console.log(templateString);
 
@@ -641,113 +640,7 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 });
 
 _.set(exports, 'tankerPlaneRouteTemplate', function (routes) {
-	var tankerTemplate = '' +
-		'["route"] = {' +
-		'["points"] = {' +
-		'[1] = {' +
-		'["alt"] = ' + _.get(routes, 'alt') + ',' +
-		'["action"] = "Turning Point",' +
-		'["alt_type"] = "BARO",' +
-		'["speed"] = ' + _.get(routes, 'speed') + ',' +
-		'["task"] = {' +
-		'["id"] = "ComboTask",' +
-		'["params"] = {' +
-		'["tasks"] = {' +
-		'[1] = {' +
-		'["number"] = 1,' +
-		'["auto"] = true,' +
-		'["id"] = "Tanker",' +
-		'["enabled"]=true,' +
-		'["params"]={},' +
-		'},' +
-		'[2] = {' +
-		'["number"] = 2,' +
-		'["auto"] = false,' +
-		'["id"] = "WrappedAction",' +
-		'["name"] = "RadioFreq",' +
-		'["enabled"]=true,' +
-		'["params"] = {' +
-		'["action"] = {' +
-		'["id"] = "SetFrequency",' +
-		'["params"] = {' +
-		'["power"]=10,' +
-		'["modulation"]=0,' +
-		'["frequency"]=' + _.get(routes, 'radioFreq') + ',' +
-		'},' +
-		'},' +
-		'},' +
-		'},' +
-		'[3] = {' +
-		'["number"] = 3,' +
-		'["auto"] = false,' +
-		'["id"] = "Orbit",' +
-		'["enabled"]=true,' +
-		'["params"] = {' +
-		'["altitude"] = ' + _.get(routes, 'alt') + ',' +
-		'["pattern"] = "Race-Track",' +
-		'["speed"] = ' + _.get(routes, 'speed') + ',' +
-		'["speedEdited"] = true,' +
-		'},' +
-		'},' +
-		'#TACAN' +
-		'},' +
-		'},' +
-		'},' +
-		'["type"] = "Turning Point",' +
-		'["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
-		'["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-		'["speed_locked"] = true,' +
-		'},' +
-		'[2]={' +
-		'["alt"] = ' + _.get(routes, 'alt') + ',' +
-		'["action"] = "Turning Point",' +
-		'["alt_type"] = "BARO",' +
-		'["speed"] = ' + _.get(routes, 'speed') + ',' +
-		'["task"] = {' +
-		'["id"] = "ComboTask",' +
-		'["params"] = {' +
-		'["tasks"]={}' +
-		'},' +
-		'},' +
-		'["type"] = "Turning Point",' +
-		'["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').x, ' +
-		'["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').z, ' +
-		'["speed_locked"] = true,' +
-		'},' +
-		'},' +
-		'},'
-		;
-	var tacanInfo = '[4] = {' +
-		'["number"] = 4,' +
-		'["auto"] = true,' +
-		'["id"] = "WrappedAction",' +
-		'["name"] = "TACAN",' +
-		'["enabled"] = true,' +
-		'["params"] = {' +
-		'["action"] = {' +
-		'["id"] = "ActivateBeacon",' +
-		'["params"] = {' +
-		'["type"] = 4,' +
-		'["AA"] = true,' +
-		'["callsign"] = "BHABTKR",' +
-		'["system"] = 4,' +
-		'["name"] = "BHABTKR",' +
-		'["channel"] = ' + _.get(routes, 'tacan.channel') + ',' +
-		'["modeChannel"] = "' + _.get(routes, 'tacan.modeChannel') + '",' +
-		'["bearing"] = true,' +
-		'["frequency"]= ' + _.get(routes, 'tacan.frequency') + ',' +
-		'},' +
-		'},' +
-		'},' +
-		'},'
-		;
-
-	if (_.get(routes, 'tacan.enabled')) {
-		tankerTemplate = _.replace(tankerTemplate, '#TACAN', tacanInfo);
-	} else {
-		tankerTemplate = _.replace(tankerTemplate, '#TACAN', '');
-	}
-	return tankerTemplate;
+	return exports.getUnitTemplate('tankerPlaneRouteTemplate', routes);
 });
 
 _.set(exports, 'landPlaneRouteTemplate', function (routes) {
