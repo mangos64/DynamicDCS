@@ -89,7 +89,7 @@ this should install all the dependences needed to run DDCS
 
 #### Install DDCS node dependencies
 1. open a command prompt in the directory of the DDCS directory
-2. run:<br>
+2. open an admin based control panel(type cmd in the search, right click cmd and select administrator)(for node-opus compiling) and run:<br>
    ```bash
    npm install
    ```
