@@ -1,0 +1,16 @@
+{ "_id" : ".Command Center", "type" : ".Command Center", "country" : [ "USA", "RUSSIA" ], "category" : "Fortifications", "shape_name" : "ComCenter" }
+{ "_id" : "iso_container_small", "type" : "iso_container_small", "country" : [ "USA", "RUSSIA" ], "shape_name" : "iso_container_small_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "iso_container", "type" : "iso_container", "country" : [ "USA", "RUSSIA" ], "shape_name" : "iso_container_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "ammo_cargo", "type" : "ammo_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "ammo_box_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "barrels_cargo", "type" : "barrels_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "barrels_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "container_cargo", "type" : "container_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "bw_container_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "fueltank_cargo", "type" : "fueltank_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "fueltank_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "f_bar_cargo", "type" : "f_bar_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "f_bar_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "m117_cargo", "type" : "m117_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "m117_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "oiltank_cargo", "type" : "oiltank_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "oiltank_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "pipes_big_cargo", "type" : "pipes_big_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "pipes_big_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "pipes_small_cargo", "type" : "pipes_small_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "pipes_small_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "tetrapod_cargo", "type" : "tetrapod_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "tetrapod_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "trunks_long_cargo", "type" : "trunks_long_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "trunks_long_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "trunks_small_cargo", "type" : "trunks_small_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "trunks_small_cargo", "category" : "Cargo", "canCargo" : true }
+{ "_id" : "uh1h_cargo", "type" : "uh1h_cargo", "country" : [ "USA", "RUSSIA" ], "shape_name" : "ab-212_cargo", "category" : "Cargo", "canCargo" : true }
