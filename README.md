@@ -30,7 +30,7 @@ readWriteAnyDatabase@admin
 userAdminAnyDatabase@admin
 ```
 5. Login to your mongodb and create 2 databases (Add Collection)<br>
-  * Create 1 database named "DDCS" and [https://docs.mongodb.com/manual/reference/program/mongoimport/](import) devEnvironment/DBs/DDCS collections into it
+  * Create 1 database named "DDCS" and [import](https://docs.mongodb.com/manual/reference/program/mongoimport/) devEnvironment/DBs/DDCS collections into it
   * Create another named "DDCSExampleServer" and import devEnvironment/DBs/DDCSExampleServer collections into it
   * See below for an example command to load of all of the JSON files in easily
 
