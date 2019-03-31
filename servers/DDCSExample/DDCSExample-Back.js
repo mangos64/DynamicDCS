@@ -13,7 +13,7 @@ const serverTimerController = require('../../controllers/action/serverTimer');
 //config
 var commsCounter = 0;
 var masterServer = '127.0.0.1';
-var serverName = 'DDCSExample';
+var serverName = 'DDCSExampleServer';
 var lastSentLoader;
 
 masterDBController.initDB(serverName, masterServer)
