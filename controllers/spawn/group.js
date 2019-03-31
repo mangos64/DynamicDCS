@@ -575,7 +575,6 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 
 	matchingTemplates.forEach((x) => {
 		const sanitisedKey = x.replace(/%/g, ''); // Remove the leading and trailing % sign from the key
-		console.log('Sanitised Key: ', sanitisedKey);
 
 		/**
 		 * In order to allow for default values, we need to split on the pipe symbol
@@ -611,7 +610,6 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 
 		// Split the key using the delimeter symbol of ';' so we can go down multiple paths
 		const path = key.split(';');
-		console.log('Path: ', path);
 		const mappedPath = path.map(y => {
 			if (isNaN(y)) {
 				return y;
@@ -619,23 +617,16 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 
 			return parseInt(y, 10);
 		});
-		console.log('Mapped Path: ', mappedPath);
 
+		let value;
 		if (defaultValue) {
-			templateString = templateString.replace(new RegExp(x, 'g'), _.get(routes, mappedPath, defaultValue));
+			value = _.get(routes, mappedPath, defaultValue);
 		} else {
-			templateString = templateString.replace(new RegExp(x, 'g'), _.get(routes, mappedPath));
+			value = _.get(routes, mappedPath);
 		}
+
+		templateString = templateString.replace(new RegExp(x, 'g'), isNaN(value) ? `"${value}"` : value);
 	});
-
-	// Check if EPLRS is activated and add to the template if it is.
-	if (_.get(routes, 'eplrs')) {
-		templateString = templateString.replace(/%eplrs%/g, templateController.getTemplateFromFile('eplrs'));
-	} else {
-		templateString = templateString.replace(/%eplrs%/g, ''); // No eplrs implemented, so let's remove it as it will cause errors
-	}
-
-	// Do one final pass to replace any remaining template strings (there shouldn't)
 
 	return templateString;
 });

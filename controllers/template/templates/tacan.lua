@@ -1,4 +1,5 @@
-["number"] = 4, 
+[4] = {
+    ["number"] = 4, 
     ["auto"] = true, 
     ["id"] = "WrappedAction", 
     ["name"] = "TACAN", 
