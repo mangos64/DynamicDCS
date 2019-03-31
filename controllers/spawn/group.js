@@ -726,60 +726,7 @@ _.set(exports, 'landPlaneRouteTemplate', function (routes) {
 });
 
 _.set(exports, 'landHeliRouteTemplate', function (routes) {
-	return '' +
-		'["route"] = {' +
-		'["points"] = {' +
-		'[1] = {' +
-		'["alt"] = 500,' +
-		'["action"] = "Turning Point",' +
-		'["alt_type"] = "BARO",' +
-		'["speed"] = 70,' +
-		'["task"] = {' +
-		'["id"] = "ComboTask",' +
-		'["params"]={' +
-		'["tasks"]={' +
-		'[1]={' +
-		'["enabled"]=true,' +
-		'["auto"]=false,' +
-		'["id"]="WrappedAction",' +
-		'["number"] = 1,' +
-		'["params"]={' +
-		'["action"]={' +
-		'["id"] = "Option",' +
-		'["params"]={' +
-		'["value"] = 2,' +
-		'["name"] = 1,' +
-		'},' +
-		'},' +
-		'},' +
-		'},' +
-		'[2] = {' +
-		'["enabled"] = true,' +
-		'["auto"]=false,' +
-		'["id"]="Land",' +
-		'["number"]= 2,' +
-		'["params"]={' +
-		'["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').x, ' +
-		'["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').z, ' +
-		'["duration"] = 300,' +
-		'["durationFlag"] = false,' +
-		'},' +
-		'},' +
-		'},' +
-		'},' +
-		'},' +
-		'["type"] = "Turning Point",' +
-		// '["ETA"] = 0,' +
-		// '["ETA_locked"] = true,' +
-		'["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
-		'["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-		// '["name"] = "waypoint 1",' +
-		// '["formation_template"] = "",' +
-		// '["speed_locked"] = true,' +
-		'},' +
-		'},' +
-		'},'
-		;
+	return exports.getUnitTemplate('landHeliRouteTemplate', routes);
 });
 
 _.set(exports, 'grndUnitGroup', function (groupObj, task, routes) {
