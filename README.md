@@ -28,12 +28,12 @@ readWriteAnyDatabase@admin
 userAdminAnyDatabase@admin
 ```
 5. Login to your mongodb and create 2 databases (Add Collection)<br>
-  a. Create 1 named "DDCSExample" and import devEnvironment/DB/DDCSExample db into it
-  b. Create another named "ServerExample" and import devEnvironment/DB/ServerExample db into it
+  a. Create 1 named "DDCS" and import devEnvironment/DBs/DDCS db into it
+  b. Create another named "DDCSExampleServer" and import devEnvironment/DBs/DDCSExampleServer db into it
 #### Install Git and checkout main DDCS project
 1. Follow the instructions on getting command line git working for windows, should be able to open a windows cmd line and type git, and it works. Please ONLY use command line git for checking in things, the GUI systems do weird things in source control for some reason<br>
 https://git-scm.com/download/win<br>
-2. In a director where you want the project to live, clone the project:<br>
+2. In a directory where you want the project to live, clone the project:<br>
 ```bash
 git clone https://github.com/afinegan/DynamicDCS.git
 ``` 
@@ -47,9 +47,13 @@ andrew.finegan@gmail.com
 https://github.com/coreybutler/nvm-windows/releases
 2. go into the directory you checked DDCS project out and install node 8<br>
 ```bash
-nvm install 8
+nvm install v8.12.0
 ```
-3. once done, run node -v to make sure it is installed and working (might have to open another command prompt for it to work)
+3. use nvm to choose the version
+```bash
+nvm use v8.12.0
+```
+4. once done, run node -v to make sure it is installed and working (might have to open another command prompt for it to work)
 ```bash
 node -v
 v8.12.0
@@ -85,7 +89,7 @@ this should install all the dependences needed to run DDCS
 
 #### Install DDCS node dependencies
 1. open a command prompt in the directory of the DDCS directory
-2. run:<br>
+2. open an admin based control panel(type cmd in the search, right click cmd and select administrator)(for node-opus compiling) and run:<br>
    ```bash
    npm install
    ```

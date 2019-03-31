@@ -1,0 +1,4 @@
+{ "_id" : "Caucasus", "name" : "Caucasus", "lat" : 43.4275113, "lon" : 41.2920366, "zoom" : 8, "removeSideZone" : 11, "overlayFile" : "json/overlayCoordsCaucasus.json" }
+{ "_id" : "Nevada", "name" : "Nevada", "lat" : 36.8136826, "lon" : -115.3591919, "zoom" : 8, "removeSideZone" : 11, "overlayFile" : "json/overlayCoordsNevada.json" }
+{ "_id" : "Normandy", "name" : "Normandy", "lat" : 36.2019926, "lon" : -115.1852577, "zoom" : 8, "removeSideZone" : 11, "overlayFile" : "json/overlayCoordsNormandy.json" }
+{ "_id" : "PersianGulf", "name" : "PersianGulf", "lat" : 27.364929, "lon" : 56.398295, "zoom" : 7, "removeSideZone" : 11, "overlayFile" : "json/overlayCoordsPersianGulf.json" }

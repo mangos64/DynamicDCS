@@ -30,7 +30,7 @@ const processTimedTenMinutes = require('../../controllers/timedEvents/tenMinutes
 
 //config
 var masterServer = '127.0.0.1';
-var serverName = 'DDCSExample';
+var serverName = 'DDCSExampleServer';
 
 masterDBController.initDB(serverName, masterServer)
 	.then(function() {
