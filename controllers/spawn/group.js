@@ -629,6 +629,7 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 	});
 
 	templateString = templateString.replace(/\r?\n|\r/g, ''); // Remove any new lines
+	templateString = templateString.replace(/\s+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/g, '');
 
 	console.log(templateString);
 
@@ -1791,6 +1792,7 @@ _.set(exports, 'spawnAWACSPlane', function (serverName, playerUnitObj, awacsObj)
 			var curCMD = exports.spawnGrp(curGroupSpawn, curCountry, curCategory);
 			var sendClient = { action: 'CMD', cmd: [curCMD], reqID: 0 };
 			var actionObj = { actionObj: sendClient, queName: 'clientArray' };
+			console.log(actionObj);
 			masterDBController.cmdQueActions('save', serverName, actionObj)
 				.then(function () {
 					var mesg = 'C: A ' + awacsObj.type + ' AWACS Has Been Spawned ' + playerUnitObj.hdg + ' from ' + closeBase.name + ' ' + awacsObj.details;
