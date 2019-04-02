@@ -101,6 +101,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-lodash": "^2.3.5",
     "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-security": "^1.4.0",
     "grunt": "^1.0.3",
     "grunt-angular-templates": "^1.1.0",
     "jade": "^1.11.0",

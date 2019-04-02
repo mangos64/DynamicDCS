@@ -3,8 +3,12 @@
     "browser": true,
     "jasmine": true
   },
+  "plugins": [
+    "security"
+  ],
   "extends": [
     "eslint:recommended",
+    "plugin:security/recommended",
     "airbnb-base/legacy"
   ],
   "globals": {
