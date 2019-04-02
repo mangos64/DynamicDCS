@@ -1517,11 +1517,16 @@ _.assign(exports, {
 										if (curUnitHdg > 359) {
 											curUnitHdg = 30;
 										}
-										_.set(unitStart, 'spwnName', 'DU|' + curPlayer.ucid + '|' + type + '|' + special + '|true|' + mobile + '|' + curPlayer.name + '|' + _.random(10000, 99999));
+										if (special === 'jtac') {
+											_.set(unitStart, 'spwnName', 'DU|' + curPlayer.ucid + '|' + type + '|' + special + '|true|' + mobile + '|' + curPlayer.name + '|');
+										} else {
+											_.set(unitStart, 'spwnName', 'DU|' + curPlayer.ucid + '|' + type + '|' + special + '|true|' + mobile + '|' + curPlayer.name + '|' + _.random(10000, 99999));
+										}
 										_.set(unitStart, 'lonLatLoc', playerUnit.lonLatLoc);
 										_.set(unitStart, 'heading', curUnitHdg);
 										_.set(unitStart, 'country', pCountry);
 										_.set(unitStart, 'playerCanDrive', mobile);
+										_.set(unitStart, 'special', special);
 										// console.log('ah2: ', curUnitHdg, addHdg, playerUnit);
 										newSpawnArray.push(unitStart);
 										curUnitHdg = curUnitHdg + addHdg;
