@@ -2039,7 +2039,11 @@ _.set(exports, 'spawnLogiGroup', function (serverName, spawnArray, side) {
 				curUnitSpawn += ','
 			}
 			unitNum += 1;
-			curUnitName = curSpwnUnit.spwnName + ' #' + unitNum;
+			if(_.get(curSpwnUnit, 'special') === 'jtac') {
+				curUnitName = curSpwnUnit.spwnName;
+			} else {
+				curUnitName = curSpwnUnit.spwnName + ' #' + unitNum;
+			}
 
 			_.set(curSpwnUnit, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(curSpwnUnit.lonLatLoc, curAng, 0.05));
 			curAng += 15;
