@@ -1,3 +1,7 @@
+/*
+ * DDCS Licensed under AGPL-3.0 by Andrew "Drex" Finegan https://github.com/afinegan/DynamicDCS
+ */
+
 // Occurs whenever an object is hit by a weapon.
 // arg1 = id
 // arg2 = time
