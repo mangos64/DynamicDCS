@@ -26,13 +26,8 @@
     "hapi/hapi-scope-start": "off",
     "no-shadow": [1, { "allow": ["err", "done"] }],
 
-    "security/detect-buffer-noassert": 1,
-    "security/detect-no-csrf-before-method-override": 1,
     "security/detect-non-literal-fs-filename": "off",
     "security/detect-object-injection": "off",
-    "security/detect-possible-timing-attacks": 1,
-    "security/detect-pseudoRandomBytes": 1,
-
 
     "array-bracket-spacing": 1,
     "brace-style": [1, "stroustrup"],
