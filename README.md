@@ -1,6 +1,6 @@
-# DynamicDCS [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fb48fa271add4ac881a114f8ea04ebc0)](https://www.codacy.com/app/DDCS/DynamicDCS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=afinegan/DynamicDCS&amp;utm_campaign=Badge_Grade)
+# DynamicDCS
 ## Dynamic DCS System for Controlling DCS Servers
-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fb48fa271add4ac881a114f8ea04ebc0)](https://www.codacy.com/app/DDCS/DynamicDCS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=afinegan/DynamicDCS&amp;utm_campaign=Badge_Grade)<br/><br>
 The Dynamic DCS engine is built on externally written software from the ground up to offload all the process's from the DCS server to allow for unique game play using nodeJS and mongoDB for asynchronous processing and decision making.
 The server then, syncs to it through lua sockets and it compiles commands to send back, essentially freeing up massive amounts of overhead for the server to do what it needs to do.<br>
 
