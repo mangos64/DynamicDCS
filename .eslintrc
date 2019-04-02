@@ -23,8 +23,11 @@
   },
   "rules":  {
     "hapi/hapi-capitalize-modules": [1, "global-scope-only"],
-    "hapi/hapi-scope-start": 1,
+    "hapi/hapi-scope-start": "off",
     "no-shadow": [1, { "allow": ["err", "done"] }],
+
+    "security/detect-non-literal-fs-filename": "off",
+    "security/detect-object-injection": "off",
 
     "array-bracket-spacing": 1,
     "brace-style": [1, "stroustrup"],
