@@ -23,7 +23,9 @@
     "func-names": "off",
     "indent": ["error", "tab", {"SwitchCase": 1}],
     "no-console": 1,
-    "no-tabs": "off"
+    "no-tabs": "off",
+    "security/detect-no-csrf-before-method-override": "warn",
+    "security/detect-object-injection": "off"
   },
   "root": true
 }
