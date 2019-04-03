@@ -302,15 +302,28 @@
 					sideColor[2] = '#00aaff';
 					sideColor[1] = '#ff5555';
 
-					_.set(gSrv, ['circleOverlay', base], new gSrv.googleMaps.Circle({
-						strokeColor: sideColor[side],
-						fillColor: sideColor[side],
-						strokeOpacity: 0.2,
-						strokeWeight: 0,
-						map: gSrv.currentMap,
-						center: center,
-						radius: 15000
-					}));
+					_.set(gSrv, ['circleOverlay', base], function () {
+						if (_.get(gSrv, ['overlayCoords', base, 'capturePoint'])) {
+							return new gSrv.googleMaps.Circle({
+								strokeColor: sideColor[side],
+								fillColor: sideColor[side],
+								strokeOpacity: 0.2,
+								strokeWeight: 0,
+								map: gSrv.currentMap,
+								center: center,
+								radius: 7500
+							});
+						}
+						return new gSrv.googleMaps.Circle({
+							strokeColor: sideColor[side],
+							fillColor: sideColor[side],
+							strokeOpacity: 0.2,
+							strokeWeight: 0,
+							map: gSrv.currentMap,
+							center: center,
+							radius: 15000
+						});
+					});
 
 					gSrv.googleMaps.event.addListener(
 						_.get(gSrv, ['circleOverlay', base]),
