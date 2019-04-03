@@ -15,13 +15,12 @@ const UnitDictionarySchema = new Schema({
 			type: String,
 			required: true
 		},
-		country: {
-			type: Array,
-			required: true
-		},
 		category: {
 			type: String,
 			required: true
+		},
+		config: {
+			type: Object
 		},
 		spawnCat: {
 			type: String,
@@ -37,10 +36,6 @@ const UnitDictionarySchema = new Schema({
 		launcher: {
 			type: Boolean,
 			default: false
-		},
-		spawnCount: {
-			type: Number,
-			default: 1
 		},
 		threatLvl: {
 			type: Number,
