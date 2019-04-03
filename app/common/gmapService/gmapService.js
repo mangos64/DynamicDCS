@@ -295,33 +295,19 @@
 				}
 
 				if ( typeof gSrv.overlayCoords[base].latc !== "undefined" ) {
-					var center =  {lat: gSrv.overlayCoords[base].latc,
-						lng: gSrv.overlayCoords[base].lngc};
-					//setup 2 sides color
-					var sideColor = {};
-					sideColor[2] = '#00aaff';
-					sideColor[1] = '#ff5555';
+					var center =  {lat: gSrv.overlayCoords[base].latc, lng: gSrv.overlayCoords[base].lngc};
+					var overlayRadius = _.get(gSrv, ['overlayCoords', base, 'capturePoint']) ? 7500 : 15000;
+					var sideColor = { "1": '#ff5555', "2": '#00aaff' };
 
-					_.set(gSrv, ['circleOverlay', base], _.get(gSrv, ['overlayCoords', base, 'capturePoint']) ?
-						new gSrv.googleMaps.Circle({
-							strokeColor: sideColor[side],
-							fillColor: sideColor[side],
-							strokeOpacity: 0.2,
-							strokeWeight: 0,
-							map: gSrv.currentMap,
-							center: center,
-							radius: 7500
-						}) :
-						new gSrv.googleMaps.Circle({
-							strokeColor: sideColor[side],
-							fillColor: sideColor[side],
-							strokeOpacity: 0.2,
-							strokeWeight: 0,
-							map: gSrv.currentMap,
-							center: center,
-							radius: 15000
-						})
-					);
+					_.set(gSrv, ['circleOverlay', base], new gSrv.googleMaps.Circle({
+						strokeColor: sideColor[side],
+						fillColor: sideColor[side],
+						strokeOpacity: 0.2,
+						strokeWeight: 0,
+						map: gSrv.currentMap,
+						center: center,
+						radius: overlayRadius
+					}));
 
 					gSrv.googleMaps.event.addListener(
 						_.get(gSrv, ['circleOverlay', base]),
