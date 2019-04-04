@@ -126,7 +126,7 @@ _.set(exports, 'syncType', function (serverName, serverUnitCount) {
 								DCSLuaCommands.sendMesgChatWindow(serverName, mesg);
 								exports.isServerSynced = false;
 							} else {
-								if (!exports.isServerSynced && units.length > 200) {
+								if (!exports.isServerSynced && units.length > 50) {
 									mesg = 'Server units are Synced, Slots Now Open!';
 									console.log(mesg);
 									DCSLuaCommands.sendMesgChatWindow(serverName, mesg);
@@ -137,7 +137,7 @@ _.set(exports, 'syncType', function (serverName, serverUnitCount) {
 									baseSpawnFlagsController.setbaseSides(serverName);
 									f10MarksController.setFarpMarks(serverName);
 								} else {
-									console.log('failing  !exports.isServerSynced && units.length > 100', !exports.isServerSynced, ' && ', units.length > 100);
+									console.log('failing  !exports.isServerSynced && units.length > 50', !exports.isServerSynced, ' && ', units.length > 100);
 								}
 							}
 						} else {

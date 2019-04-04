@@ -1223,6 +1223,7 @@ _.set(exports, 'staticTemplate', function (staticObj) {
 
 _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnAlways, launchers) {
 	// console.log('1: ', spawnCat, side, spawnShow, spawnAlways, launchers);
+	var curTimePeriod = _.get(constants, ['config', 'timePeriod']);
 	var curEnabledCountrys = _.get(constants, [_.get(constants, ['side', side]) + 'Countrys']);
 	var findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
 	var cPUnits = [];
@@ -1233,7 +1234,8 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 	var curUnits = [];
 	// console.log('2: ', findUnits);
 	_.forEach(findUnits, function (unit) {
-		if(_.intersection(_.get(unit, 'country'), curEnabledCountrys).length > 0) {
+		// console.log('unitCountry: ', _.get(unit, ['config', curTimePeriod, 'country']));
+		if(_.intersection(_.get(unit, ['config', curTimePeriod, 'country']), curEnabledCountrys).length > 0) {
 			cPUnits.push(unit);
 		}
 	});
@@ -1258,10 +1260,11 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 
 		if (curUnits.length > 0) {
 			_.forEach(curUnits, function (cUnit) {
+				var curTimePeriodSpawnCount = _.get(cUnit, ['config', curTimePeriod, 'spawnCount']);
 				if(_.get(cUnit, 'launcher')) {
-					curLaunchSpawn = launchers ? launchers : _.get(cUnit, 'spawnCount');
+					curLaunchSpawn = launchers ? launchers : curTimePeriodSpawnCount;
 				} else {
-					curLaunchSpawn = _.get(cUnit, 'spawnCount');
+					curLaunchSpawn = curTimePeriodSpawnCount;
 				}
 				for (y=0; y < curLaunchSpawn; y++) {
 					unitsChosen.push(cUnit);
@@ -2039,7 +2042,11 @@ _.set(exports, 'spawnLogiGroup', function (serverName, spawnArray, side) {
 				curUnitSpawn += ','
 			}
 			unitNum += 1;
-			curUnitName = curSpwnUnit.spwnName + ' #' + unitNum;
+			if(_.get(curSpwnUnit, 'special') === 'jtac') {
+				curUnitName = curSpwnUnit.spwnName;
+			} else {
+				curUnitName = curSpwnUnit.spwnName + ' #' + unitNum;
+			}
 
 			_.set(curSpwnUnit, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(curSpwnUnit.lonLatLoc, curAng, 0.05));
 			curAng += 15;
