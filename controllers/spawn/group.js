@@ -1258,7 +1258,7 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 		} else {
 			curUnits.push(curUnit);
 		}
-
+console.log('CUS: ', curTimePeriod, curUnits);
 		if (curUnits.length > 0) {
 			_.forEach(curUnits, function (cUnit) {
 				var curTimePeriodSpawnCount = _.get(cUnit, ['config', curTimePeriod, 'spawnCount']);
