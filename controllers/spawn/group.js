@@ -1223,7 +1223,7 @@ _.set(exports, 'staticTemplate', function (staticObj) {
 });
 
 _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnAlways, launchers) {
-	// console.log('1: ', spawnCat, side, spawnShow, spawnAlways, launchers);
+	 console.log('1: ', spawnCat, side, spawnShow, spawnAlways, launchers);
 	var curTimePeriod = _.get(constants, ['config', 'timePeriod']);
 	var curEnabledCountrys = _.get(constants, [_.get(constants, ['side', side]) + 'Countrys']);
 	var findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
@@ -1233,7 +1233,7 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 	var curLaunchSpawn;
 	var curUnit;
 	var curUnits = [];
-	// console.log('2: ', findUnits);
+	console.log('2: ', findUnits);
 	_.forEach(findUnits, function (unit) {
 		// console.log('unitCountry: ', _.get(unit, ['config', curTimePeriod, 'country']));
 		if(_.intersection(_.get(unit, ['config', curTimePeriod, 'country']), curEnabledCountrys).length > 0) {
