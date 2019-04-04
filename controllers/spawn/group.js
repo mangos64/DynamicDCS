@@ -1184,6 +1184,7 @@ _.set(exports, 'airUnitTemplate', function ( unitObj ) {
 			'["gun"] = 200,' +
 		'},';
 
+	console.log('cs: ', unitObj);
 		if (unitObj.country === 'USA' || unitObj.country === 'AGGRESSORS') {
 			// console.log('cs: ', unitObj);
 			curAirTemplate = curAirTemplate + '["callsign"] = {' +
