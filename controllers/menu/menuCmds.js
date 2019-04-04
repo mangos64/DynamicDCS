@@ -1478,7 +1478,8 @@ _.assign(exports, {
 										return _.includes(_.get(curUnitDict, 'comboName'), type);
 									});
 									_.forEach(findUnits, function (cbUnit) {
-										for (x=0; x < cbUnit.spawnCount; x++) {
+										var spawnUnitCount = _.get(cbUnit, ['config', curTimePeriod, 'spawnCount']);
+										for (x=0; x < spawnUnitCount; x++) {
 											unitStart = _.cloneDeep(cbUnit);
 											if (curUnitHdg > 359) {
 												curUnitHdg = 30;
