@@ -1528,6 +1528,7 @@ _.assign(exports, {
 										_.set(unitStart, 'playerCanDrive', mobile);
 										_.set(unitStart, 'special', special);
 										// console.log('ah2: ', curUnitHdg, addHdg, playerUnit);
+										console.log('unitstart: ', unitStart);
 										newSpawnArray.push(unitStart);
 										curUnitHdg = curUnitHdg + addHdg;
 									}

@@ -116,7 +116,7 @@ _.assign(exports, {
 										.then(function (response) {
 											console.log('unpacking response: ', response);
 											if (response) {
-												exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
+												//exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
 											}
 										})
 										.catch(function (err) {
