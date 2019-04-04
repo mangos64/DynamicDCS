@@ -1515,7 +1515,7 @@ _.assign(exports, {
 										console.log('EWR: UKRAINE');
 										pCountry = 'UKRAINE';
 									}
-									console.log('UNIT SPAWNING: ', findUnit);
+									// console.log('UNIT SPAWNING: ', findUnit);
 									for (x=0; x < spawnUnitCount; x++) {
 										unitStart = _.cloneDeep(findUnit);
 										if (curUnitHdg > 359) {
@@ -1532,7 +1532,7 @@ _.assign(exports, {
 										_.set(unitStart, 'playerCanDrive', mobile);
 										_.set(unitStart, 'special', special);
 										// console.log('ah2: ', curUnitHdg, addHdg, playerUnit);
-										console.log('unitstart: ', unitStart);
+										// console.log('unitstart: ', unitStart);
 										newSpawnArray.push(unitStart);
 										curUnitHdg = curUnitHdg + addHdg;
 									}

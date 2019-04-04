@@ -103,7 +103,7 @@ _.assign(exports, {
 										.then(function (response) {
 											console.log('spawn response1: ', response);
 											if (response) {
-												//exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
+												exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
 											}
 										})
 										.catch(function (err) {
@@ -116,7 +116,7 @@ _.assign(exports, {
 										.then(function (response) {
 											console.log('unpacking response2: ', response);
 											if (response) {
-												//exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
+												exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
 											}
 										})
 										.catch(function (err) {
