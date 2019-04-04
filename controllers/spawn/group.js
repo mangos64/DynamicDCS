@@ -2234,7 +2234,8 @@ _.set(exports, 'spawnBaseEWR', function (serverName, type, baseName, side) {
 		pCountry = 'UKRAINE';
 	}
 	// console.log('FINDUNIT: ', findUnit, pCountry);
-	for (x=0; x < findUnit.spawnCount; x++) {
+	var spawnUnitCount = _.get(findUnit, ['config', curTimePeriod, 'spawnCount']);
+	for (x=0; x < spawnUnitCount; x++) {
 		unitStart = _.cloneDeep(findUnit);
 		_.set(unitStart, 'spwnName', baseName + ' ' + type);
 		_.set(unitStart, 'lonLatLoc', zoneController.getRandomLatLonFromBase(serverName, baseName, 'buildingPoly'));
