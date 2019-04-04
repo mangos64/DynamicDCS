@@ -1512,6 +1512,7 @@ _.assign(exports, {
 										console.log('EWR: UKRAINE');
 										pCountry = 'UKRAINE';
 									}
+									console.log('UNIT SPAWNING: ', findUnit);
 									for (x=0; x < findUnit.spawnCount; x++) {
 										unitStart = _.cloneDeep(findUnit);
 										if (curUnitHdg > 359) {
