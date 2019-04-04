@@ -1248,8 +1248,9 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 	} else {
 		randomIndex = _.random(0, cPUnits.length);
 	}
-	console.log('CUS: ', curTimePeriod, curUnit);
+
 	curUnit = cPUnits[randomIndex];
+	console.log('CUS: ', curTimePeriod, curUnit);
 	if (curUnit) {
 		if(_.get(curUnit, 'comboName').length > 0) {
 			curUnits = _.filter(cPUnits, function (curPUnit) {
