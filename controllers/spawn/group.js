@@ -1248,7 +1248,7 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 	} else {
 		randomIndex = _.random(0, cPUnits.length);
 	}
-
+	console.log('CUS: ', curTimePeriod, curUnit);
 	curUnit = cPUnits[randomIndex];
 	if (curUnit) {
 		if(_.get(curUnit, 'comboName').length > 0) {
@@ -1258,7 +1258,7 @@ _.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnA
 		} else {
 			curUnits.push(curUnit);
 		}
-console.log('CUS: ', curTimePeriod, curUnits);
+
 		if (curUnits.length > 0) {
 			_.forEach(curUnits, function (cUnit) {
 				var curTimePeriodSpawnCount = _.get(cUnit, ['config', curTimePeriod, 'spawnCount']);
