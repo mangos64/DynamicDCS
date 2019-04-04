@@ -114,7 +114,7 @@ _.assign(exports, {
 									msg = "G: Unpacking " + _.toUpper(curCrateSpecial) + " " + curCrateType + "!";
 									menuCmdsController.unpackCrate(serverName, curPlayerUnit, curCrate.country, curCrateType, curCrateSpecial, isCombo, isMobile)
 										.then(function (response) {
-											console.log('unpacking response2: ', response);
+											console.log('unpacking response2: ', response, serverName, curPlayerUnit, curCrate.country, curCrateType, curCrateSpecial, isCombo, isMobile);
 											if (response) {
 												//exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
 											}
