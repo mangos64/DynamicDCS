@@ -87,8 +87,6 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
 
     templateString = templateString.replace(/\r?\n|\r|\s+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/g, ''); // Remove any new lines and any spaces that aren't between quotes
 
-    console.log(templateString);
-
     return templateString;
 });
 
@@ -205,147 +203,29 @@ _.set(exports, 'mi28nTemplate', function (unitObj) {
 });
 
 _.set(exports, 'ah64dTemplate', function (unitObj) {
-    var curAirTemplate = '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["type"] = "AH-64D",' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["hardpoint_racks"] = true,' +
-        '["payload"]={' +
-        '["pylons"]={' +
-        '[1] = {' +
-        '["CLSID"] = "{88D18A5E-99C8-4B04-B40B-1C02F2018B6E}",' +
-        '},' +
-        '[4] = {' +
-        '["CLSID"] = "{88D18A5E-99C8-4B04-B40B-1C02F2018B6E}",' +
-        '},' +
-        '},' +
-        '["fuel"] = "1157",' +
-        '["flare"] = 30,' +
-        '["chaff"] = 30,' +
-        '["gun"] = 50,' +
-        '},' +
-        '},';
-
-    return curAirTemplate;
+    return exports.getUnitTemplate('ah64dTemplate', unitObj);
 });
 
 _.set(exports, 'b1bTemplate', function (unitObj) {
-    var curAirTemplate = '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["type"] = "B-1B",' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["hardpoint_racks"] = true,' +
-        '["payload"]={' +
-        '["pylons"]={' +
-        '[1] = {' +
-        '["CLSID"] = "B-1B_Mk-84*8",' +
-        '},' +
-        '[2] = {' +
-        '["CLSID"] = "GBU-31V3B*8",' +
-        '},' +
-        '[3] = {' +
-        '["CLSID"] = "B-1B_Mk-84*8",' +
-        '},' +
-        '},' +
-        '["fuel"] = "88450",' +
-        '["flare"] = 30,' +
-        '["chaff"] = 60,' +
-        '["gun"] = 100,' +
-        '},' +
-        '},';
-
-    return curAirTemplate;
+    return exports.getUnitTemplate('b1bTemplate', unitObj);
 });
 
 _.set(exports, 'su24mTemplate', function (unitObj) {
-    var curAirTemplate = '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["type"] = "Su-24M",' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["hardpoint_racks"] = true,' +
-        '["payload"]={' +
-        '["pylons"]={' +
-        '[1] = {' +
-        '["CLSID"] = "{3C612111-C7AD-476E-8A8E-2485812F4E5C}",' +
-        '},' +
-        '[2] = {' +
-        '["CLSID"] = "{KAB_1500Kr_LOADOUT}",' +
-        '},' +
-        '[3] = {' +
-        '["CLSID"] = "{E2C426E3-8B10-4E09-B733-9CDC26520F48}",' +
-        '},' +
-        '[4] = {' +
-        '["CLSID"] = "{KAB_1500Kr_LOADOUT}",' +
-        '},' +
-        '[5] = {' +
-        '["CLSID"] = "{3C612111-C7AD-476E-8A8E-2485812F4E5C}",' +
-        '},' +
-        '[6] = {' +
-        '["CLSID"] = "{E2C426E3-8B10-4E09-B733-9CDC26520F48}",' +
-        '},' +
-        '[7] = {' +
-        '["CLSID"] = "{KAB_1500Kr_LOADOUT}",' +
-        '},' +
-        '[8] = {' +
-        '["CLSID"] = "{3C612111-C7AD-476E-8A8E-2485812F4E5C}",' +
-        '},' +
-        '},' +
-        '["fuel"] = "11700",' +
-        '["flare"] = 96,' +
-        '["chaff"] = 96,' +
-        '["gun"] = 100,' +
-        '},' +
-        '},';
-
-    return curAirTemplate;
+    return exports.getUnitTemplate('su24mTemplate', unitObj);
 });
 
 _.set(exports, 'airUnitTemplate', function (unitObj) {
-    // console.log('cOBJ: ', unitObj);
-    var curAirTemplate = '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["type"] = "' + _.get(unitObj, 'type') + '",' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["payload"]={' +
-        '["pylons"]={},' +
-        '["fuel"] = "100000",' +
-        '["flare"] = 200,' +
-        '["chaff"] = 200,' +
-        '["gun"] = 200,' +
-        '},';
-
+    let countryAddition;
     if (unitObj.country === 'USA' || unitObj.country === 'AGGRESSORS') {
-        // console.log('cs: ', unitObj);
-        curAirTemplate = curAirTemplate + '["callsign"] = {' +
-            '[1] = ' + _.get(unitObj, ['callsign', '1']) + ',' +
-            '[2] = ' + _.get(unitObj, ['callsign', '2']) + ',' +
-            '[3] = ' + _.get(unitObj, ['callsign', '3']) + ',' +
-            '["name"] = "' + _.get(unitObj, 'callsign.name') + '",' +
-            '},' +
-            '["onboard_num"] = "' + _.get(unitObj, 'onboard_num') + '",';
+        countryAddition = exports.getUnitTemplate('usaOrAggressorsTemplate', unitObj);
     } else {
-        curAirTemplate = curAirTemplate + '["callsign"] = "' + _.get(unitObj, 'callsign') + '",' +
-            '["onboard_num"] = "' + _.get(unitObj, 'onboard_num') + '",';
+        countryAddition = exports.getUnitTemplate('notUsaOrAggressorsTemplate', unitObj);
     }
-    curAirTemplate += '}';
 
-    return curAirTemplate;
+    const payload = { ...unitObj, countryAddition };
+    console.log(payload);
+
+    return exports.getUnitTemplate('airUnitTemplate', payload);
 });
 
 _.set(exports, 'staticTemplate', function (staticObj) {
