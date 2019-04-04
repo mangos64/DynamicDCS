@@ -1420,6 +1420,7 @@ _.assign(exports, {
 	},
 	unpackCrate: function (serverName, playerUnit, country, type, special, combo, mobile) {
 		return new Promise(function(resolve, reject) {
+			var curTimePeriod = _.get(constants, 'config.timePeriod', 'modern');
 			if(playerUnit.inAir) {
 				DCSLuaCommands.sendMesgToGroup(
 					playerUnit.groupId,
@@ -1468,7 +1469,7 @@ _.assign(exports, {
 						;
 						var newSpawnArray = [];
 						if (combo) {
-							constants.getUnitDictionary(_.get(constants, 'config.timePeriod', 'modern'))
+							constants.getUnitDictionary(curTimePeriod)
 								.then(function (unitDic) {
 									var addHdg = 30;
 									var curUnitHdg = playerUnit.hdg;
@@ -1501,19 +1502,21 @@ _.assign(exports, {
 								})
 								;
 						} else {
-							constants.getUnitDictionary(_.get(constants, 'config.timePeriod', 'modern'))
+							constants.getUnitDictionary(curTimePeriod)
 								.then(function (unitDic) {
 									var addHdg = 30;
 									var curUnitHdg = playerUnit.hdg;
 									var unitStart;
 									var pCountry = country;
 									var findUnit = _.find(unitDic, {_id: type});
+
+									var spawnUnitCount = _.get(findUnit, ['config', curTimePeriod, 'spawnCount']);
 									if ((type === '1L13 EWR' || type === '55G6 EWR' || type === 'Dog Ear radar') && _.get(playerUnit, 'coalition') === 2) {
 										console.log('EWR: UKRAINE');
 										pCountry = 'UKRAINE';
 									}
 									console.log('UNIT SPAWNING: ', findUnit);
-									for (x=0; x < findUnit.spawnCount; x++) {
+									for (x=0; x < spawnUnitCount; x++) {
 										unitStart = _.cloneDeep(findUnit);
 										if (curUnitHdg > 359) {
 											curUnitHdg = 30;
