@@ -1,0 +1,17 @@
+{ 
+    ["x"] = coord.LLtoLO( %lonLatLoc;1% , %lonLatLoc;0% ).x,  
+    ["y"] = coord.LLtoLO( %lonLatLoc;1% , %lonLatLoc;0% ).z,  
+    ["livery_id"] = "standard 1", 
+    ["type"] = "Mi-24V", 
+    ["name"] = %name%, 
+    // ["unitId"] = %unitId% , 
+    ["heading"] = %heading:0% , 
+    ["skill"] = %skill:Excellent%, 
+    ["payload"]={ 
+        ["pylons"]={}, 
+        ["fuel"] = "1704", 
+        ["flare"] = 192, 
+        ["chaff"] = 0, 
+        ["gun"] = 100, 
+    }, 
+},

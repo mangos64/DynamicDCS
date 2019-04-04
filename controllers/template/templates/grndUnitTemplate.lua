@@ -9,5 +9,5 @@
     ["heading"] = %heading:0%  , 
     ["playerCanDrive"] = %playerCanDrive:false%,
     ["skill"] = %skill:Excellent%, 
-    ["country"] = %country%, 
+    ["country"] = %country%,
 }

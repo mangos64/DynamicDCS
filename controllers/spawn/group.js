@@ -12,563 +12,6 @@ const templateController = require('../template/templateController');
 
 var openSAM = 0;
 
-_.set(exports, 'spawnGrp', function (grpSpawn, country, category) {
-    // console.log('spwnGrp: ', country, _.indexOf(constants.countryId, country), category);
-    return 'coalition.addGroup(' + _.indexOf(constants.countryId, country) + ', Group.Category.' + category + ', ' + grpSpawn + ')';
-});
-
-_.set(exports, 'spawnStatic', function (serverName, staticSpawn, country, statName, init) {
-    return [
-        'coalition.addStaticObject(' + _.indexOf(constants.countryId, country) + ', ' + staticSpawn + ')'
-    ];
-
-	/*
-	if (init) {
-		return sSpawnCmd = [
-			'coalition.addStaticObject(' + _.indexOf(constants.countryId, country) + ', ' + staticSpawn + ')'
-		];
-	} else {
-		exports.destroyUnit( serverName, statName );
-		return sSpawnCmd = [
-			'coalition.addStaticObject(' + _.indexOf(constants.countryId, country) + ', ' + staticSpawn + ')'
-		];
-	}
-	*/
-});
-
-_.set(exports, 'turnOnEWRAuto', function (groupObj) {
-    var setCallsign;
-    var setFreq;
-    if (_.includes(_.get(groupObj, 'country'), 'UKRAINE')) {
-        setCallsign = 254;
-        setFreq = 254000000;
-    } else if (_.get(groupObj, 'type') === '55G6 EWR') {
-        // Mig 15 freq
-        setCallsign = 375;
-        setFreq = 3750000;
-    } else {
-        setCallsign = 124;
-        setFreq = 124000000;
-    }
-    return '' +
-        '["route"] = {' +
-        '["spans"] = {},' +
-        '["points"] = {' +
-        '[1] = {' +
-        // '["alt"] = 252,' +
-        '["type"] = "Turning Point",' +
-        '["ETA"] = 0,' +
-        '["alt_type"] = "BARO",' +
-        '["formation_template"] = "",' +
-        // '["y"] = 440640.41085714,' +
-        // '["x"] = -60694.918271202,' +
-        '["name"] = "dontdisperse",' +
-        '["ETA_locked"] = true,' +
-        '["speed"] = 0,' +
-        '["action"] = "Off Road",' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["enabled"] = true,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["number"] = 1,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["name"] = 8,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '[2] = {' +
-        '["number"] = 2,' +
-        '["name"] = "ewr enroute task",' +
-        '["id"] = "EWR",' +
-        '["auto"] = true,' +
-        '["enabled"] = true,' +
-        '["params"] = {},' +
-        '},' +
-        '[3] = {' +
-        '["number"] = 3,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "SetFrequency",' +
-        '["params"] = {' +
-        '["power"] = 10,' +
-        '["modulation"] = 0,' +
-        '["frequency"] = ' + setFreq + ',' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '[4] = {' +
-        '["enabled"] = true,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["number"] = 4,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "SetCallsign",' +
-        '["params"] = {' +
-        '["callsign"] = ' + setCallsign + ',' +
-        '["callnameFlag"] = false,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '},' +
-        '},';
-});
-
-_.set(exports, 'turnOffDisperseUnderFire', function () {
-    return '' +
-        '["route"] = {' +
-        '["spans"] = {},' +
-        '["points"] = {' +
-        '[1] = {' +
-        // '["alt"] = 252,' +
-        '["type"] = "Turning Point",' +
-        '["ETA"] = 0,' +
-        '["alt_type"] = "BARO",' +
-        '["formation_template"] = "",' +
-        // '["y"] = 440640.41085714,' +
-        // '["x"] = -60694.918271202,' +
-        '["name"] = "dontdisperse",' +
-        '["ETA_locked"] = true,' +
-        '["speed"] = 0,' +
-        '["action"] = "Off Road",' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["enabled"] = true,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["number"] = 1,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["name"] = 8,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '},' +
-        '},';
-});
-
-_.set(exports, 'defenseHeliRouteTemplate', function (routes) {
-    return '' +
-        '["route"] = {' +
-        '["points"] = {' +
-        '[1] = {' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["number"] = 1,' +
-        '["auto"] = true,' +
-        '["id"] = "EngageTargets",' +
-        '["enabled"] = true,' +
-        '["key"] = "CAS",' +
-        '["params"] = {' +
-        '["targetTypes"] = {' +
-        '[1] = "Helicopters",' +
-        '[2] = "Ground Units",' +
-        '[3] = "Light armed ships",' +
-        '},' +
-        '["priority"] = 0,' +
-        '},' +
-        '},' +
-        '[2] = {' +
-        '["number"] = 2,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=2,' +
-        '["name"]=1,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '[3] = {' +
-        '["number"] = 3,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=0,' +
-        '["name"]=0,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[2]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {["tasks"] = {}}' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[3]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {["tasks"] = {}}' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 2, 1]) + ', ' + _.get(routes, ['routeLocs', 2, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 2, 1]) + ', ' + _.get(routes, ['routeLocs', 2, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[4]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {["tasks"] = {}}' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 3, 1]) + ', ' + _.get(routes, ['routeLocs', 3, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 3, 1]) + ', ' + _.get(routes, ['routeLocs', 3, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[5]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {["tasks"] = {}}' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 4, 1]) + ', ' + _.get(routes, ['routeLocs', 4, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 4, 1]) + ', ' + _.get(routes, ['routeLocs', 4, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[6]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {["tasks"] = {}}' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 5, 1]) + ', ' + _.get(routes, ['routeLocs', 5, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 5, 1]) + ', ' + _.get(routes, ['routeLocs', 5, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[7]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {["tasks"] = {}}' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 6, 1]) + ', ' + _.get(routes, ['routeLocs', 6, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 6, 1]) + ', ' + _.get(routes, ['routeLocs', 6, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[8]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["number"] = 1,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "SwitchWaypoint",' +
-        '["params"] = {' +
-        '["goToWaypointIndex"] = 1,' +
-        '["fromWaypointIndex"] = 8,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '}' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 7, 1]) + ', ' + _.get(routes, ['routeLocs', 7, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 7, 1]) + ', ' + _.get(routes, ['routeLocs', 7, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '},' +
-        '},'
-        ;
-});
-
-_.set(exports, 'atkHeliRouteTemplate', function (routes) {
-    return '' +
-        '["route"] = {' +
-        '["points"] = {' +
-        '[1] = {' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["number"] = 1,' +
-        '["auto"] = true,' +
-        '["id"] = "EngageTargets",' +
-        '["enabled"] = true,' +
-        '["key"] = "CAS",' +
-        '["params"] = {' +
-        '["targetTypes"] = {' +
-        '[1] = "Helicopters",' +
-        '[2] = "Ground Units",' +
-        '[3] = "Light armed ships",' +
-        '},' +
-        '["priority"] = 0,' +
-        '},' +
-        '},' +
-        '[2] = {' +
-        '["number"] = 2,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=2,' +
-        '["name"]=1,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '[3] = {' +
-        '["number"] = 3,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=0,' +
-        '["name"]=0,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[2]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '},' +
-        '},' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '},' +
-        '},'
-        ;
-});
-
-_.set(exports, 'bombersPlaneRouteTemplate', function (routes) {
-    return '' +
-        '["route"] = {' +
-        '["points"] = {' +
-        '[1] = {' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["number"] = 1,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=true,' +
-        '["name"]=15,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '[2] = {' +
-        '["number"] = 2,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=2,' +
-        '["name"]=1,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '[3] = {' +
-        '["number"] = 3,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=4,' +
-        '["name"]=0,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '[2]={' +
-        '["alt"] = ' + _.get(routes, 'alt') + ',' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = ' + _.get(routes, 'speed') + ',' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["number"] = 1,' +
-        '["auto"] = false,' +
-        '["id"] = "EngageTargets",' +
-        '["enabled"] = true,' +
-        '["key"] = "CAS",' +
-        '["params"] = {' +
-        '["targetTypes"] = {' +
-        '[1] = "Helicopters",' +
-        '[2] = "Ground Units",' +
-        '[3] = "Light armed ships",' +
-        '},' +
-        '["priority"] = 0,' +
-        '},' +
-        '},' +
-        '[2] = {' +
-        '["number"] = 2,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"]=0,' +
-        '["name"]=0,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').z, ' +
-        '["speed_locked"] = true,' +
-        '},' +
-        '},' +
-        '},'
-        ;
-});
-
 _.set(exports, 'getUnitTemplate', function (templateName, routes) {
     let templateString = templateController.getTemplateFromFile(templateName);
 
@@ -629,7 +72,17 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
             value = _.get(routes, mappedPath);
         }
 
-        templateString = templateString.replace(new RegExp(x, 'g'), isNaN(value) ? `"${value}"` : value);
+        let surroundWithQuotes;
+        // Check if the value is a number, string or boolean
+        if (isNaN(value)) {
+            // Not a number, so lets check if it's a boolean
+            const isBoolean = (/^false|true$/g).test(value);
+            surroundWithQuotes = isBoolean ? false : true;
+        } else {
+            surroundWithQuotes = false;
+        }
+
+        templateString = templateString.replace(new RegExp(x, 'g'), surroundWithQuotes ? `"${value}"` : value);
     });
 
     templateString = templateString.replace(/\r?\n|\r|\s+(?=(?:[^\'"]*[\'"][^\'"]*[\'"])*[^\'"]*$)/g, ''); // Remove any new lines and any spaces that aren't between quotes
@@ -637,6 +90,63 @@ _.set(exports, 'getUnitTemplate', function (templateName, routes) {
     console.log(templateString);
 
     return templateString;
+});
+
+_.set(exports, 'spawnGrp', function (grpSpawn, country, category) {
+    // console.log('spwnGrp: ', country, _.indexOf(constants.countryId, country), category);
+    return 'coalition.addGroup(' + _.indexOf(constants.countryId, country) + ', Group.Category.' + category + ', ' + grpSpawn + ')';
+});
+
+_.set(exports, 'spawnStatic', function (serverName, staticSpawn, country, statName, init) {
+    return [
+        'coalition.addStaticObject(' + _.indexOf(constants.countryId, country) + ', ' + staticSpawn + ')'
+    ];
+
+	/*
+	if (init) {
+		return sSpawnCmd = [
+			'coalition.addStaticObject(' + _.indexOf(constants.countryId, country) + ', ' + staticSpawn + ')'
+		];
+	} else {
+		exports.destroyUnit( serverName, statName );
+		return sSpawnCmd = [
+			'coalition.addStaticObject(' + _.indexOf(constants.countryId, country) + ', ' + staticSpawn + ')'
+		];
+	}
+	*/
+});
+
+_.set(exports, 'turnOnEWRAuto', function (groupObj) {
+    let payload = {};
+    if (_.includes(_.get(groupObj, 'country'), 'UKRAINE')) {
+        _.set(payload, 'setCallsign', 254);
+        _.set(payload, 'setFreq', 254000000);
+    } else if (_.get(groupObj, 'type') === '55G6 EWR') {
+        // Mig 15 freq
+        _.set(payload, 'setCallsign', 375);
+        _.set(payload, 'setFreq', 3750000);
+    } else {
+        _.set(payload, 'setCallsign', 124);
+        _.set(payload, 'setFreq', 124000000);
+    }
+
+    return exports.getUnitTemplate('ewrAuto', payload);
+});
+
+_.set(exports, 'turnOffDisperseUnderFire', function () {
+    return exports.getUnitTemplate('disperseUnderFire', {});
+});
+
+_.set(exports, 'defenseHeliRouteTemplate', function (routes) {
+    return exports.getUnitTemplate('defenseHeliRouteTemplate', routes);
+});
+
+_.set(exports, 'atkHeliRouteTemplate', function (routes) {
+    return exports.getUnitTemplate('atkHeliRouteTemplate', routes);
+});
+
+_.set(exports, 'bombersPlaneRouteTemplate', function (routes) {
+    return exports.getUnitTemplate('bombersPlaneRouteTemplate', routes);
 });
 
 _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
@@ -648,85 +158,7 @@ _.set(exports, 'tankerPlaneRouteTemplate', function (routes) {
 });
 
 _.set(exports, 'landPlaneRouteTemplate', function (routes) {
-    return '' +
-        '["route"] = {' +
-        '["points"] = {' +
-        '[1] = {' +
-        '["alt"] = 2000,' +
-        '["action"] = "Turning Point",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = 138,' +
-        '["task"] = {' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"] = {' +
-        '[1] = {' +
-        '["enabled"]=true,' +
-        '["auto"]=false,' +
-        '["id"]="WrappedAction",' +
-        '["number"] = 1,' +
-        '["params"]={' +
-        '["action"]={' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"] = 2,' +
-        '["name"] = 1,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["type"] = "Turning Point",' +
-        // '["ETA"] = 0,' +
-        // '["ETA_locked"] = true,' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 0, 1]) + ', ' + _.get(routes, ['routeLocs', 0, 0]) + ').z, ' +
-        // '["name"] = "waypoint 1",' +
-        // '["formation_template"] = "",' +
-        // '["speed_locked"] = true,' +
-        '},' +
-        '[2]={' +
-        '["alt"] = 25,' +
-        '["action"] = "Landing",' +
-        '["alt_type"] = "BARO",' +
-        '["speed"] = 168,' +
-        '["task"]={' +
-        '["id"] = "ComboTask",' +
-        '["params"] = {' +
-        '["tasks"]={' +
-        '[1] = {' +
-        '["number"] = 1,' +
-        '["auto"] = false,' +
-        '["id"] = "WrappedAction",' +
-        '["enabled"] = true,' +
-        '["params"] = {' +
-        '["action"] = {' +
-        '["id"] = "Option",' +
-        '["params"] = {' +
-        '["value"] = 2,' +
-        '["name"] = 1,' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '},' +
-        '["type"] = "Land",' +
-        // '["ETA"] = 712.36534243372,' +
-        // '["ETA_locked"] = false,' +
-        '["x"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(routes, ['routeLocs', 1, 1]) + ', ' + _.get(routes, ['routeLocs', 1, 0]) + ').z, ' +
-        // '["name"] = "DictKey_WptName_21362",' +
-        // '["formation_template"] = "",' +
-        '["airdromeId"] = ' + _.get(routes, 'baseId') + ',' +
-        // '["speed_locked"] = true,' +
-        '},' +
-        '}' +
-        '},'
-        ;
+    return exports.getUnitTemplate('landPlaneRouteTemplate', routes);
 });
 
 _.set(exports, 'landHeliRouteTemplate', function (routes) {
@@ -734,132 +166,42 @@ _.set(exports, 'landHeliRouteTemplate', function (routes) {
 });
 
 _.set(exports, 'grndUnitGroup', function (groupObj, task, routes) {
-    var curRoute = '';
-    var curTask = (task) || 'Ground Nothing';
-    var uncontrollable = _.get(groupObj, 'playerCanDrive', false) === false;
-    // console.log('uncontrol: ', uncontrollable, curTask);
-
-    // console.log('hidden: ', groupObj);
+    const curTask = (task) || 'Ground Nothing';
+    const uncontrollable = _.get(groupObj, 'playerCanDrive', false) === false;
+    let curRoute;
 
     if (routes) {
         curRoute = routes;
     } else if (groupObj.type === '1L13 EWR' || groupObj.type === '55G6 EWR') {
-        // console.log('turningOnRouteEWRInstructions: ', groupObj);
         curRoute = exports.turnOnEWRAuto(groupObj);
     } else {
         curRoute = exports.turnOffDisperseUnderFire();
     }
 
-    return '{' +
-        // '["groupId"] = ' + _.get(groupObj, 'groupId') + ',' +
-        '["communication"] = true,' +
-        '["start_time"] = 0,' +
-        '["frequency"] = 251,' +
-        '["radioSet"] = false,' +
-        '["modulation"] = 0,' +
-        '["taskSelected"] = true,' +
-        '["name"] = "' + _.get(groupObj, 'groupName') + '",' +
-        '["visible"] = ' + _.get(groupObj, 'visible', false) + ',' +
-        // '["hidden"] = ' + _.get(groupObj, 'hidden', true) + ',' +
-        '["hidden"] = ' + _.get(groupObj, 'hidden', false) + ',' +
-        '["uncontrollable"] = ' + uncontrollable + ',' +
-        '["tasks"] = {},' +
-        '["task"] = "' + _.get(groupObj, 'task', curTask) + '",' +
-        '["taskSelected"] = true,' +
-        '["units"] = {#UNITS},' +
-        '["category"] = Group.Category.' + _.get(groupObj, 'category') + ',' +
-        '["country"] = "' + _.get(groupObj, 'country') + '",' +
-        curRoute +
-        '}';
+    const task = _.get(groupObj, 'task');
+    if (!task) {
+        _.set(groupObj, 'task', curTask);
+    }
+
+    let payload = { ...groupObj, curRoute, uncontrollable };
+
+    return exports.getUnitTemplate('grndUnitGroup', payload);
 });
 
 _.set(exports, 'grndUnitTemplate', function (unitObj) {
-    return '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["type"] = "' + _.get(unitObj, 'type') + '",' +
-        '["transportable"] = {' +
-        '["randomTransportable"] = true,' +
-        '},' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["playerCanDrive"] = ' + _.get(unitObj, 'playerCanDrive', false) + ',' +
-        // '["playerCanDrive"] = false,' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["country"] = "' + _.get(unitObj, 'country') + '",' +
-        '}'
-        ;
+    return exports.getUnitTemplate('grndUnitTemplate', unitObj);
 });
 
 _.set(exports, 'mi24vTemplate', function (unitObj) {
-    var curAirTemplate = '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["livery_id"] = "standard 1",' +
-        '["type"] = "Mi-24V",' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["payload"]={' +
-        '["pylons"]={},' +
-        '["fuel"] = "1704",' +
-        '["flare"] = 192,' +
-        '["chaff"] = 0,' +
-        '["gun"] = 100,' +
-        '},' +
-        '},';
-
-    return curAirTemplate;
+    return exports.getUnitTemplate('mi24vTemplate', unitObj);
 });
 
 _.set(exports, 'ah1wTemplate', function (unitObj) {
-    var curAirTemplate = '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["livery_id"] = "USA X Black",' +
-        '["type"] = "AH-1W",' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["payload"]={' +
-        '["pylons"]={},' +
-        '["fuel"] = "1250",' +
-        '["flare"] = 30,' +
-        '["chaff"] = 30,' +
-        '["gun"] = 100,' +
-        '},' +
-        '},';
-
-    return curAirTemplate;
+    return exports.getUnitTemplate('ah1wTemplate', unitObj);
 });
 
 _.set(exports, 'mi28nTemplate', function (unitObj) {
-    var curAirTemplate = '{' +
-        '["x"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').x, ' +
-        '["y"] = coord.LLtoLO(' + _.get(unitObj, ['lonLatLoc', 1]) + ', ' + _.get(unitObj, ['lonLatLoc', 0]) + ').z, ' +
-        '["type"] = "Mi-28N",' +
-        '["name"] = "' + _.get(unitObj, 'name') + '",' +
-        // '["unitId"] = ' + _.get(unitObj, 'unitId') + ',' +
-        '["heading"] = ' + _.get(unitObj, 'heading', 0) + ',' +
-        '["skill"] = "' + _.get(unitObj, 'skill', 'Excellent') + '",' +
-        '["hardpoint_racks"] = true,' +
-        '["payload"]={' +
-        '["pylons"]={' +
-        '[1] = {' +
-        '["CLSID"] = "{57232979-8B0F-4db7-8D9A-55197E06B0F5}",' +
-        '},' +
-        '},' +
-        '["fuel"] = "1500",' +
-        '["flare"] = 128,' +
-        '["chaff"] = 0,' +
-        '["gun"] = 100,' +
-        '},' +
-        '},';
-
-    return curAirTemplate;
+    return exports.getUnitTemplate('mi28nTemplate', unitObj);
 });
 
 _.set(exports, 'ah64dTemplate', function (unitObj) {

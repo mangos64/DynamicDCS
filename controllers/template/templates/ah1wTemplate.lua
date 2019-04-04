@@ -1,0 +1,16 @@
+{ 
+    ["x"] = coord.LLtoLO( %lonLatLoc;1% , %lonLatLoc;0% ).x,  
+    ["y"] = coord.LLtoLO( %lonLatLoc;1% , %lonLatLoc;0% ).z,  
+    ["livery_id"] = "USA X Black", 
+    ["type"] = "AH-1W", 
+    ["name"] = %name%, 
+    ["heading"] = %heading:0% , 
+    ["skill"] = %skill:Excellent%, 
+    ["payload"]= { 
+        ["pylons"]={}, 
+        ["fuel"] = "1250", 
+        ["flare"] = 30, 
+        ["chaff"] = 30, 
+        ["gun"] = 100, 
+    },
+},
