@@ -1,3 +1,7 @@
+/*
+ * DDCS Licensed under AGPL-3.0 by Andrew "Drex" Finegan https://github.com/afinegan/DynamicDCS
+ */
+
 (function (angular) {
 	'use strict';
 
@@ -291,12 +295,9 @@
 				}
 
 				if ( typeof gSrv.overlayCoords[base].latc !== "undefined" ) {
-					var center =  {lat: gSrv.overlayCoords[base].latc,
-						lng: gSrv.overlayCoords[base].lngc};
-					//setup 2 sides color
-					var sideColor = {};
-					sideColor[2] = '#00aaff';
-					sideColor[1] = '#ff5555';
+					var center =  {lat: gSrv.overlayCoords[base].latc, lng: gSrv.overlayCoords[base].lngc};
+					var overlayRadius = _.get(gSrv, ['overlayCoords', base, 'capturePoint']) ? 7500 : 15000;
+					var sideColor = { "1": '#ff5555', "2": '#00aaff' };
 
 					_.set(gSrv, ['circleOverlay', base], new gSrv.googleMaps.Circle({
 						strokeColor: sideColor[side],
@@ -305,7 +306,7 @@
 						strokeWeight: 0,
 						map: gSrv.currentMap,
 						center: center,
-						radius: 15000
+						radius: overlayRadius
 					}));
 
 					gSrv.googleMaps.event.addListener(

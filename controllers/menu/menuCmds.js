@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 const _ = require('lodash');
+=======
+/*
+ * DDCS Licensed under AGPL-3.0 by Andrew "Drex" Finegan https://github.com/afinegan/DynamicDCS
+ */
+
+const	_ = require('lodash');
+>>>>>>> master
 const constants = require('../constants');
 const DCSLuaCommands = require('../player/DCSLuaCommands');
 const masterDBController = require('../db/masterDB');
@@ -1415,8 +1423,14 @@ _.assign(exports, {
 			;
 	},
 	unpackCrate: function (serverName, playerUnit, country, type, special, combo, mobile) {
+<<<<<<< HEAD
 		return new Promise(function (resolve, reject) {
 			if (playerUnit.inAir) {
+=======
+		return new Promise(function(resolve, reject) {
+			var curTimePeriod = _.get(constants, 'config.timePeriod', 'modern');
+			if(playerUnit.inAir) {
+>>>>>>> master
 				DCSLuaCommands.sendMesgToGroup(
 					playerUnit.groupId,
 					serverName,
@@ -1464,7 +1478,7 @@ _.assign(exports, {
 							;
 						var newSpawnArray = [];
 						if (combo) {
-							constants.getUnitDictionary(_.get(constants, 'config.timePeriod', 'modern'))
+							constants.getUnitDictionary(curTimePeriod)
 								.then(function (unitDic) {
 									var addHdg = 30;
 									var curUnitHdg = playerUnit.hdg;
@@ -1473,7 +1487,12 @@ _.assign(exports, {
 										return _.includes(_.get(curUnitDict, 'comboName'), type);
 									});
 									_.forEach(findUnits, function (cbUnit) {
+<<<<<<< HEAD
 										for (x = 0; x < cbUnit.spawnCount; x++) {
+=======
+										var spawnUnitCount = _.get(cbUnit, ['config', curTimePeriod, 'spawnCount']);
+										for (x=0; x < spawnUnitCount; x++) {
+>>>>>>> master
 											unitStart = _.cloneDeep(cbUnit);
 											if (curUnitHdg > 359) {
 												curUnitHdg = 30;
@@ -1497,28 +1516,45 @@ _.assign(exports, {
 								})
 								;
 						} else {
-							constants.getUnitDictionary(_.get(constants, 'config.timePeriod', 'modern'))
+							constants.getUnitDictionary(curTimePeriod)
 								.then(function (unitDic) {
 									var addHdg = 30;
 									var curUnitHdg = playerUnit.hdg;
 									var unitStart;
 									var pCountry = country;
+<<<<<<< HEAD
 									var findUnit = _.find(unitDic, { _id: type });
+=======
+									var findUnit = _.find(unitDic, {_id: type});
+
+									var spawnUnitCount = _.get(findUnit, ['config', curTimePeriod, 'spawnCount']);
+>>>>>>> master
 									if ((type === '1L13 EWR' || type === '55G6 EWR' || type === 'Dog Ear radar') && _.get(playerUnit, 'coalition') === 2) {
 										console.log('EWR: UKRAINE');
 										pCountry = 'UKRAINE';
 									}
+<<<<<<< HEAD
 									for (x = 0; x < findUnit.spawnCount; x++) {
+=======
+									// console.log('UNIT SPAWNING: ', findUnit);
+									for (x=0; x < spawnUnitCount; x++) {
+>>>>>>> master
 										unitStart = _.cloneDeep(findUnit);
 										if (curUnitHdg > 359) {
 											curUnitHdg = 30;
 										}
-										_.set(unitStart, 'spwnName', 'DU|' + curPlayer.ucid + '|' + type + '|' + special + '|true|' + mobile + '|' + curPlayer.name + '|' + _.random(10000, 99999));
+										if (special === 'jtac') {
+											_.set(unitStart, 'spwnName', 'DU|' + curPlayer.ucid + '|' + type + '|' + special + '|true|' + mobile + '|' + curPlayer.name + '|');
+										} else {
+											_.set(unitStart, 'spwnName', 'DU|' + curPlayer.ucid + '|' + type + '|' + special + '|true|' + mobile + '|' + curPlayer.name + '|' + _.random(10000, 99999));
+										}
 										_.set(unitStart, 'lonLatLoc', playerUnit.lonLatLoc);
 										_.set(unitStart, 'heading', curUnitHdg);
 										_.set(unitStart, 'country', pCountry);
 										_.set(unitStart, 'playerCanDrive', mobile);
+										_.set(unitStart, 'special', special);
 										// console.log('ah2: ', curUnitHdg, addHdg, playerUnit);
+										// console.log('unitstart: ', unitStart);
 										newSpawnArray.push(unitStart);
 										curUnitHdg = curUnitHdg + addHdg;
 									}

@@ -1,13 +1,14 @@
 # DynamicDCS
-#### Dynamic DCS System for Controlling DCS Servers
-
+## Dynamic DCS System for Controlling DCS Servers
 The Dynamic DCS engine is built on externally written software from the ground up to offload all the process's from the DCS server to allow for unique game play using nodeJS and mongoDB for asynchronous processing and decision making.
 The server then, syncs to it through lua sockets and it compiles commands to send back, essentially freeing up massive amounts of overhead for the server to do what it needs to do.<br>
+
 The full system is compiled of:<br>
-DCS(Game Server) <-> dynamicdcs.com(nodeJS) <-> discord(access's API) or SRS(reads json file)
+DCS (Game Server) <-> dynamicdcs.com (nodeJS) <-> Discord (API) or SRS (JSON file)
 
 The main goal of this server is to create a place to fly where it feels like a real war, things happen that you cant predict like a real war.
-
+<br><br>
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fb48fa271add4ac881a114f8ea04ebc0)](https://www.codacy.com/app/DDCS/DynamicDCS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=afinegan/DynamicDCS&amp;utm_campaign=Badge_Grade)
 ## Installation
 
 To Install the DDCS Engine will be broken up into a few parts. This installation will assume you are installing the default example setup of the engine
@@ -28,15 +29,25 @@ readWriteAnyDatabase@admin
 userAdminAnyDatabase@admin
 ```
 5. Login to your mongodb and create 2 databases (Add Collection)<br>
-  a. Create 1 named "DDCS" and import devEnvironment/DBs/DDCS db into it
-  b. Create another named "DDCSExampleServer" and import devEnvironment/DBs/DDCSExampleServer db into it
+  * Create 1 database named "DDCS" and [import](https://docs.mongodb.com/manual/reference/program/mongoimport/) devEnvironment/DBs/DDCS collections into it
+  * Create another named "DDCSExampleServer" and import devEnvironment/DBs/DDCSExampleServer collections into it
+  * See below for an example command to load of all of the JSON files in easily
+
+```
+for %i in (*.json) do mongoimport --file %i --db DDCS --username (your username) --password (your password) --authenticationDatabase admin
+```
+
 #### Install Git and checkout main DDCS project
+
 1. Follow the instructions on getting command line git working for windows, should be able to open a windows cmd line and type git, and it works. Please ONLY use command line git for checking in things, the GUI systems do weird things in source control for some reason<br>
 https://git-scm.com/download/win<br>
+
 2. In a directory where you want the project to live, clone the project:<br>
+
 ```bash
 git clone https://github.com/afinegan/DynamicDCS.git
 ``` 
+
 3. When you have code to create a PR to add to DDCS project please contact Drex or Quaggles on DDCS Discord for access to the GitHub<br>
 https://discord.gg/h4G9QZf
 or email me:
@@ -45,22 +56,29 @@ andrew.finegan@gmail.com
 #### Installing NVM and NodeJS
 1. Get NVM for windows and install it:<br>
 https://github.com/coreybutler/nvm-windows/releases
-2. go into the directory you checked DDCS project out and install node 8<br>
+
+2. Go into the directory you checked DDCS project out and install node 8<br>
+
 ```bash
 nvm install v8.12.0
 ```
-3. use nvm to choose the version
+
+3. Use NVM to choose the version
 ```bash
 nvm use v8.12.0
 ```
-4. once done, run node -v to make sure it is installed and working (might have to open another command prompt for it to work)
+
+4. Once done, run node -v to make sure it is installed and working (might have to open another command prompt for it to work)
+
 ```bash
 node -v
 v8.12.0
 ```
-this should install all the dependences needed to run DDCS
+
+This should install all the dependencies needed to run DDCS
 
 #### Creating local configs
+
 1. Create a file in the root of the project named ".config.json" with the following contents:<br>
 ```JSON
 {
@@ -73,11 +91,13 @@ this should install all the dependences needed to run DDCS
   }
 }
 ```
+
 2. Auth0(optional I think): Create a file in the root of the project named ".env" with you auth0 environment<br>
    ```
    AUTH0_AUDIENCE=[your auth0 api access path]
    AUTH0_DOMAIN=[your auth0 api access domain]
    ```
+
 3. Auth0(optional I think): Create a file in the root of the project named "auth0-variables.js" with your auth0 variables<br>
     ```
     var AUTH0_CLIENT_ID='';
@@ -88,14 +108,15 @@ this should install all the dependences needed to run DDCS
     ```
 
 #### Install DDCS node dependencies
-1. open a command prompt in the directory of the DDCS directory
-2. open an admin based control panel(type cmd in the search, right click cmd and select administrator)(for node-opus compiling) and run:<br>
+1. Open a command prompt in the directory of the DDCS directory
+2. Open an admin based control panel(type cmd in the search, right click cmd and select administrator)(for node-opus compiling) and run:<br>
    ```bash
    npm install
    ```
    this will install all the dependancys for the DDCS project
+
 #### Install Backend Hook Script for backend communication
-1. make sure DCS is closed
+1. Make sure DCS is closed
 2. Copy the file from app/assets/lua/dynamicDCSTrueGameGUI.lua into the folder C:\Users\[computer account name]\Saved Games\DCS\Scripts\Hooks
 
 #### Configure your DCS server to be able to run lua socket(has to be done after EVERY update)

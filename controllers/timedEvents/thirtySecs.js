@@ -1,3 +1,7 @@
+/*
+ * DDCS Licensed under AGPL-3.0 by Andrew "Drex" Finegan https://github.com/afinegan/DynamicDCS
+ */
+
 const _ = require('lodash');
 const masterDBController = require('../db/masterDB');
 const jtacController = require('../action/jtac');

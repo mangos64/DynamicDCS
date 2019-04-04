@@ -1,3 +1,7 @@
+/*
+ * DDCS Licensed under AGPL-3.0 by Andrew "Drex" Finegan https://github.com/afinegan/DynamicDCS
+ */
+
 const	_ = require('lodash');
 const masterDBController = require('../db/masterDB');
 const proximityController = require('../proxZone/proximity');
@@ -97,7 +101,7 @@ _.assign(exports, {
 									console.log('trying to build cc on empty base');
 									neutralCCController.spawnCCAtNeutralBase(serverName, curPlayerUnit)
 										.then(function (response) {
-											console.log('spawn response: ', response);
+											console.log('spawn response1: ', response);
 											if (response) {
 												exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
 											}
@@ -110,7 +114,7 @@ _.assign(exports, {
 									msg = "G: Unpacking " + _.toUpper(curCrateSpecial) + " " + curCrateType + "!";
 									menuCmdsController.unpackCrate(serverName, curPlayerUnit, curCrate.country, curCrateType, curCrateSpecial, isCombo, isMobile)
 										.then(function (response) {
-											console.log('unpacking response: ', response);
+											console.log('unpacking response2: ', response);
 											if (response) {
 												exports.destroyCrates(serverName, grpTypes, curCrateType, numCrate);
 											}
