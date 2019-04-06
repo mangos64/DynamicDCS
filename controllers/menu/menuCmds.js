@@ -104,13 +104,13 @@ _.assign(exports, {
 											;
 										}
 										if(curIntCrateType === 'BaseRepair') {
-											if (_.some(playerProx)) {
+											if (_.some(playerProx) && _.get(curBaseObj, 'side') === _.get(curUnit, 'coalition')) {
 												repairController.repairBase(serverName, curBaseObj, curUnit);
 											} else {
 												DCSLuaCommands.sendMesgToGroup(
 													curUnit.groupId,
 													serverName,
-													"G: You are not near any bases!",
+													"G: You are not near any friendly bases!",
 													5
 												);
 											}
