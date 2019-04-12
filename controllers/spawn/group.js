@@ -1221,16 +1221,22 @@ _.set(exports, 'staticTemplate', function (staticObj) {
 	return retObj;
 });
 
-_.set(exports, 'getRndFromSpawnCat', function (spawnCat, side, spawnShow, spawnAlways, launchers) {
+_.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawnShow, spawnAlways, launchers) {
 	var curTimePeriod = _.get(constants, ['config', 'timePeriod']);
 	var curEnabledCountrys = _.get(constants, [_.get(constants, ['side', side]) + 'Countrys']);
-	var findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
+	var findUnits;
 	var cPUnits = [];
 	var randomIndex;
 	var unitsChosen = [];
 	var curLaunchSpawn;
 	var curUnit;
 	var curUnits = [];
+
+	if (_.get(serverName, 'timePeriod') === 'modern' && spawnCat === 'radarSam') {
+		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, spawnCatSec: 'modern', enabled: true});
+	} else {
+		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
+	}
 	_.forEach(findUnits, function (unit) {
 		// console.log('unitCountry: ', _.get(unit, ['config', curTimePeriod, 'country']));
 		if(_.intersection(_.get(unit, ['config', curTimePeriod, 'country']), curEnabledCountrys).length > 0) {
@@ -1294,7 +1300,7 @@ _.set(exports, 'spawnSupportVehiclesOnFarp', function ( serverName, baseName, si
 		curAng = curAng + 270
 	}
 	_.forEach(sptArray, function (val) {
-		var sptUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat(val, side, false, true)));
+		var sptUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat(serverName, val, side, false, true)));
 		_.set(sptUnit, 'name', baseName + '_' + val);
 		_.set(sptUnit, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(_.get(curBase, ['centerLoc']), curAng, 0.05));
 		curAng += 15;
@@ -1343,7 +1349,7 @@ _.set(exports, 'spawnBaseReinforcementGroup', function (serverName, side, baseNa
 		for (var i = 0; i < curTickVal; i++) {
 			if (!(name === 'samRadar')){
 				curAngle = 0;
-				curRndSpawn = _.sortBy(exports.getRndFromSpawnCat(name, side, false, forceSpawn), 'sort');
+				curRndSpawn = _.sortBy(exports.getRndFromSpawnCat(serverName, name, side, false, forceSpawn), 'sort');
 				compactUnits = [];
 				infoSpwn = _.first(curRndSpawn);
 				centerRadar = _.get(infoSpwn, 'centerRadar') ? 1 : 0;
@@ -1482,7 +1488,7 @@ _.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, lau
 	var groupedUnits = [];
 	randLatLonInBase = zoneController.getRandomLatLonFromBase(serverName, baseName, 'layer2Poly', openSAM);
 	groupedUnits = [];
-	curRndSpawn = _.sortBy(exports.getRndFromSpawnCat( 'samRadar', side, false, true, launchers ), 'sort');
+	curRndSpawn = _.sortBy(exports.getRndFromSpawnCat(serverName, 'samRadar', side, false, true, launchers ), 'sort');
 	infoSpwn = _.first(curRndSpawn);
 	centerRadar = _.get(infoSpwn, 'centerRadar') ? 1 : 0;
 	curSpokeNum = curRndSpawn.length - centerRadar;
@@ -1514,7 +1520,7 @@ _.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, lau
 	}
 	// console.log('launchers: ', _.cloneDeep(groupedUnits), _.get(infoSpwn, 'secRadarNum'), centerRadar, curSpokeNum, centerRadar);
 	//add ammo truck
-	curCat = _.cloneDeep(_.first(exports.getRndFromSpawnCat('unarmedAmmo', side, false, true)));
+	curCat = _.cloneDeep(_.first(exports.getRndFromSpawnCat(serverName, 'unarmedAmmo', side, false, true)));
 	_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, 180, _.get(curCat, 'spokeDistance')/2));
 	_.set(curCat, 'name', '|' + baseName + '|' + openSAM + 'SAM|' + _.random(1000000, 9999999));
 	curAngle += curSpokeDeg;
@@ -1540,12 +1546,12 @@ _.set(exports, 'spawnLayer2Reinforcements', function (serverName, catType, rndAm
 	console.log('spawnBase: ', baseName);
 	for (var i = 0; i < curTickCnt; i++) {
 		curAngle = 0;
-		curRndSpawn = _.cloneDeep(exports.getRndFromSpawnCat(catType, side, false, true));
+		curRndSpawn = _.cloneDeep(exports.getRndFromSpawnCat(serverName, catType, side, false, true));
 		groupedL2Units = [];
 		curSpokeNum = curRndSpawn.length;
 		curSpokeDeg = 359/curSpokeNum;
 
-		curCat = _.cloneDeep(_.first(exports.getRndFromSpawnCat('unarmedAmmo', side, false, true)));
+		curCat = _.cloneDeep(_.first(exports.getRndFromSpawnCat(serverName, 'unarmedAmmo', side, false, true)));
 		randLatLonInBase = _.cloneDeep(zoneController.getRandomLatLonFromBase(serverName, baseName, 'layer2Poly'));
 		_.set(curCat, 'lonLatLoc', randLatLonInBase);
 		groupedL2Units.push(curCat);
@@ -1940,11 +1946,11 @@ _.set(exports, 'spawnSupportPlane', function (serverName, baseObj, side) {
 	console.log('BASE: ', baseLoc);
 
 	if(_.get(baseObj, 'farp')) {
-		curSpwnUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat( 'transportHeli', side, true, true )));
+		curSpwnUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat(serverName, 'transportHeli', side, true, true )));
 		// remoteLoc = zoneController.getLonLatFromDistanceDirection(baseLoc, _.get(baseObj, 'spawnAngle'), 40);
 		remoteLoc = zoneController.getLonLatFromDistanceDirection(baseLoc, randomDir, 40);
 	} else {
-		curSpwnUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat( 'transportAircraft', side, true, true )));
+		curSpwnUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat(serverName, 'transportAircraft', side, true, true )));
 		remoteLoc = zoneController.getLonLatFromDistanceDirection(baseLoc, randomDir, 70);
 		// remoteLoc = zoneController.getLonLatFromDistanceDirection(baseLoc, _.random(0, 359), 70);
 	}
