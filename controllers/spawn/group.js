@@ -1317,7 +1317,7 @@ _.set(exports, 'spawnSupportBaseGrp', function ( serverName, baseName, side ) {
 	var spawnArray = [];
 	var curBases = _.get(constants, 'bases');
 	var farpBases = _.filter(curBases, (baseObj)=> {
-		return (_.includes(baseObj._id, '_MOB') || _.includes(baseObj._id, '_FOB')) && _.first(_.split(_.get(baseObj, 'name'), ' #')) === baseName;
+		return ((_.includes(baseObj._id, '_MOB') && _.get(baseObj, 'initSide') === side)|| _.includes(baseObj._id, '_FOB')) && _.first(_.split(_.get(baseObj, 'name'), ' #')) === baseName;
 	});
 	_.forEach(farpBases, function (farp) {
 		spawnArray = _.concat(spawnArray, exports.spawnSupportVehiclesOnFarp( serverName, _.get(farp, 'name'), side ));
