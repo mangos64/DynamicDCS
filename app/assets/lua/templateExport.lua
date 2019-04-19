@@ -77,7 +77,7 @@ do
 											if polyArray[nArry[4]].unitPoly[nArry[5]] == nil then
 												polyArray[nArry[4]].unitPoly[nArry[5]] = {}
 											end
-											--env.info('poly: '..gName)
+											--env.info('poly1: '..gName)
 											for pIndex = 1, #group.route.points do
 												local lat, lon, alt = coord.LOtoLL({x = group.route.points[pIndex].x, y = 0, z = group.route.points[pIndex].y})
 												polyArray[nArry[4]].unitPoly[nArry[5]][pIndex] = {
@@ -97,7 +97,7 @@ do
 											if polyArray[nArry[4]].buildingPoly[nArry[5]] == nil then
 												polyArray[nArry[4]].buildingPoly[nArry[5]] = {}
 											end
-											--env.info('poly: '..gName)
+											--env.info('poly2: '..gName)
 											for pIndex = 1, #group.route.points do
 												local lat, lon, alt = coord.LOtoLL({x = group.route.points[pIndex].x, y = 0, z = group.route.points[pIndex].y})
 												polyArray[nArry[4]].buildingPoly[nArry[5]][pIndex] = {
@@ -117,7 +117,7 @@ do
 											if polyArray[nArry[4]].layer2Poly[nArry[5]] == nil then
 												polyArray[nArry[4]].layer2Poly[nArry[5]] = {}
 											end
-											--env.info('poly: '..gName)
+											--env.info('poly3: '..gName)
 											for pIndex = 1, #group.route.points do
 												local lat, lon, alt = coord.LOtoLL({x = group.route.points[pIndex].x, y = 0, z = group.route.points[pIndex].y})
 												polyArray[nArry[4]].layer2Poly[nArry[5]][pIndex] = {
@@ -169,30 +169,16 @@ do
 				},
 				["polygonLoc"] = {},
 				["alt"] = alt,
-				["farp"] = false,
-				["expansion"] = false,
-				["mainBase"] = false
+				["baseType"] = 'MOB'
 			}
+			if polyArray[baseName] ~= nil then
+				curObj["polygonLoc"] = polyArray[baseName]
+			end
 			env.info('RUN1')
-			if string.find(baseName, 'FARP', 1, true) then
-				curObj.farp = true
+			if string.find(baseName, 'FOB', 1, true) then
+				curObj.baseType = 'FOB'
 			end
 			env.info('RUN2')
-			if string.find(baseName, 'Expansion', 1, true) then
-				curObj.expansion = true
-			end
-			env.info('RUN3')
-			if not string.find(baseName, 'Expansion', 1, true) and not string.find(baseName, ' #', 1, true) then
-				env.info('RUN4')
-				--env.info('applycache  ' .. baseName..' : '.. coalition);
-				--trigger.action.setUserFlag(baseName, coalition)
-				curObj.mainBase = true
-				--airbaseCache[baseName].side = coalition
-				if polyArray[baseName] ~= nil then
-					curObj["polygonLoc"] = polyArray[baseName]
-				end
-			end
-			env.info('RUN5')
 			table.insert(updateQue.que, {
 				action = 'airbaseC',
 				data = curObj

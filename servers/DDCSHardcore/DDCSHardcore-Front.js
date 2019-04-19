@@ -103,7 +103,7 @@ masterDBController.initDB(serverName, masterServer)
 					if (!sychrontronController.isServerSynced) {
 						console.log('SYNC: ', sychrontronController.isServerSynced);
 					}
-					// console.log('CB: ', cbArray.que);
+					// console.log('CB: ', !_.get(exports, 'sessionName'));
 					_.set(exports, 'curServerUnitCnt', cbArray.unitCount);
 					if(!_.get(exports, 'sessionName')) {
 						exports.getLatestSession(serverName, cbArray.epoc, cbArray.startAbsTime,  cbArray.curAbsTime);

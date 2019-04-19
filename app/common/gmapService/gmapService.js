@@ -320,7 +320,7 @@
 			}
 		});
 		_.set(gSrv, 'updateOverlay', function (base, side) {
-			if(!_.includes(base, 'FARP')){ //until farps have a img overlay, bypass them...
+			if(!_.includes(base, '_MOB') || !_.includes(base, '_FOB')){ //until farps have a img overlay, bypass them...
 				_.get(gSrv, ['baseOverlay', base]).setMap(null);
 				delete gSrv.baseOverlay[base];
 			}
