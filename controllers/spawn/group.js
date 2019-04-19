@@ -570,6 +570,7 @@ _.set(exports, 'bombersPlaneRouteTemplate', function (routes) {
 });
 
 _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
+	var addTaskNum = (_.get(routes, 'eplrs')) ? 1 : 0;
 	var curRoute =  '' +
 		'["route"] = {' +
 			'["points"] = {' +
@@ -581,16 +582,32 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 					'["task"] = {' +
 						'["id"] = "ComboTask",' +
 						'["params"] = {' +
-							'["tasks"] = {' +
-								'[1] = {' +
-									'["number"] = 1,' +
+							'["tasks"] = {';
+								if(_.get(routes, 'eplrs')) {
+									curRoute += '[1] = {' +
+										'["number"] = 1,' +
+										'["auto"] = true,' +
+										'["id"] = "WrappedAction",' +
+										'["enabled"] = true,' +
+										'["params"] = {' +
+											'["action"] = {' +
+												'["id"] = "EPLRS",' +
+												'["params"] = {' +
+														'["value"] = true,' +
+												'},' +
+											'},' +
+										'},' +
+									'},' ;
+								}
+								curRoute += '[' + addTaskNum + 1 + '] = {' +
+									'["number"] = ' + addTaskNum + 1 + ',' +
 									'["auto"] = true,' +
 									'["id"] = "AWACS",' +
 									'["enabled"] = true,' +
 									'["params"]={},' +
 								'},' +
-								'[2] = {' +
-									'["number"] = 2,' +
+								'[' + addTaskNum + 2 + '] = {' +
+									'["number"] = ' + addTaskNum + 2 + ',' +
 									'["auto"] = false,' +
 									'["id"] = "WrappedAction",' +
 									'["name"] = "RadioFreq",' +
@@ -606,8 +623,8 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 										'},' +
 									'},' +
 								'},' +
-								'[3] = {' +
-									'["number"] = 3,' +
+								'[' + addTaskNum + 3 + '] = {' +
+									'["number"] = ' + addTaskNum + 3 + ',' +
 									'["auto"] = false,' +
 									'["id"] = "Orbit",' +
 									'["enabled"]=true,' +
@@ -618,8 +635,8 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 										'["speedEdited"] = true,' +
 									'},' +
 								'},' +
-								'[4] = {' +
-									'["number"] = 4,' +
+								'[' + addTaskNum + 4 + '] = {' +
+									'["number"] = ' + addTaskNum + 4 + ',' +
 									'["auto"] = false,' +
 									'["id"] = "WrappedAction",' +
 									'["enabled"] = true,' +
@@ -632,24 +649,8 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 											'},' +
 										'},' +
 									'},' +
-								'},' ;
-								if(_.get(routes, 'eplrs')) {
-									curRoute += '[5] = {' +
-										'["number"] = 5,' +
-										'["auto"] = true,' +
-										'["id"] = "WrappedAction",' +
-										'["enabled"] = true,' +
-										'["params"] = {' +
-											'["action"] = {' +
-												'["id"] = "EPLRS",' +
-												'["params"] = {' +
-													'["value"] = true,' +
-												'},' +
-											'},' +
-										'},' +
-									'},' ;
-								}
-						curRoute += '},' +
+								'},' +
+						 '},' +
 						'},' +
 					'},' +
 					'["type"] = "Turning Point",' +
@@ -1221,7 +1222,7 @@ _.set(exports, 'staticTemplate', function (staticObj) {
 	return retObj;
 });
 
-_.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawnShow, spawnAlways, launchers) {
+_.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawnShow, spawnAlways, launchers, useUnitType) {
 	var curTimePeriod = _.get(constants, ['config', 'timePeriod']);
 	var curEnabledCountrys = _.get(constants, [_.get(constants, ['side', side]) + 'Countrys']);
 	var findUnits;
@@ -1232,7 +1233,10 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 	var curUnit;
 	var curUnits = [];
 
-	if (_.get(serverName, 'timePeriod') === 'modern' && spawnCat === 'radarSam') {
+	if (!_.isEmpty(useUnitType)) {
+		var curComboName = _.get(_.find(_.get(constants, 'unitDictionary'), {type: useUnitType}), 'comboName');
+		findUnits = _.filter(_.get(constants, 'unitDictionary'), {comboName: curComboName});
+	} else if (_.get(serverName, 'timePeriod') === 'modern' && spawnCat === 'radarSam') {
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, spawnCatSec: 'modern', enabled: true});
 	} else {
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
@@ -1467,7 +1471,7 @@ _.set(exports, 'spawnSAMNet', function (serverName, side, baseName, init) {
 	;
 });
 
-_.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, launchers) {
+_.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, launchers, useUnitType) {
 	var centerRadar;
 	var compactUnits;
 	var curAngle = 0;
@@ -1481,7 +1485,8 @@ _.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, lau
 	var groupedUnits = [];
 	randLatLonInBase = zoneController.getRandomLatLonFromBase(serverName, baseName, 'layer2Poly', openSAM);
 	groupedUnits = [];
-	curRndSpawn = _.sortBy(exports.getRndFromSpawnCat(serverName, 'samRadar', side, false, true, launchers ), 'sort');
+	curRndSpawn = _.sortBy(exports.getRndFromSpawnCat(serverName, 'samRadar', side, false, true, launchers, useUnitType ), 'sort');
+	// console.log('RANDSPWN: ', curRndSpawn);
 	infoSpwn = _.first(curRndSpawn);
 	centerRadar = _.get(infoSpwn, 'centerRadar') ? 1 : 0;
 	curSpokeNum = curRndSpawn.length - centerRadar;
@@ -1514,6 +1519,7 @@ _.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, lau
 	// console.log('launchers: ', _.cloneDeep(groupedUnits), _.get(infoSpwn, 'secRadarNum'), centerRadar, curSpokeNum, centerRadar);
 	//add ammo truck
 	curCat = _.cloneDeep(_.first(exports.getRndFromSpawnCat(serverName, 'unarmedAmmo', side, false, true)));
+	// console.log('ammo: ', curCat);
 	_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, 180, _.get(curCat, 'spokeDistance')/2));
 	_.set(curCat, 'name', '|' + baseName + '|' + openSAM + 'SAM|' + _.random(1000000, 9999999));
 	curAngle += curSpokeDeg;
@@ -1521,7 +1527,6 @@ _.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, lau
 	// console.log('ammo: ', _.cloneDeep(groupedUnits));
 	// console.log('sg: ', serverName, _.compact(groupedUnits), baseName, side);
 	compactUnits = _.compact(groupedUnits);
-	// console.log('CU: ', compactUnits);
 	exports.spawnGroup(serverName, compactUnits, baseName, side);
 	return _.get(_.cloneDeep(compactUnits), 'length', 0);
 });
