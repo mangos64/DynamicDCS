@@ -512,7 +512,7 @@ _.assign(exports, {
 				return new Promise(function(resolve, reject) {
 					Airfield.find(
 						{
-							mainBase: true,
+							baseType: "MOB",
 							enabled: true,
 							centerLoc: {
 								$near: {
@@ -535,7 +535,7 @@ _.assign(exports, {
 				return new Promise(function(resolve, reject) {
 					Airfield.find(
 						{
-							mainBase: true,
+							baseType: "MOB",
 							enabled: true,
 							side: obj.playerSide,
 							centerLoc: {
@@ -559,7 +559,7 @@ _.assign(exports, {
 				return new Promise(function(resolve, reject) {
 					Airfield.find(
 						{
-							mainBase: true,
+							baseType: "MOB",
 							enabled: true,
 							side: constants.enemyCountry[obj.playerSide],
 							centerLoc: {

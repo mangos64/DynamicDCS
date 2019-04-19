@@ -10,16 +10,15 @@ const groupController = require('../spawn/group');
 _.set(exports, 'processFiveSecActions', function (serverName, fullySynced) {
 	var replenThreshold = 1; // percentage under max
 	var replenBase = _.get(constants, ['config', 'replenThresholdBase']) * replenThreshold;
-	var replenFarp = _.get(constants, ['config', 'replenThresholdFARP']) * replenThreshold;
 	var replenTimer = _.random(_.get(constants, 'config.replenTimer')/2, _.get(constants, 'config.replenTimer'));
 
 	if (fullySynced) {
 		//set base flags
-		masterDBController.baseActions('read', serverName, {mainBase: true})
+		masterDBController.baseActions('read', serverName, {baseType: "MOB"})
 			.then(function (bases) {
 				_.forEach(bases, function (base) {
 					var curRegEx = '^' + _.get(base, '_id') + ' #';
-					var unitCnt = (_.get(base, 'farp')) ?  replenFarp : replenBase;
+					var unitCnt = replenBase;
 					masterDBController.unitActions('read', serverName, {name: new RegExp(curRegEx), dead: false})
 						.then(function (units) {
 							var replenEpoc = new Date(_.get(base, 'replenTime', 0)).getTime();

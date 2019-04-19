@@ -365,7 +365,7 @@ _.assign(exports, {
 						5
 					);
 				} else {
-					masterDBController.baseActions('read', serverName, {mainBase: true, side: curUnit.coalition})
+					masterDBController.baseActions('read', serverName, {baseType: "MOB", side: curUnit.coalition})
 						.then(function (bases) {
 							checkAllBase = [];
 							_.forEach(bases, function (base) {
@@ -506,7 +506,7 @@ _.assign(exports, {
 									} else {
 										if(exports.isTroopOnboard(curUnit, serverName)) {
 											checkAllBase = [];
-											masterDBController.baseActions('read', serverName, {mainBase: true, side: curUnit.coalition})
+											masterDBController.baseActions('read', serverName, {baseType: "MOB", side: curUnit.coalition})
 												.then(function (bases) {
 													_.forEach(bases, function (base) {
 														checkAllBase.push(proximityController.isPlayerInProximity(serverName, base.centerLoc, 3.4, curUnit.playername)

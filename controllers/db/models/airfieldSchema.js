@@ -15,17 +15,10 @@ const AirfieldSchema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
-	farp: {
-		type: Boolean,
-		default: false
-	},
-	expansion: {
-		type: Boolean,
-		default: false
-	},
-	mainBase: {
-		type: Boolean,
-		default: false
+	baseType: {
+		type: String,
+		required: true,
+		default: 'MOB'
 	},
 	centerLoc: {
 		type: [Number],

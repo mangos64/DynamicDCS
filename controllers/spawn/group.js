@@ -1309,23 +1309,16 @@ _.set(exports, 'spawnSupportVehiclesOnFarp', function ( serverName, baseName, si
 	return curFarpArray;
 });
 
-_.set(exports, 'spawnSupportBaseGrp', function ( serverName, baseName, side, init ) {
+_.set(exports, 'spawnSupportBaseGrp', function ( serverName, baseName, side ) {
 	var spawnArray = [];
 	var curBases = _.get(constants, 'bases');
-	var farpBases = _.filter(curBases, {farp: true});
-	var expBases = _.filter(curBases, {expansion: true});
-	// var curEnabledCountrys = _.get(constants, [_.get(constants, ['side', side]) + 'Countrys']);
-	if (_.includes(baseName, 'FARP')) {
-		var curFarpBases = _.filter(farpBases, function (farp) {
-			return _.first(_.split(_.get(farp, 'name'), ' #')) === baseName && _.get(farp, 'initSide') === side;
-				// && !_.isEmpty(_.intersection([_.get(farp, 'country')], curEnabledCountrys));
-		});
-		// console.log('doesnt work: ', serverName, baseName, side, init, curFarpBases);
-		_.forEach(curFarpBases, function (farp) {
-			spawnArray = _.concat(spawnArray, exports.spawnSupportVehiclesOnFarp( serverName, _.get(farp, 'name'), side ));
-		});
-		exports.spawnGroup(serverName, _.compact(spawnArray), baseName, side);
-	}
+	var farpBases = _.filter(curBases, (baseObj)=> {
+		return (_.includes(baseObj._id, '_MOB') || _.includes(baseObj._id, '_FOB')) && _.first(_.split(_.get(baseObj, 'name'), ' #')) === baseName;
+	});
+	_.forEach(farpBases, function (farp) {
+		spawnArray = _.concat(spawnArray, exports.spawnSupportVehiclesOnFarp( serverName, _.get(farp, 'name'), side ));
+	});
+	exports.spawnGroup(serverName, _.compact(spawnArray), baseName, side);
 	return true;
 });
 
@@ -1945,7 +1938,7 @@ _.set(exports, 'spawnSupportPlane', function (serverName, baseObj, side) {
 	baseLoc = _.get(baseObj, 'centerLoc');
 	console.log('BASE: ', baseLoc);
 
-	if(_.get(baseObj, 'farp')) {
+	if(_.includes(_.get(baseObj, '_id'), '_MOB') || _.includes(_.get(baseObj, '_id'), '_FOB')) {
 		curSpwnUnit = _.cloneDeep(_.first(exports.getRndFromSpawnCat(serverName, 'transportHeli', side, true, true )));
 		// remoteLoc = zoneController.getLonLatFromDistanceDirection(baseLoc, _.get(baseObj, 'spawnAngle'), 40);
 		remoteLoc = zoneController.getLonLatFromDistanceDirection(baseLoc, randomDir, 40);
@@ -1965,7 +1958,7 @@ _.set(exports, 'spawnSupportPlane', function (serverName, baseObj, side) {
 			baseLoc
 		]
 	};
-	if(_.get(baseObj, 'farp')) {
+	if(_.includes(_.get(baseObj, '_id'), '_MOB') || _.includes(_.get(baseObj, '_id'), '_FOB')) {
 		curGroupSpawn = exports.grndUnitGroup( curGrpObj, 'Transport', exports.landHeliRouteTemplate(curRoutes));
 	} else {
 		curGroupSpawn = exports.grndUnitGroup( curGrpObj, 'Transport', exports.landPlaneRouteTemplate(curRoutes));
@@ -2142,13 +2135,8 @@ _.set(exports, 'spawnNewMapGrps', function ( serverName ) {
 		var spawnArray = [];
 		var curReplenThreshold;
 		exports.spawnSupportBaseGrp(serverName, extName, extSide, true);
-		if(_.includes(extName, 'FARP')) {
-			curReplenThreshold = curServer.replenThresholdFARP;
-		} else {
-			curReplenThreshold = curServer.replenThresholdBase;
-		}
 		totalUnitNum = 0;
-		while (spawnArray.length + totalUnitNum < curReplenThreshold) { //UNCOMMENT THESE
+		while (spawnArray.length + totalUnitNum < curServer.replenThresholdBase) { //UNCOMMENT THESE
 			totalUnitNum += exports.spawnBaseReinforcementGroup(serverName, extSide, extName, true, true);
 			// console.log('TN: ', totalUnitNum, spawnArray.length, totalUnitNum, '<', curReplenThreshold, spawnArray.length + totalUnitNum < curReplenThreshold);
 		}
@@ -2273,7 +2261,7 @@ _.set(exports, 'healBase', function ( serverName, baseName, curPlayerUnit) {
 			.then(function (baseUnit) {
 				if (baseUnit) {
 					var curBase = _.first(baseUnit);
-					if (!_.get(curBase, 'mainBase')) {
+					if (_.get(curBase, 'baseType') !== "MOB") {
 						neutralCCController.spawnCCAtNeutralBase(serverName, curPlayerUnit)
 							.then(function (resp) {
 								exports.spawnSupportBaseGrp( serverName, curBase.name, _.get(curPlayerUnit, 'coalition') );

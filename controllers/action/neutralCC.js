@@ -14,7 +14,7 @@ _.assign(exports, {
 	checkCmdCenters: function (serverName) {
 		var basesChanged = false;
 		var curSide;
-		masterDBController.baseActions('read', serverName, {mainBase: false, expansion: false, farp: false})
+		masterDBController.baseActions('read', serverName, {baseType: "FOB", enabled: true})
 			.then(function (bases) {
 				_.forEach(bases, function (base) {
 					masterDBController.unitActions('read', serverName, {_id: base.name + ' Logistics', dead: false})
@@ -57,7 +57,7 @@ _.assign(exports, {
 	spawnCCAtNeutralBase: function (serverName, curPlayerUnit) {
 		// console.log('spwnNeutral: ', curPlayerUnit);
 		return new Promise(function(resolve, reject) {
-			masterDBController.baseActions('read', serverName, {mainBase: false, expansion: false, enabled: true})
+			masterDBController.baseActions('read', serverName, {baseType: "FOB", enabled: true})
 				.then(function (bases) {
 					mainNeutralBases = _.remove(bases, function (base) {
 						return !_.includes(base.name, '#');
@@ -79,6 +79,7 @@ _.assign(exports, {
 														'G: ' + base.name + ' Command Center Already Exists, Support Units Replaced.',
 														5
 													);
+													// console.log('SSB: ', serverName, base.name, curPlayerUnit.coalition);
 													groupController.spawnSupportBaseGrp( serverName, base.name, curPlayerUnit.coalition );
 												} else {
 													console.log(' enemy cmdCenter already exists: ' + base.name + ' ' + cmdCenters);
