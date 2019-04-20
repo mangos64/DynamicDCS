@@ -46,7 +46,7 @@
 						<a href="#" uib-dropdown-toggle>Live Maps <b class="caret"></b></a>
 						<ul uib-dropdown-menu>
 							<li ng-repeat="srv in srvService.servers">
-								<a ng-if="srv.enabled" ui-sref="dynMap({name: '{{srv.name}}'})">{{srv.name}}</a>
+								<a ng-if="srv.enabled" ui-sref="dynMap({name: '{{srv.name}}'})">{{srv.displayName}}</a>
 							</li>
 						</ul>
 					</li>
