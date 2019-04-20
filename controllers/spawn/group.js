@@ -582,10 +582,17 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 					'["task"] = {' +
 						'["id"] = "ComboTask",' +
 						'["params"] = {' +
-							'["tasks"] = {';
+							'["tasks"] = {' +
+								'[1] = {' +
+									'["number"] = 1,' +
+									'["auto"] = true,' +
+									'["id"] = "AWACS",' +
+									'["enabled"] = true,' +
+									'["params"]={},' +
+								'},';
 								if(_.get(routes, 'eplrs')) {
-									curRoute += '[1] = {' +
-										'["number"] = 1,' +
+									curRoute += '[2] = {' +
+										'["number"] = 2,' +
 										'["auto"] = true,' +
 										'["id"] = "WrappedAction",' +
 										'["enabled"] = true,' +
@@ -593,21 +600,14 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 											'["action"] = {' +
 												'["id"] = "EPLRS",' +
 												'["params"] = {' +
-														'["value"] = true,' +
+													'["value"] = true,' +
 												'},' +
 											'},' +
 										'},' +
 									'},' ;
 								}
-								curRoute += '[' + addTaskNum + 1 + '] = {' +
-									'["number"] = ' + addTaskNum + 1 + ',' +
-									'["auto"] = true,' +
-									'["id"] = "AWACS",' +
-									'["enabled"] = true,' +
-									'["params"]={},' +
-								'},' +
-								'[' + addTaskNum + 2 + '] = {' +
-									'["number"] = ' + addTaskNum + 2 + ',' +
+					curRoute += '[' + (addTaskNum + 2) + '] = {' +
+									'["number"] = ' + (addTaskNum + 2) + ',' +
 									'["auto"] = false,' +
 									'["id"] = "WrappedAction",' +
 									'["name"] = "RadioFreq",' +
@@ -623,8 +623,8 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 										'},' +
 									'},' +
 								'},' +
-								'[' + addTaskNum + 3 + '] = {' +
-									'["number"] = ' + addTaskNum + 3 + ',' +
+								'[' + (addTaskNum + 3) + '] = {' +
+									'["number"] = ' + (addTaskNum + 3) + ',' +
 									'["auto"] = false,' +
 									'["id"] = "Orbit",' +
 									'["enabled"]=true,' +
@@ -633,21 +633,6 @@ _.set(exports, 'awacsPlaneRouteTemplate', function (routes) {
 										'["pattern"] = "Race-Track",' +
 										'["speed"] = ' + _.get(routes, 'speed') + ',' +
 										'["speedEdited"] = true,' +
-									'},' +
-								'},' +
-								'[' + addTaskNum + 4 + '] = {' +
-									'["number"] = ' + addTaskNum + 4 + ',' +
-									'["auto"] = false,' +
-									'["id"] = "WrappedAction",' +
-									'["enabled"] = true,' +
-									'["params"] = {' +
-										'["action"] = {' +
-											'["id"] = "Option",' +
-											'["params"] = {' +
-												'["name"] = 1,' +
-												'["value"] = 2,' +
-											'},' +
-										'},' +
 									'},' +
 								'},' +
 						 '},' +
