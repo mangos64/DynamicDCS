@@ -955,8 +955,7 @@ _.assign(exports, {
 		if(awacsType === 'RussianAWACSE2C') {
 			awacsObj = {
 				name: 'RussianAWACSE2C',
-				// type: 'E-2C',
-				type: 'E-3A',
+				type: 'E-2C',
 				country: 'AGGRESSORS',
 				alt: '7620',
 				speed: '265',

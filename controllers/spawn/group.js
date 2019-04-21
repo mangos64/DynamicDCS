@@ -1803,7 +1803,7 @@ _.set(exports, 'spawnAWACSPlane', function (serverName, playerUnitObj, awacsObj)
 			remoteLoc = zoneController.getLonLatFromDistanceDirection(playerUnitObj.lonLatLoc, playerUnitObj.hdg, curSpwnUnit.spawnDistance);
 
 			curGrpObj = _.cloneDeep(curSpwnUnit);
-			_.set(curGrpObj, 'groupName', curTkrName + '#' + _.random(1000000, 9999999));
+			_.set(curGrpObj, 'groupName', curTkrName);
 			_.set(curGrpObj, 'country', curCountry);
 			_.set(curGrpObj, 'category', curCategory);
 			_.set(curGrpObj, 'routeLocs', [
@@ -1814,7 +1814,7 @@ _.set(exports, 'spawnAWACSPlane', function (serverName, playerUnitObj, awacsObj)
 			curGroupSpawn = exports.grndUnitGroup( curGrpObj, 'AWACS', exports.awacsPlaneRouteTemplate(curGrpObj));
 
 			_.set(curSpwnUnit, 'lonLatLoc', remoteLoc);
-			_.set(curSpwnUnit, 'name', curTkrName + '#' + _.random(1000000, 9999999));
+			_.set(curSpwnUnit, 'name', curTkrName);
 			_.set(curSpwnUnit, 'playerCanDrive', false);
 			_.set(curSpwnUnit, 'hidden', false);
 
