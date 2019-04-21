@@ -373,7 +373,6 @@ _.assign(exports, {
 					}
 				},
 				side: side,
-				baseType: "MOB",
 				enabled: true
 			})
 			.then(function (closestBase) {
