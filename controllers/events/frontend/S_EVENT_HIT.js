@@ -45,19 +45,22 @@ _.set(exports, 'checkShootingUsers', function (serverName) {
 					;
 				}
 
-				if ((_.get(shootObj, 'tUnit.category') === 'GROUND') || (_.get(shootObj, 'iUnit.category') === 'GROUND')) {
+				if (_.get(shootObj, 'tUnit.category') === 'GROUND') {
 					radioTowerController.baseUnitUnderAttack(serverName, _.get(shootObj, 'tUnit'));
 					if (_.get(constants, 'config.inGameHitMessages', true)) {
-						// console.log('FiredBy: ', _.get(shootObj, 'iUnit.groupId'));
-						// console.log('FiredAt: ', _.get(shootObj, 'tUnit.groupId'));
 						DCSLuaCommands.sendMesgToGroup(
-							_.get(shootObj, 'iUnit.groupId'),
+							_.get(shootObj, 'tUnit.groupId'),
 							serverName,
 							_.get(shootObj, 'msg'),
 							20
 						);
+					}
+				} else if (_.get(shootObj, 'iUnit.category') === 'GROUND') {
+					radioTowerController.baseUnitUnderAttack(serverName, _.get(shootObj, 'tUnit'));
+					if (_.get(constants, 'config.inGameHitMessages', true) || _.get(exports.shootingUsers, [key, 'isOwnedUnit'], false)) {
+						console.log('shooting: ', _.get(shootObj, 'msg'));
 						DCSLuaCommands.sendMesgToGroup(
-							_.get(shootObj, 'tUnit.groupId'),
+							_.get(shootObj, 'iUnit.groupId'),
 							serverName,
 							_.get(shootObj, 'msg'),
 							20
@@ -202,19 +205,23 @@ _.set(exports, 'processEventHit', function (serverName, sessionName, eventObj) {
 														;
 													}
 
-													if ((_.get(iCurObj, 'tUnit.category') === 'GROUND') || (_.get(iCurObj, 'iUnit.category') === 'GROUND')) {
+													if (_.get(iCurObj, 'tUnit.category') === 'GROUND') {
 														radioTowerController.baseUnitUnderAttack(serverName, _.get(iCurObj, 'tUnit'));
 														if (_.get(constants, 'config.inGameHitMessages', true)) {
-															console.log('FiredBy: ', _.get(iCurObj, 'iUnit.groupId'));
-															console.log('FiredAt: ', _.get(iCurObj, 'tUnit.groupId'));
+															// console.log('FiredAt: ', _.get(iCurObj, 'tUnit.groupId'));
 															DCSLuaCommands.sendMesgToGroup(
-																_.get(iCurObj, 'iUnit.groupId'),
+																_.get(iCurObj, 'tUnit.groupId'),
 																serverName,
 																_.get(iCurObj, 'msg'),
 																20
 															);
+														}
+													} else if (_.get(iCurObj, 'iUnit.category') === 'GROUND') {
+														if (_.get(constants, 'config.inGameHitMessages', true) || isOwnedUnit) {
+															console.log('singleHit: ', _.get(iCurObj, 'msg'));
+															// console.log('FiredBy: ', _.get(iCurObj, 'iUnit.groupId'));
 															DCSLuaCommands.sendMesgToGroup(
-																_.get(iCurObj, 'tUnit.groupId'),
+																_.get(iCurObj, 'iUnit.groupId'),
 																serverName,
 																_.get(iCurObj, 'msg'),
 																20
