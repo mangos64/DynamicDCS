@@ -51,7 +51,7 @@ _.set(exports, 'checkShootingUsers', function (serverName) {
 						DCSLuaCommands.sendMesgToGroup(
 							_.get(shootObj, 'tUnit.groupId'),
 							serverName,
-							_.get(shootObj, 'msg'),
+							'G: ' + _.get(shootObj, 'msg'),
 							20
 						);
 					}
@@ -62,7 +62,7 @@ _.set(exports, 'checkShootingUsers', function (serverName) {
 						DCSLuaCommands.sendMesgToGroup(
 							_.get(shootObj, 'iUnit.groupId'),
 							serverName,
-							_.get(shootObj, 'msg'),
+							'G: ' + _.get(shootObj, 'msg'),
 							20
 						);
 					}
@@ -70,7 +70,7 @@ _.set(exports, 'checkShootingUsers', function (serverName) {
 					if (_.get(constants, 'config.inGameHitMessages', true)) {
 						DCSLuaCommands.sendMesgToAll(
 							serverName,
-							_.get(shootObj, 'msg'),
+							'A: ' + _.get(shootObj, 'msg'),
 							20
 						);
 					}
@@ -179,13 +179,13 @@ _.set(exports, 'processEventHit', function (serverName, sessionName, eventObj) {
 													_.set(exports.shootingUsers, [iUnitId, 'iUnitType'], _.get(iCurObj, 'iType'));
 													_.set(exports.shootingUsers, [iUnitId, 'iUnitCoalition'], _.get(iCurObj, 'iCoalition'));
 													_.set(iCurObj, 'msg',
-														'A: ' + constants.side[_.get(curIUnit, 'coalition')] + ' '+ iPName +' has hit ' + constants.side[_.get(curTUnit, 'coalition')]+' ' + tPName + ' '+_.get(exports.shootingUsers, [iUnitId, 'count'], 0)+' times with ' + _.get(curWeapon, 'displayName') + ' - +10'
+														constants.side[_.get(curIUnit, 'coalition')] + ' '+ iPName +' has hit ' + constants.side[_.get(curTUnit, 'coalition')]+' ' + tPName + ' '+_.get(exports.shootingUsers, [iUnitId, 'count'], 0)+' times with ' + _.get(curWeapon, 'displayName') + ' - +10'
 													);
 													// console.log('2: ', iCurObj.msg); //'+_.get(curWeapon, 'score')+'
 													_.set(exports.shootingUsers, [iUnitId, 'iCurObj'], _.cloneDeep(iCurObj));
 												} else {
 													_.set(iCurObj, 'score', _.get(curWeapon, 'score'));
-													_.set(iCurObj, 'msg', 'A: ' + constants.side[_.get(curIUnit, 'coalition')] + ' '+ iPName +' has hit ' + constants.side[_.get(curTUnit, 'coalition')] + ' '+tPName + ' with ' + _.get(curWeapon, 'displayName') + ' - +'+_.get(curWeapon, 'score'));
+													_.set(iCurObj, 'msg', constants.side[_.get(curIUnit, 'coalition')] + ' '+ iPName +' has hit ' + constants.side[_.get(curTUnit, 'coalition')] + ' '+tPName + ' with ' + _.get(curWeapon, 'displayName') + ' - +'+_.get(curWeapon, 'score'));
 													// console.log('3: ', iCurObj.msg);
 													if(_.get(iCurObj, 'iucid') || _.get(iCurObj, 'tucid')) {
 														webPushCommands.sendToAll(serverName, {payload: {action: eventObj.action, data: _.cloneDeep(iCurObj)}});
@@ -212,7 +212,7 @@ _.set(exports, 'processEventHit', function (serverName, sessionName, eventObj) {
 															DCSLuaCommands.sendMesgToGroup(
 																_.get(iCurObj, 'tUnit.groupId'),
 																serverName,
-																_.get(iCurObj, 'msg'),
+																'G: ' + _.get(iCurObj, 'msg'),
 																20
 															);
 														}
@@ -223,7 +223,7 @@ _.set(exports, 'processEventHit', function (serverName, sessionName, eventObj) {
 															DCSLuaCommands.sendMesgToGroup(
 																_.get(iCurObj, 'iUnit.groupId'),
 																serverName,
-																_.get(iCurObj, 'msg'),
+																'G: Your ' + _.get(iCurObj, 'msg'),
 																20
 															);
 														}
@@ -231,7 +231,7 @@ _.set(exports, 'processEventHit', function (serverName, sessionName, eventObj) {
 														if (_.get(constants, 'config.inGameHitMessages', true)) {
 															DCSLuaCommands.sendMesgToAll(
 																serverName,
-																_.get(iCurObj, 'msg'),
+																'A: ' + _.get(iCurObj, 'msg'),
 																20
 															);
 														}
