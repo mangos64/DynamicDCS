@@ -58,11 +58,11 @@ _.set(exports, 'checkShootingUsers', function (serverName) {
 				} else if (_.get(shootObj, 'iUnit.category') === 'GROUND') {
 					radioTowerController.baseUnitUnderAttack(serverName, _.get(shootObj, 'tUnit'));
 					if (_.get(constants, 'config.inGameHitMessages', true) || _.get(exports.shootingUsers, [key, 'isOwnedUnit'], false)) {
-						console.log('shooting: ', _.get(shootObj, 'msg'));
+						console.log('shooting: ', 'G: Your ' + _.get(shootObj, 'msg'));
 						DCSLuaCommands.sendMesgToGroup(
 							_.get(shootObj, 'iUnit.groupId'),
 							serverName,
-							'G: ' + _.get(shootObj, 'msg'),
+							'G: Your ' + _.get(shootObj, 'msg'),
 							20
 						);
 					}
@@ -218,7 +218,7 @@ _.set(exports, 'processEventHit', function (serverName, sessionName, eventObj) {
 														}
 													} else if (_.get(iCurObj, 'iUnit.category') === 'GROUND') {
 														if (_.get(constants, 'config.inGameHitMessages', true) || isOwnedUnit) {
-															console.log('singleHit: ', _.get(iCurObj, 'msg'));
+															console.log('singleHit: ', 'G: Your ' + _.get(iCurObj, 'msg'));
 															// console.log('FiredBy: ', _.get(iCurObj, 'iUnit.groupId'));
 															DCSLuaCommands.sendMesgToGroup(
 																_.get(iCurObj, 'iUnit.groupId'),
