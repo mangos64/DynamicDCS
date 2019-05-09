@@ -1113,7 +1113,8 @@ _.assign(exports, {
 														checkAllBase.push(proximityController.isPlayerInProximity(serverName, _.get(curLogistic, 'lonLatLoc'), 0.2, unit.playername)
 															.then( function(pProx) {
 																if(_.some(pProx)) {
-																	closeLogi = base.name;
+																	closeLogi = _.get(base, 'name');
+																	console.log('sP: ', closeLogi, pProx);
 																}
 															})
 															.catch(function (err) {
