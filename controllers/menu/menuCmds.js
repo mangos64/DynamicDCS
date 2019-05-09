@@ -1109,14 +1109,9 @@ _.assign(exports, {
 											.then(function(aliveBases) {
 												_.forEach(bases, function (base) {
 													curLogistic = _.find(aliveBases, {name: base.name + ' Logistics'});
+													closeLogi = _.get(base, 'name');
 													if (!!curLogistic) {
 														checkAllBase.push(proximityController.isPlayerInProximity(serverName, _.get(curLogistic, 'lonLatLoc'), 0.2, unit.playername)
-															.then( function(pProx) {
-																if(_.some(pProx)) {
-																	closeLogi = _.get(base, 'name');
-																	console.log('sP: ', closeLogi, pProx);
-																}
-															})
 															.catch(function (err) {
 																console.log('line 59: ', err);
 															})
