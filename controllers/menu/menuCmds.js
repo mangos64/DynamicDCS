@@ -1100,6 +1100,7 @@ _.assign(exports, {
 									})
 								;
 							} else {
+								var closeLogi = '';
 								masterDBController.baseActions('read', serverName)
 									.then(function (bases) {
 										checkAllBase = [];
@@ -1110,6 +1111,11 @@ _.assign(exports, {
 													curLogistic = _.find(aliveBases, {name: base.name + ' Logistics'});
 													if (!!curLogistic) {
 														checkAllBase.push(proximityController.isPlayerInProximity(serverName, _.get(curLogistic, 'lonLatLoc'), 0.2, unit.playername)
+															.then( function(pProx) {
+																if(_.some(pProx)) {
+																	closeLogi = base.name;
+																}
+															})
 															.catch(function (err) {
 																console.log('line 59: ', err);
 															})
@@ -1136,7 +1142,7 @@ _.assign(exports, {
 																		crateCount++;
 																	});
 																	crateObj = {
-																		name: (spc) ? spc + '|#' + _.random(1000000, 9999999) : type + '|#' + _.random(1000000, 9999999),
+																		name: (spc) ? spc + '|#' + _.random(1000000, 9999999) : type + '|' + closeLogi + '|#' + _.random(1000000, 9999999),
 																		unitLonLatLoc: unit.lonLatLoc,
 																		shape_name: _.get(_.find(constants.staticDictionary, {_id: crateType}), 'shape_name', 'iso_container_small_cargo'),
 																		category: 'Cargo',
