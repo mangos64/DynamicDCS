@@ -1208,6 +1208,7 @@ _.set(exports, 'staticTemplate', function (staticObj) {
 });
 
 _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawnShow, spawnAlways, launchers, useUnitType) {
+	console.log('getRndCat: ', serverName, spawnCat, side, spawnShow, spawnAlways, launchers, useUnitType);
 	var curTimePeriod = _.get(constants, ['config', 'timePeriod']);
 	var curEnabledCountrys = _.get(constants, [_.get(constants, ['side', side]) + 'Countrys']);
 	var findUnits;
