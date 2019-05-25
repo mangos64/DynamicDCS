@@ -1227,8 +1227,10 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 	} else {
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
 	}
+	console.log('findUnits: ', findUnits);
+
 	_.forEach(findUnits, function (unit) {
-		// console.log('unitCountry: ', _.get(unit, ['config', curTimePeriod, 'country']));
+		console.log('unitCountry: ', _.get(unit, ['config', curTimePeriod, 'country']));
 		if(_.intersection(_.get(unit, ['config', curTimePeriod, 'country']), curEnabledCountrys).length > 0) {
 			cPUnits.push(unit);
 		}
@@ -1243,6 +1245,7 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 	}
 
 	curUnit = cPUnits[randomIndex];
+	console.log('cu: ', curUnit);
 	if (curUnit) {
 		if(_.get(curUnit, 'comboName').length > 0) {
 			curUnits = _.filter(cPUnits, function (curPUnit) {
@@ -1251,7 +1254,6 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 		} else {
 			curUnits.push(curUnit);
 		}
-
 		if (curUnits.length > 0) {
 			_.forEach(curUnits, function (cUnit) {
 				var curTimePeriodSpawnCount = _.get(cUnit, ['config', curTimePeriod, 'spawnCount']);
@@ -1270,6 +1272,7 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 				_.set(unit, 'hidden', false);
 			});
 		}
+		console.log('unitsChosen: ', unitsChosen, spawnShow);
 		return unitsChosen;
 	} else {
 		return false;
