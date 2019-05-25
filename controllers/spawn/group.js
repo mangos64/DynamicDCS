@@ -1456,7 +1456,7 @@ _.set(exports, 'spawnSAMNet', function (serverName, side, baseName, init) {
 	;
 });
 
-_.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, launchers, useUnitType) {
+_.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, launchers, useUnitType, lastLonLat) {
 	var centerRadar;
 	var compactUnits;
 	var curAngle = 0;
@@ -1468,7 +1468,7 @@ _.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, lau
 	var randLatLonInBase;
 	var infoSpwn;
 	var groupedUnits = [];
-	randLatLonInBase = zoneController.getRandomLatLonFromBase(serverName, baseName, 'layer2Poly', openSAM);
+	randLatLonInBase = (lastLonLat) ? lastLonLat : zoneController.getRandomLatLonFromBase(serverName, baseName, 'layer2Poly', openSAM);
 	groupedUnits = [];
 	curRndSpawn = _.sortBy(exports.getRndFromSpawnCat(serverName, 'samRadar', side, false, true, launchers, useUnitType ), 'sort');
 	// console.log('RANDSPWN: ', curRndSpawn);

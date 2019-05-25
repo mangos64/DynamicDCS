@@ -80,7 +80,8 @@ _.assign(exports, {
 								_.get(tNameArry, [1]),
 								_.get(tNameArry, [2]).charAt(0),
 								launcher,
-								_.first(unitsMissing)
+								_.first(unitsMissing),
+								_.get(curSAMTemplate, 'lonLatLoc'),
 							);
 							console.log('TRUCKHERE? ', unitsMissing);
 							_.forEach(group, function (removeElement) {
