@@ -583,6 +583,7 @@ _.assign(exports, {
 																			});
 																			// spawn troop type
 																			curSpawnUnit = _.cloneDeep(_.first(groupController.getRndFromSpawnCat(curUnit.troopType, curUnit.coalition, false, true)));
+																			console.log('consolespawnunit: ', curSpawnUnit, curUnit);
 																			spawnArray = {
 																				spwnName: 'TU|' + curPlayer.ucid + '|' + curUnit.troopType + '|' + curUnit.playername + '|' ,
 																				type: curSpawnUnit.type,
