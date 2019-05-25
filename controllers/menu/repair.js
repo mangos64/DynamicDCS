@@ -73,7 +73,7 @@ _.assign(exports, {
 							var curSAMTemplate = _.first(group);
 							var tNameArry = _.split(curSAMTemplate, '|');
 							//add missing units to existing array
-							//console.log('spawnStarSam: ' + curSAMTemplate);
+							console.log('spawnStarSam: ' + curSAMTemplate);
 							groupController.spawnStarSam(
 								serverName,
 								_.get(curSAMTemplate, 'coalition'),
