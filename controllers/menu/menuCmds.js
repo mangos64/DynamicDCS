@@ -544,7 +544,7 @@ _.assign(exports, {
 																				groupController.destroyUnit(serverName, unit.name);
 																			});
 																			// spawn troop type
-																			curSpawnUnit = _.cloneDeep(_.first(groupController.getRndFromSpawnCat(curUnit.troopType, curUnit.coalition, false, true)));
+																			curSpawnUnit = _.cloneDeep(_.first(groupController.getRndFromSpawnCat(serverName, curUnit.troopType, curUnit.coalition, false, true)));
 																			spawnArray = {
 																				spwnName: 'TU|' + curPlayer.ucid + '|' + curUnit.troopType + '|' + curUnit.playername + '|' + _.random(1000000, 9999999) ,
 																				type: curSpawnUnit.type,
@@ -582,7 +582,7 @@ _.assign(exports, {
 																				groupController.destroyUnit(serverName, unit.name);
 																			});
 																			// spawn troop type
-																			curSpawnUnit = _.cloneDeep(_.first(groupController.getRndFromSpawnCat(curUnit.troopType, curUnit.coalition, false, true)));
+																			curSpawnUnit = _.cloneDeep(_.first(groupController.getRndFromSpawnCat(serverName, curUnit.troopType, curUnit.coalition, false, true)));
 																			console.log('consolespawnunit: ', curSpawnUnit, curUnit);
 																			spawnArray = {
 																				spwnName: 'TU|' + curPlayer.ucid + '|' + curUnit.troopType + '|' + curUnit.playername + '|' ,
