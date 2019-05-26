@@ -69,7 +69,7 @@ _.assign(exports, {
 						var unitsMissing = _.difference(curReqArray, _.uniq(_.map(group, 'type')));
 
 						// if there are units missing and the launcher exists, fix the group
-						if(unitsMissing.length && launcher) {
+						if(unitsMissing.length && launcher && _.sample([true, false])) {
 							var curSAMTemplate = _.first(group);
 							var tNameArry = _.split(curSAMTemplate, '|');
 							//add missing units to existing array
