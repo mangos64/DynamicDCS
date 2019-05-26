@@ -1227,8 +1227,8 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 		console.log('lunitdict2');
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, spawnCatSec: 'modern', enabled: true});
 	} else {
-		console.log('lunitdict3');
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
+		console.log('lunitdict3: ', findUnits, spawnCat);
 	}
 	console.log('findUnits: ', findUnits);
 
