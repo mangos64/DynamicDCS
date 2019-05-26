@@ -1221,10 +1221,13 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 
 	if (!_.isEmpty(useUnitType)) {
 		var curComboName = _.get(_.find(_.get(constants, 'unitDictionary'), {type: useUnitType}), 'comboName');
+		console.log('lunitdict1');
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {comboName: curComboName});
 	} else if (_.get(serverName, 'timePeriod') === 'modern' && spawnCat === 'radarSam') {
+		console.log('lunitdict2');
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, spawnCatSec: 'modern', enabled: true});
 	} else {
+		console.log('lunitdict3');
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
 	}
 	console.log('findUnits: ', findUnits);
