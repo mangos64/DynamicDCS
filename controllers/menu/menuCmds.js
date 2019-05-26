@@ -553,6 +553,7 @@ _.assign(exports, {
 																			category: curSpawnUnit.category,
 																			playerCanDrive: true
 																		};
+																		console.log('constants: ', _.get(curSpawnUnit, ['config', _.get(constants, 'config.timePeriod'), 'spawnCount']), _.get(constants, 'config.timePeriod'), curSpawnUnit);
 																		for(var x = 0; x < _.get(curSpawnUnit, ['config', _.get(constants, 'config.timePeriod'), 'spawnCount'], 1); x++) {
 																			curTroops.push(spawnArray);
 																		}
