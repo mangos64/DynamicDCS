@@ -358,6 +358,33 @@ _.assign(exports, {
 			})
 			;
 	},
+	getMOBsInProximity: function (serverName, lonLat, kmDistance, side) {
+		return masterDBController.baseActions(
+			'read',
+			serverName,
+			{
+				centerLoc: {
+					$near: {
+						$geometry: {
+							type: "Point",
+							coordinates: lonLat
+						},
+						$maxDistance: kmDistance * 1000
+					}
+				},
+				side: side,
+				enabled: true,
+				baseType: 'MOB'
+			})
+			.then(function (closestBase) {
+				// console.log('close units ' + closeUnits);
+				return closestBase;
+			})
+			.catch(function (err) {
+				console.log('line 27: ', err);
+			})
+			;
+	},
 	getBasesInProximity: function (serverName, lonLat, kmDistance, side) {
 		return masterDBController.baseActions(
 			'read',

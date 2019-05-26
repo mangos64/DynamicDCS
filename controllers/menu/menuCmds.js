@@ -10,12 +10,12 @@ const proximityController = require('../proxZone/proximity');
 const menuUpdateController = require('../menu/menuUpdate');
 const groupController = require('../spawn/group');
 const crateController = require('../spawn/crate');
-const reloadController = require('../menu/reload');
 const repairController = require('../menu/repair');
 const userLivesController = require('../action/userLives');
 const resourcePointsController = require('../action/resourcePoints');
 const serverTimerController = require('../action/serverTimer');
 const sideLockController = require('../action/sideLock');
+const zoneController = require('../proxZone/zone');
 
 _.assign(exports, {
 	internalCargo: function (serverName, curUnit, curPlayer, intCargoType) {
@@ -1206,9 +1206,11 @@ _.assign(exports, {
 		;
 	},
 	spawnTanker: function (serverName, curUnit, curPlayer, tankerType, rsCost) {
+		var tankerObj;
+		var safeSpawnDistance = 60;
+		var remoteLoc;
 		console.log('tankerType: ', tankerType, rsCost);
 
-		var tankerObj;
 		if(tankerType === 'BHABTKR') {
 			tankerObj = {
 				name: 'BHABTKR',
@@ -1371,14 +1373,41 @@ _.assign(exports, {
 			};
 		}
 
-		resourcePointsController.spendResourcePoints(serverName, curPlayer, rsCost, 'Tanker', tankerObj)
-			.then(function(spentPoints) {
-				if (spentPoints) {
-					groupController.spawnTankerPlane(serverName, curUnit, tankerObj);
-				}
+		remoteLoc = zoneController.getLonLatFromDistanceDirection(curUnit.lonLatLoc, curUnit.hdg, tankerObj.spawnDistance);
+
+		//check if tankers are closer to any enemy base by 60km
+		proximityController.getMOBsInProximity(serverName, remoteLoc, safeSpawnDistance, _.get(constants, ['enemyCountry', _.get(curUnit, 'coalition')]))
+			.then(function (closeMOBs1) {
+				proximityController.getMOBsInProximity(serverName, curUnit.lonLatLoc, safeSpawnDistance, _.get(constants, ['enemyCountry', _.get(curUnit, 'coalition')]))
+					.then(function (closeMOBs2) {
+						// console.log('closeMOBs: 1: ', closeMOBs1, ' 2: ', closeMOBs2);
+						if (closeMOBs1.length > 0 || closeMOBs2.length > 0) {
+							DCSLuaCommands.sendMesgToGroup(
+								curUnit.groupId,
+								serverName,
+								"G: Please spawn Tanker farther away from enemy bases!",
+								5
+							);
+						} else {
+							resourcePointsController.spendResourcePoints(serverName, curPlayer, rsCost, 'Tanker', tankerObj)
+								.then(function(spentPoints) {
+									if (spentPoints) {
+										groupController.spawnTankerPlane(serverName, curUnit, tankerObj, curUnit.lonLatLoc, remoteLoc);
+									}
+								})
+								.catch(function(err) {
+									console.log('err line1400: ', err);
+								})
+							;
+						}
+					})
+					.catch(function (err) {
+						console.log('err line1406: ', err);
+					})
+				;
 			})
-			.catch(function(err) {
-				console.log('err line938: ', err);
+			.catch(function (err) {
+				console.log('err line1411: ', err);
 			})
 		;
 	},

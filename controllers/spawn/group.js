@@ -1852,32 +1852,28 @@ _.set(exports, 'spawnAWACSPlane', function (serverName, playerUnitObj, awacsObj)
 	;
 });
 
-_.set(exports, 'spawnTankerPlane', function (serverName, playerUnitObj, tankerObj) {
+_.set(exports, 'spawnTankerPlane', function (serverName, playerUnitObj, tankerObj, playerLoc, remoteLoc) {
 	var curTkrName;
 	var curUnitSpawn;
 	var curGroupSpawn;
 	var curCountry;
 	var curSpwnUnit;
 	var curGrpObj = {};
-	var remoteLoc;
 	var curCategory = 'AIRPLANE';
 
 	curCountry = tankerObj.country;
 	curTkrName = 'AI|' + tankerObj.name + '|';
 	curSpwnUnit = _.cloneDeep(tankerObj);
 
-	masterDBController.baseActions('getClosestBase', serverName, { unitLonLatLoc: playerUnitObj.lonLatLoc})
+	masterDBController.baseActions('getClosestBase', serverName, { unitLonLatLoc: playerLoc})
 		.then(function (closeBase) {
-			// console.log('CB: ', closeBase);
-			remoteLoc = zoneController.getLonLatFromDistanceDirection(playerUnitObj.lonLatLoc, playerUnitObj.hdg, curSpwnUnit.spawnDistance);
-
 			curGrpObj = _.cloneDeep(curSpwnUnit);
 			_.set(curGrpObj, 'groupName', curTkrName + '#' + _.random(1000000, 9999999));
 			_.set(curGrpObj, 'country', curCountry);
 			_.set(curGrpObj, 'category', curCategory);
 			_.set(curGrpObj, 'routeLocs', [
 				remoteLoc,
-				playerUnitObj.lonLatLoc
+				playerLoc
 			]);
 
 			curGroupSpawn = exports.grndUnitGroup( curGrpObj, 'Refueling', exports.tankerPlaneRouteTemplate(curGrpObj));
