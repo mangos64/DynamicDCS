@@ -32,6 +32,9 @@ _.set(exports, 'processEventTakeoff', function (serverName, sessionName, eventOb
 					var curUnitDict = _.find(constants.unitDictionary, {_id: curIUnit.type});
 					var curUnitSide = _.get(curIUnit, 'coalition');
 					var curLifePointVal = (curUnitDict) ? curUnitDict.lifeCost : 1;
+					if (_.isUndefined(curTUnit)) {
+						console.log('isUndef: ', eventObj);
+					}
 					if (curIUnit) {
 						iPlayer = _.find(playerArray, {name: _.get(curIUnit, 'playername')});
 						// console.log('takeoff: ', _.get(curIUnit, 'playername'));
