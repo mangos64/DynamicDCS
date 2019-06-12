@@ -1207,7 +1207,7 @@ _.assign(exports, {
 	},
 	spawnTanker: function (serverName, curUnit, curPlayer, tankerType, rsCost) {
 		var tankerObj;
-		var safeSpawnDistance = 60;
+		var safeSpawnDistance = 100;
 		var remoteLoc;
 		console.log('tankerType: ', tankerType, rsCost);
 
