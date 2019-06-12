@@ -32,7 +32,7 @@ _.set(exports, 'processEventTakeoff', function (serverName, sessionName, eventOb
 					var curUnitDict = _.find(constants.unitDictionary, {_id: curIUnit.type});
 					var curUnitSide = _.get(curIUnit, 'coalition');
 					var curLifePointVal = (curUnitDict) ? curUnitDict.lifeCost : 1;
-					if (_.isUndefined(curTUnit)) {
+					if (_.isUndefined(curIUnit)) {
 						console.log('isUndef: ', eventObj);
 					}
 					if (curIUnit) {
