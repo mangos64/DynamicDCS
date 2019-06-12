@@ -48,11 +48,15 @@ _.set(exports, 'syncType', function (serverName, serverUnitCount) {
 									console.log('DB has ' + units.length + ' Units, Respawn Them');
 									var filterStructure = _.filter(units, {category: 'STRUCTURE'});
 									var filterGround = _.filter(units, {category: 'GROUND'});
+									var filterShips = _.filter(units, {category: 'SHIP'});
 									masterUnitCount = filterStructure.length + filterGround.length;
 									_.forEach(units, function (unit) {
 										var curDead;
 										var curGrpName = _.get(unit, 'groupName');
-										if ((_.get(unit, 'category') === 'GROUND') && !_.get(unit, 'isTroop', false)) {
+										if (
+											(_.get(unit, 'category') === 'GROUND') &&
+											!_.get(unit, 'isTroop', false)
+										) {
 											_.set(remappedunits, [curGrpName], _.get(remappedunits, [curGrpName], []));
 											remappedunits[curGrpName].push(unit);
 										} else if (_.get(unit, 'type') === '.Command Center') {

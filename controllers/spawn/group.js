@@ -1223,9 +1223,9 @@ _.set(exports, 'getRndFromSpawnCat', function (serverName, spawnCat, side, spawn
 		var curComboName = _.get(_.find(_.get(constants, 'unitDictionary'), {type: useUnitType}), 'comboName');
 		// console.log('lunitdict1');
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {comboName: curComboName});
-	} else if (_.get(serverName, 'timePeriod') === 'modern' && spawnCat === 'radarSam') {
-		// console.log('lunitdict2');
-		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, spawnCatSec: 'modern', enabled: true});
+	} else if (curTimePeriod === 'modern' && spawnCat === 'samRadar') {
+		// console.log('lunitdict2: ');
+		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: 'samRadar', spawnCatSec: 'modern', enabled: true});
 	} else {
 		findUnits = _.filter(_.get(constants, 'unitDictionary'), {spawnCat: spawnCat, enabled: true});
 		// console.log('lunitdict3: ', findUnits, spawnCat);
@@ -1505,6 +1505,8 @@ _.set(exports, 'spawnStarSam', function(serverName, side, baseName, openSAM, lau
 		curCat = _.cloneDeep(curRndSpawn[k]);
 		_.set(curCat, 'lonLatLoc', zoneController.getLonLatFromDistanceDirection(randLatLonInBase, curAngle, _.get(curCat, 'spokeDistance')));
 		_.set(curCat, 'name', '|' + baseName + '|' + openSAM + 'SAM|' + _.random(1000000, 9999999));
+		_.set(curCat, 'heading', _.floor(curAngle));
+		// console.log('CA: ', curCat.name, curCat.heading);
 		curAngle += curSpokeDeg;
 		groupedUnits.push(curCat);
 	}

@@ -44,6 +44,9 @@ const UnitSchema = new Schema({
 		type: Number,
 		required: true
 	},
+	agl: {
+		type: Number
+	},
 	hdg: {
 		type: Number,
 		min: 0,

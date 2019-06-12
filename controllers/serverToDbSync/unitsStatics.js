@@ -70,6 +70,7 @@ _.set(exports, 'processUnitUpdates', function (serverName, sessionName, unitObj)
 						data: {
 							_id: _.get(curData, 'name'),
 							alt: parseFloat(_.get(curData, 'alt')),
+							agl: parseFloat(_.get(curData, 'agl', 0)),
 							dead: false,
 							hdg: parseFloat(_.get(curData, 'hdg')),
 							groupId: _.get(curData, 'groupId', 0),
@@ -103,6 +104,7 @@ _.set(exports, 'processUnitUpdates', function (serverName, sessionName, unitObj)
 									_id: iCurObj.data._id,
 									lonLatLoc: iCurObj.data.lonLatLoc,
 									alt: iCurObj.data.alt,
+									agl: iCurObj.data.agl,
 									hdg: iCurObj.data.hdg,
 									speed: iCurObj.data.speed,
 									coalition: iCurObj.data.coalition
@@ -140,6 +142,7 @@ _.set(exports, 'processUnitUpdates', function (serverName, sessionName, unitObj)
 										_id: iCurObj.data._id,
 										lonLatLoc: iCurObj.data.lonLatLoc,
 										alt: iCurObj.data.alt,
+										agl: iCurObj.data.agl,
 										hdg: iCurObj.data.hdg,
 										speed: iCurObj.data.speed,
 										coalition: iCurObj.data.coalition,
