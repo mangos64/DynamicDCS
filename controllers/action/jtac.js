@@ -12,6 +12,7 @@ var curLaserCode = 1688;
 var redLaserCode = 1686;
 var blueLaserCode = 1687;
 var fiveMins = 5 * 60 * 1000;
+var threeMins = 3 * 60 * 1000;
 
 _.assign(exports, {
 	aliveJtac30SecCheck: function (serverName) {
@@ -169,7 +170,7 @@ _.assign(exports, {
 				console.log('erroring line23: ', err);
 			})
 		;
-		masterDBController.unitActions('update', serverName, {_id: jtUnit.name, jtacTarget: enemyUnit.name, jtacReplenTime: new Date().getTime() + fiveMins})
+		masterDBController.unitActions('update', serverName, {_id: jtUnit.name, jtacTarget: enemyUnit.name, jtacReplenTime: new Date().getTime() + threeMins})
 			.catch(function (err) {
 				console.log('erroring line28: ', err);
 			})
